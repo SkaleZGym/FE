@@ -1,0 +1,155 @@
+.header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  height: 68px;
+  padding: 0 var(--gutter);
+  color: var(--concrete-ink);
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+  border-bottom: 1px solid transparent;
+
+  &[data-scrolled] {
+    color: var(--concrete-ink);
+    background: rgb(201 201 196 / 0.86);
+    backdrop-filter: blur(14px);
+    border-bottom-color: rgb(52 55 59 / 0.12);
+  }
+}
+
+/* 메인 배너가 밝은 콘크리트 톤이라 검은 로고를 그대로 쓴다 */
+.logo img {
+  width: 122px;
+  height: auto;
+}
+
+.nav {
+  display: flex;
+  gap: 28px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  & a {
+    position: relative;
+  }
+
+  & a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s ease;
+  }
+
+  & a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-left: auto;
+}
+
+.cart,
+.menuButton {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.menuButton {
+  display: none;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.drawer {
+  position: fixed;
+  inset: 68px 0 0;
+  z-index: 49;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 32px var(--gutter);
+  background: var(--concrete);
+  color: var(--concrete-ink);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s;
+
+  &[data-open] {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  & a {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 10px 0;
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    line-height: 1;
+    border-bottom: 1px solid rgb(52 55 59 / 0.12);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  &[data-open] a {
+    opacity: 1;
+    transform: none;
+  }
+
+  & span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .nav {
+    display: none;
+  }
+
+  .menuButton {
+    display: inline;
+  }
+}
+
+@media (min-width: 1101px) {
+  .drawer {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .header {
+    gap: 12px;
+  }
+
+  .logo img {
+    width: 92px;
+  }
+
+  .cart {
+    display: none;
+  }
+}

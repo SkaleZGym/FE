@@ -1,0 +1,133 @@
+{
+  "meta": {
+    "title": "SKALEZ",
+    "description": "We are not born with armor. We forge our own scales. Performance wear for bodybuilders."
+  },
+  "nav": {
+    "collab": "Collab",
+    "best": "Best",
+    "shop": "Shop",
+    "category": "Category",
+    "support": "Support",
+    "cart": "Cart",
+    "language": "Language",
+    "menu": "Menu",
+    "close": "Close",
+    "tights": "Tights"
+  },
+  "hero": {
+    "manifesto": "We don't follow fashion. We engineer gear for bodies under load. Every panel and every fit is calculated to endure, not to be looked at.",
+    "scroll": "Scroll",
+    "eyebrow": "Compression tights",
+    "shop": "Shop tights",
+    "note": "Where SKALEZ began, and still its core. Compression tights built for leg day."
+  },
+  "best": {
+    "note": "The pieces lifted most right now.",
+    "viewAll": "View all"
+  },
+  "products": {
+    "eyebrow": "KAIDO × SKALEZ Collab",
+    "note": "A collaboration between natural bodybuilder Kwak Hyunseong (KAIDO) and SKALEZ.",
+    "fit": "Fit: Oversized",
+    "fabric": "76% Polyester / 24% Rayon",
+    "lining": "Mesh lining",
+    "model": "Model 170cm / 82kg · wears XL",
+    "addToCart": "Add to cart",
+    "allNote": "From the newest drops to the steady sellers.",
+    "viewAll": "View all products"
+  },
+  "category": {
+    "note": "Your gear, sorted by type.",
+    "tabs": {
+      "top": "Tops",
+      "tights": "Tights",
+      "women": "Women",
+      "goods": "Goods"
+    },
+    "empty": "New products are on the way."
+  },
+  "collab": {
+    "description": "SKALEZ is built together with people who actually lift.",
+    "label": "Current collab",
+    "past": "Past collabs",
+    "shop": "Shop the drop",
+    "story": "A collaboration between natural bodybuilder Kwak Hyunseong (KAIDO) and SKALEZ. Strength isn’t something you’re born with. It’s something you build."
+  },
+  "notice": {
+    "title": "Notice",
+    "more": "View all",
+    "items": [
+      {
+        "tag": "DROP",
+        "title": "KAIDO × SKALEZ Dragon Scales collection released",
+        "date": "2026.09.28"
+      },
+      {
+        "tag": "RESTOCK",
+        "title": "Signature Camo Tights Shorts Black — 4th restock",
+        "date": ""
+      },
+      {
+        "tag": "NOTICE",
+        "title": "Our new website is coming soon",
+        "date": ""
+      },
+      {
+        "tag": "SHIPPING",
+        "title": "Extra shipping fee for remote areas in Korea",
+        "date": ""
+      }
+    ]
+  },
+  "faq": {
+    "title": "FAQ",
+    "items": [
+      {
+        "q": "How much is shipping?",
+        "a": "Domestic shipping in Korea is ₩3,000 and free on orders of ₩100,000 or more. Remote areas may have an extra fee."
+      },
+      {
+        "q": "How do I choose my size?",
+        "a": "Each product page shows the model's height, weight and size worn (e.g. 170cm / 82kg, wears XL). Please also check the fit, such as oversized or muscle fit."
+      },
+      {
+        "q": "How do reward points work?",
+        "a": "You earn 1% of your purchase amount as points. For example, a ₩69,000 item earns 690 points."
+      },
+      {
+        "q": "How do I exchange or return an item?",
+        "a": "Contact us through our KakaoTalk channel or customer service (+82 10-5817-8169) with your order number."
+      },
+      {
+        "q": "Do you ship internationally?",
+        "a": "International shipping will open step by step. We'll announce it in our notices."
+      }
+    ]
+  },
+  "quick": {
+    "title": "Quick menu",
+    "cart": "Cart",
+    "wish": "Wishlist",
+    "chat": "KakaoTalk chat",
+    "top": "Back to top"
+  },
+  "product": {
+    "soldOut": "SOLD OUT"
+  },
+  "footer": {
+    "company": "Company",
+    "ceo": "CEO",
+    "businessNumber": "Business registration no.",
+    "mailOrder": "Mail-order business no.",
+    "address": "Address",
+    "contact": "Customer service",
+    "email": "Email",
+    "terms": "Terms of use",
+    "privacy": "Privacy policy"
+  },
+  "tights": {
+    "note": "The core SKALEZ line. From shorts to full length, compression tights made for leg day.",
+    "viewAll": "View all tights"
+  }
+}

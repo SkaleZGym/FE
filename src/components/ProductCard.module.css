@@ -1,0 +1,120 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.image {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: #e4e4e2;
+  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+
+  & img {
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+.card:hover .image img {
+  transform: scale(1.05);
+}
+
+.card[data-soldout] .image img {
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.rank {
+  position: absolute;
+  left: 14px;
+  bottom: 6px;
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1;
+  color: var(--bone);
+  mix-blend-mode: difference;
+}
+
+.soldOut {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  color: var(--bone);
+  background: var(--iron);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.name {
+  text-transform: uppercase;
+}
+
+.badges {
+  display: flex;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  opacity: 0.6;
+
+  & span::before {
+    content: "●";
+    margin-right: 4px;
+    font-size: 7px;
+    vertical-align: 1px;
+  }
+}
+
+.price {
+  display: flex;
+  gap: 8px;
+  font-family: var(--font-mono);
+
+  & s {
+    opacity: 0.45;
+  }
+}
+
+/* ---------- tile: 밝은 박스형 카드 ---------- */
+
+.tile {
+  height: 100%;
+  gap: 12px;
+  padding: 10px 10px 16px;
+  color: var(--iron);
+  background: var(--tile-bg, var(--bone));
+  border-radius: 6px;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+
+  & .image {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    clip-path: none;
+  }
+
+  & .body {
+    align-items: center;
+    text-align: center;
+    font-size: 11px;
+  }
+
+  & .badges,
+  & .price {
+    justify-content: center;
+  }
+}

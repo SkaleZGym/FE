@@ -1,0 +1,108 @@
+:root {
+  /* 콘크리트(바깥) + 아이언(패널) 단색 팔레트 */
+  --concrete: #c9c9c4;
+  --concrete-ink: #34373b;
+  --concrete-muted: #6b6e72;
+  --iron: #1c1e21;
+  --iron-raised: #26292d;
+  --bone: #ecebe6;
+  --steel: #8d9198;
+  --line: rgb(236 235 230 / 0.14);
+  --accent: #ecebe6;
+
+  --font-display: var(--font-anton), "Impact", var(--font-body);
+  /* 모노 폰트에도 한·중·일 글자가 없어서 본문 폰트로 대체 */
+  --font-mono: var(--font-jetbrains), var(--font-body);
+  --font-body: var(--font-noto-kr), system-ui, sans-serif;
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --max-width: 1280px;
+}
+
+/* 언어별 본문 폰트 */
+:root:lang(ja) {
+  --font-body: var(--font-noto-jp), system-ui, sans-serif;
+}
+
+:root:lang(zh-CN) {
+  --font-body: var(--font-noto-sc), system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--concrete);
+  color: var(--concrete-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+p,
+ol,
+ul {
+  margin: 0;
+}
+
+ol,
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 68px; /* 고정 헤더 높이만큼 앵커 위치 보정 */
+}
+
+/* ---------- 스크롤 등장 애니메이션 (Reveal 컴포넌트) ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--reveal-delay, 0ms);
+}
+
+.reveal[data-visible="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* 움직임 줄이기 설정을 켠 사용자에게는 애니메이션 없이 바로 보여준다 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
