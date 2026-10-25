@@ -252,7 +252,7 @@ export default async function HomePage() {
       {/* 7. 푸터 */}
       <footer className={styles.footer}>
         <div className={styles.footerTop}>
-          <Image src={images.wordmark} alt="SKALEZ" width={110} height={22} />
+          <Image src={images.wordmark} alt="SKALEZ" width={110} height={22} style={{ height: "auto" }} />
           <span>{dict.footer.tagline} · © 2026 SKALEZ</span>
         </div>
         <dl className={styles.business}>
