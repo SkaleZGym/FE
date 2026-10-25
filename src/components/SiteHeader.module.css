@@ -13,8 +13,8 @@
   transition: background 0.35s ease, border-color 0.35s ease;
 
   &[data-scrolled] {
-    background: rgb(0 0 0 / 0.85);
-    backdrop-filter: blur(14px);
+    /* 블러(backdrop-filter)는 스크롤할 때마다 헤더 뒤 화면을 다시 흐리게 그려서 끊김의 원인이 된다. 검은 사이트라 진한 반투명 단색으로 충분 */
+    background: rgb(0 0 0 / 0.92);
     border-bottom-color: rgb(255 255 255 / 0.12);
   }
 }

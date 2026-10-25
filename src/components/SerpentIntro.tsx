@@ -306,6 +306,10 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       if (snapping) return;
       snapping = true;
       snapped = true;
+      // 맞춰 주는 0.3~0.8초 동안만 휠·터치 스크롤을 막는다. 평소에도 막는(passive: false) 리스너가 window에 걸려 있으면
+      // 브라우저가 스크롤마다 메인 스레드를 기다려야 해서 사이트 전체 스크롤이 끊긴다
+      addEventListener("wheel", block, { passive: false });
+      addEventListener("touchmove", block, { passive: false });
       const from = scrollY;
       const to = endY();
       const dur = Math.min(800, 300 + Math.abs(to - from) * 0.5);
@@ -314,7 +318,11 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
         const k = Math.min(1, (now - t0) / dur);
         scrollTo({ top: from + (to - from) * ease(k), behavior: "instant" });
         if (k < 1) requestAnimationFrame(step);
-        else snapping = false;
+        else {
+          snapping = false;
+          removeEventListener("wheel", block);
+          removeEventListener("touchmove", block);
+        }
       };
       requestAnimationFrame(step);
     }
@@ -366,7 +374,10 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       else lastT = 0;
     }
     const wake = () => {
-      if (!raf) raf = requestAnimationFrame(tick);
+      if (raf) return;
+      // 본문까지 내려가 인트로가 화면 밖이고 연출도 끝나 있으면 스크롤마다 할 일이 없다 (레이아웃 읽기·프레임 예약 생략)
+      if (!snapping && cur >= 1 && cur === target && scrollY > endY() + holdPx + H) return;
+      raf = requestAnimationFrame(tick);
     };
     const onResize = () => {
       const w = pin!.clientWidth;
@@ -412,8 +423,9 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     addEventListener("scroll", wake, { passive: true });
     addEventListener("resize", onResize);
     addEventListener("mousemove", onMove, { passive: true });
-    addEventListener("wheel", block, { passive: false });
-    addEventListener("touchmove", block, { passive: false });
+    // 인트로(히어로 포함)가 화면 밖이면 히어로 안의 무한 애니메이션(빛무리·떠 있는 상품·회전 배지 등)을 멈춘다
+    const offscreen = new IntersectionObserver(([entry]) => setFlag(pin, "data-offscreen", !entry.isIntersecting));
+    offscreen.observe(intro);
     const onAnchorClick = (e: MouseEvent) => {
       if ((e.target as Element | null)?.closest?.('a[href^="#"]')) navUntil = performance.now() + 1600;
     };
@@ -430,6 +442,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       removeEventListener("mousemove", onMove);
       removeEventListener("wheel", block);
       removeEventListener("touchmove", block);
+      offscreen.disconnect();
       document.removeEventListener("click", onAnchorClick, true);
       document.removeEventListener("visibilitychange", wake);
       cancelAnimationFrame(raf);

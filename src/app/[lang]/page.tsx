@@ -181,10 +181,10 @@ export default async function HomePage() {
         {/* 2. 테이프 티커 */}
         <div className={styles.tape} aria-hidden="true">
           <div className={`${styles.tapeLine} ${styles.t1}`}>
-            <Tape text={dict.tape.line1} repeat={6} />
+            <Tape text={dict.tape.line1} repeat={3} />
           </div>
           <div className={`${styles.tapeLine} ${styles.t2}`}>
-            <Tape text={dict.tape.line2} repeat={8} />
+            <Tape text={dict.tape.line2} repeat={5} />
           </div>
         </div>
 

@@ -51,7 +51,7 @@
     display: block;
     width: 100%;
     height: 100%;
-    filter: invert(1) drop-shadow(0 0 22px rgb(237 237 237 / 0.28));
+    filter: invert(1); /* drop-shadow는 크기가 바뀌는 로고를 매 프레임 다시 그려서 뺐다. 빛은 셰이더의 로고 빛무리가 맡는다 */
   }
 }
 
@@ -197,4 +197,11 @@
   width: 1px;
   height: 1px;
   pointer-events: none;
+}
+
+/* 인트로가 화면 밖(본문을 보는 중)이면 히어로 안의 무한 애니메이션을 멈춘다. 스크립트가 data-offscreen을 켠다 */
+.pin[data-offscreen] .heroSlot *,
+.pin[data-offscreen] .heroSlot *::before,
+.pin[data-offscreen] .heroSlot *::after {
+  animation-play-state: paused !important;
 }
