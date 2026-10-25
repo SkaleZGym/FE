@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { openProduct } from "./productEvents";
 import styles from "./ProductCard.module.css";
 
 /** 서버에서 언어·통화에 맞게 가공해서 넘기는 카드 데이터 */
@@ -23,20 +24,20 @@ type Props = {
   labels: { add: string; restock: string; wish: string };
 };
 
-/** 12번 시안의 흰 상품 카드: 사진 · 뱃지 · 이름 · 핏 · 가격 · 사이즈 · 담기/찜 */
+/** 12번 시안의 흰 상품 카드: 사진 · 뱃지 · 이름 · 핏 · 가격 · 사이즈 · 담기/찜. 사진·담기 버튼은 상품 정보 패널을 연다 */
 export default function ProductCard({ product, labels }: Props) {
   const [wished, setWished] = useState(false);
 
   return (
     <article className={styles.card} data-soldout={product.soldOut || undefined}>
-      <a href="#" className={styles.image}>
-        <Image src={product.image} alt={product.name} fill sizes="(max-width: 560px) 50vw, (max-width: 1100px) 45vw, 22vw" />
+      <button type="button" className={styles.image} aria-label={product.name} onClick={() => openProduct(product.id)}>
+        <Image src={product.image} alt="" fill sizes="(max-width: 560px) 50vw, (max-width: 1100px) 45vw, 22vw" />
         {product.badge && (
           <span className={styles.badge} data-tone={product.badge.tone}>
             {product.badge.label}
           </span>
         )}
-      </a>
+      </button>
       <h3 className={styles.name}>{product.name}</h3>
       <div className={styles.sub}>{product.sub}</div>
       <div className={styles.price} data-sale={product.listPrice ? "" : undefined}>
@@ -49,7 +50,7 @@ export default function ProductCard({ product, labels }: Props) {
         ))}
       </div>
       <div className={styles.row}>
-        <button type="button" className={styles.add}>
+        <button type="button" className={styles.add} onClick={() => openProduct(product.id)}>
           {product.soldOut ? labels.restock : labels.add}
         </button>
         <button type="button" className={styles.heart} aria-pressed={wished} aria-label={labels.wish} onClick={() => setWished((w) => !w)}>

@@ -4,10 +4,11 @@
     "description": "铠甲不是与生俱来的，而是自己锻造的。为健美运动员打造的功能服饰 SKALEZ。"
   },
   "nav": {
-    "shop": "商品",
-    "tights": "紧身裤",
-    "collab": "联名",
-    "support": "客服",
+    "shop": "SHOP",
+    "newDrops": "NEW DROPS",
+    "tights": "TIGHTS",
+    "collab": "COLLAB",
+    "about": "ABOUT",
     "cart": "购物车",
     "language": "语言",
     "menu": "菜单",
@@ -52,20 +53,71 @@
     "compression": "压缩版型",
     "free": "均码"
   },
+  "fabric": {
+    "cotton": "100% 棉",
+    "cottonPoly": "80% 棉 / 20% 聚酯纤维",
+    "polyRayon": "76% 聚酯纤维 / 24% 人造丝",
+    "nylonSpandex": "78% 锦纶 / 22% 氨纶",
+    "polySilicone": "聚酯纤维 / 硅胶防滑"
+  },
+  "panel": {
+    "title": "[ PRODUCT ]",
+    "close": "关闭",
+    "dialog": "商品信息",
+    "size": "尺码",
+    "qty": "数量",
+    "decrease": "减少数量",
+    "increase": "增加数量",
+    "add": "加入购物车",
+    "restock": "到货提醒",
+    "soldOutNote": "[ SOLD OUT ] 可订阅到货提醒",
+    "soon": "在线购物车即将上线，目前请通过 KakaoTalk 咨询。",
+    "fit": "FIT",
+    "fabric": "FABRIC",
+    "model": "MODEL",
+    "shipping": "SHIPPING",
+    "modelValue": "模特 170cm / 82kg · 穿 XL",
+    "shippingValue": "$15 · 满 $150 包邮"
+  },
   "shopBy": {
-    "tights": { "small": "[ CORE LINE ]", "title": "TIGHTS" },
-    "tops": { "small": "[ OVERSIZED · MUSCLE ]", "title": "TOPS" },
-    "hoodies": { "small": "[ WARM UP ]", "title": "HOODIES" }
+    "tights": {
+      "small": "[ CORE LINE ]",
+      "title": "TIGHTS"
+    },
+    "tops": {
+      "small": "[ OVERSIZED · MUSCLE ]",
+      "title": "TOPS"
+    },
+    "hoodies": {
+      "small": "[ WARM UP ]",
+      "title": "HOODIES"
+    }
   },
   "trend": {
     "cta": "Shop now"
   },
   "trust": {
     "items": [
-      { "title": "100%", "accent": "OFFICIAL", "desc": "SKALEZ 官方商店" },
-      { "title": "SAME-DAY", "accent": "SHIP", "desc": "工作日下午 2 点前付款当日发货" },
-      { "title": "FREE", "accent": "EXCHANGE", "desc": "7 天内 1 次免费换尺码" },
-      { "title": "ALWAYS", "accent": "HERE", "desc": "KakaoTalk 1:1 咨询" }
+      {
+        "title": "100%",
+        "accent": "OFFICIAL",
+        "desc": "SKALEZ 官方商店"
+      },
+      {
+        "title": "SAME-DAY",
+        "accent": "SHIP",
+        "desc": "工作日下午 2 点前付款当日发货"
+      },
+      {
+        "title": "FREE",
+        "accent": "EXCHANGE",
+        "desc": "7 天内 1 次免费换尺码"
+      },
+      {
+        "title": "ALWAYS",
+        "accent": "HERE",
+        "desc": "KakaoTalk 1:1 咨询"
+      }
     ]
   },
   "quick": {

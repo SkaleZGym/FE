@@ -1,6 +1,7 @@
 import Image from "next/image";
 import HeroShowcase, { type ShowcaseItem } from "@/components/HeroShowcase";
 import ProductCard, { type CardData } from "@/components/ProductCard";
+import ProductPanel, { type PanelProduct } from "@/components/ProductPanel";
 import QuickMenu from "@/components/QuickMenu";
 import Reveal from "@/components/Reveal";
 import SerpentIntro from "@/components/SerpentIntro";
@@ -8,6 +9,8 @@ import SiteHeader from "@/components/SiteHeader";
 import {
   business,
   currencyFor,
+  descriptions,
+  fabricOf,
   fitOf,
   formatMoney,
   heroShowcase,
@@ -80,12 +83,30 @@ export default async function HomePage() {
     ...dict.shopBy[key],
   }));
   const trend = productById(trendImageId);
+  // 상품 정보 패널에서 열 수 있는 상품: 히어로 로테이션 + 추천 카드
+  const panelProducts: PanelProduct[] = [...new Set([...heroShowcase.map((item) => item.id), ...picks.map((item) => item.id)])].map((id) => {
+    const product = productById(id);
+    return {
+      id,
+      image: product.image,
+      name: product.name[locale],
+      badges: product.badges,
+      ...priceOf(product, locale),
+      soldOut: Boolean(product.soldOut),
+      desc: descriptions[id]?.[locale],
+      sizes: sizesOf(product),
+      fit: dict.fit[fitOf(product)],
+      fabric: dict.fabric[fabricOf(product)],
+    };
+  });
 
+  // 19번 시안의 메뉴 5개. COLLAB은 인트로가 끝난 히어로 자리(#drop), ABOUT은 아직 소개 페이지가 없어 신뢰 바로
   const nav = [
     { label: dict.nav.shop, href: "#featured" },
+    { label: dict.nav.newDrops, href: "#featured" },
     { label: dict.nav.tights, href: "#shopby" },
-    { label: dict.nav.collab, href: "#trend" },
-    { label: dict.nav.support, href: "#trust" },
+    { label: dict.nav.collab, href: "#drop" },
+    { label: dict.nav.about, href: "#trust" },
   ];
 
   return (
@@ -292,6 +313,7 @@ export default async function HomePage() {
       </footer>
 
       <QuickMenu labels={dict.quick} introDim />
+      <ProductPanel products={panelProducts} labels={dict.panel} />
     </>
   );
 }

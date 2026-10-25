@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { openProduct } from "./productEvents";
 import styles from "./HeroShowcase.module.css";
 
 export type ShowcaseItem = { id: number; image: string; name: string; line: string; price: string; listPrice?: string };
@@ -69,14 +70,14 @@ export default function HeroShowcase({ items, labels }: Props) {
           ›
         </button>
       </div>
-      <a className={styles.info} href="#featured">
+      <button type="button" className={styles.info} onClick={() => openProduct(current.id)}>
         <small>{current.line}</small>
         <b>{current.name}</b>
         <span className={styles.price}>
           {current.price}
           {current.listPrice && <s>{current.listPrice}</s>}
         </span>
-      </a>
+      </button>
     </>
   );
 }

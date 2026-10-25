@@ -121,6 +121,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
   const replayRef = useRef<HTMLButtonElement>(null);
+  const dropRef = useRef<HTMLSpanElement>(null);
   const api = useRef<{ skip: () => void; replay: () => void } | null>(null);
 
   useEffect(() => {
@@ -129,6 +130,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     const canvas = canvasRef.current;
     const logoEl = logoRef.current;
     const replay = replayRef.current;
+    const drop = dropRef.current;
     if (!intro || !pin || !canvas || !logoEl || !replay) return;
     const header = document.querySelector<HTMLElement>("[data-intro-dim]");
     const brand = header?.querySelector<HTMLElement>("[data-intro-logo]") ?? null;
@@ -149,7 +151,9 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
         if (!el) continue;
         for (const name of ["--hdr", "--hdr-vis", "--hdr-pe", "--nav", "--qv"]) el.style.removeProperty(name);
         el.removeAttribute("data-intro-done");
+        varCache.delete(el); // 지운 값을 캐시가 기억하고 있으면 다시 마운트됐을 때 안 써져서 헤더가 안 보인다
       }
+      varCache.delete(pin);
       brand?.removeAttribute("data-glow");
     };
     // 움직임 줄이기: CSS가 인트로를 접어 두므로 헤더·퀵메뉴만 켜고 끝
@@ -200,6 +204,11 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       trackPx = Math.round(H * introVh);
       holdPx = Math.round(H * holdVh);
       intro!.style.height = `${H + trackPx + holdPx}px`;
+      // #drop 앵커(메뉴 COLLAB)는 히어로가 다 보이는 자리. html의 scroll-padding-top만큼 아래에 둬야 정확히 그 위치에 멈춘다
+      if (drop) {
+        const pad = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+        drop.style.top = `${trackPx + pad}px`;
+      }
       lw = Math.min(W * 0.72, 820);
       lh = lw * RATIO;
       logoEl!.style.width = `${lw}px`;
@@ -277,6 +286,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     let lastT = 0;
     let snapping = false;
     let snapped = false;
+    let navUntil = 0; // 메뉴(#앵커) 클릭으로 이동하는 동안은 히어로 스냅이 끼어들지 않는다
     const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
     const endY = () => intro!.offsetTop + trackPx; // 진행도 1 = 히어로가 다 보이는 자리. 여기서부터 홀드 구간
     const readTarget = () => {
@@ -322,8 +332,8 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       const dt = lastT ? Math.min(0.05, (now - lastT) * 0.001) : 0.016;
       lastT = now;
       readTarget();
-      // 인트로 트랙 안에서 .9를 넘는 순간에만 맞춰 준다. 메뉴 클릭 등으로 본문까지 한 번에 건너뛴 경우에는 끌어오지 않는다
-      if (!snapped && target >= 0.9 && target > lastTarget && scrollY < endY()) landHero();
+      // 인트로 트랙 안에서 .9를 넘는 순간에만 맞춰 준다. 메뉴 클릭으로 지나가는 중이거나 본문까지 건너뛴 경우에는 끌어오지 않는다
+      if (!snapped && target >= 0.9 && target > lastTarget && scrollY < endY() && now > navUntil) landHero();
       if (target < 0.85) snapped = false; // 위로 되돌아가면 다음에 또 맞춰 준다
       lastTarget = target;
       const prev = cur;
@@ -398,6 +408,10 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     addEventListener("mousemove", onMove, { passive: true });
     addEventListener("wheel", block, { passive: false });
     addEventListener("touchmove", block, { passive: false });
+    const onAnchorClick = (e: MouseEvent) => {
+      if ((e.target as Element | null)?.closest?.('a[href^="#"]')) navUntil = performance.now() + 1600;
+    };
+    document.addEventListener("click", onAnchorClick, true);
     document.addEventListener("visibilitychange", wake);
     document.fonts?.ready.then(() => {
       measure();
@@ -410,6 +424,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       removeEventListener("mousemove", onMove);
       removeEventListener("wheel", block);
       removeEventListener("touchmove", block);
+      document.removeEventListener("click", onAnchorClick, true);
       document.removeEventListener("visibilitychange", wake);
       cancelAnimationFrame(raf);
       intro.style.removeProperty("height");
@@ -420,6 +435,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
 
   return (
     <div ref={introRef} className={styles.intro}>
+      <span ref={dropRef} id="drop" className={styles.anchor} aria-hidden="true" />
       <div ref={pinRef} className={styles.pin}>
         <div className={styles.heroSlot}>{children}</div>
         <canvas ref={canvasRef} className={styles.scales} aria-hidden="true" />

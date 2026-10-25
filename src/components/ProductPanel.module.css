@@ -1,0 +1,251 @@
+/* 19번 시안의 상품 정보 패널 (밝은 본 톤). PC: 오른쪽 사이드, 모바일: 아래에서 올라오는 시트 */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgb(18 19 21 / 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s;
+
+  &[data-open] {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 91;
+  display: flex;
+  flex-direction: column;
+  width: min(480px, 100vw);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  color: var(--iron);
+  background: var(--bone);
+  transform: translateX(100%);
+  visibility: hidden;
+  /* 닫힐 때는 밀려 나간 뒤 숨기고, 열릴 때는 바로 보이게 (그래야 열자마자 닫기 버튼에 포커스를 줄 수 있다) */
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s linear 0.45s;
+
+  &[data-open] {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), visibility 0s;
+  }
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px var(--gutter) 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.close {
+  padding: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  text-transform: uppercase;
+  background: none;
+  border: 0;
+}
+
+.image {
+  position: relative;
+  flex: none;
+  margin: 16px var(--gutter) 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: #e4e4e2;
+  border-radius: 6px;
+
+  & img {
+    object-fit: cover;
+  }
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px var(--gutter) 28px;
+}
+
+.badges {
+  display: flex;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  opacity: 0.6;
+
+  & span::before {
+    content: "● ";
+    font-size: 7px;
+    vertical-align: 1px;
+  }
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 22px;
+
+  & s {
+    font-size: 12px;
+    opacity: 0.5;
+  }
+}
+
+.soldOut {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #b03a2e;
+}
+
+.desc {
+  font-size: 13px;
+  line-height: 1.7;
+  opacity: 0.8;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  & button {
+    min-width: 48px;
+    padding: 10px 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: none;
+    border: 1px solid rgb(28 30 33 / 0.3);
+    border-radius: 4px;
+  }
+
+  & button[aria-pressed="true"] {
+    color: var(--bone);
+    background: var(--iron);
+    border-color: var(--iron);
+  }
+}
+
+.qty {
+  display: inline-flex;
+  align-items: center;
+  align-self: start;
+  border: 1px solid rgb(28 30 33 / 0.3);
+  border-radius: 4px;
+
+  & button {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    background: none;
+    border: 0;
+  }
+
+  & output {
+    min-width: 36px;
+    font-family: var(--font-mono);
+    text-align: center;
+  }
+}
+
+.add {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bone);
+  background: var(--iron);
+  border: 0;
+  border-radius: 6px;
+
+  & span:last-child {
+    transition: transform 0.3s ease;
+  }
+
+  &:hover span:last-child {
+    transform: translateX(6px);
+  }
+}
+
+.note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--concrete-muted);
+}
+
+.specs {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+  border-top: 1px solid rgb(28 30 33 / 0.14);
+  opacity: 0.75;
+
+  & div {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  & dd {
+    margin: 0;
+    text-align: right;
+  }
+}
+
+@media (max-width: 720px) {
+  .panel {
+    top: auto;
+    width: 100vw;
+    max-height: 92svh;
+    border-radius: 16px 16px 0 0;
+    transform: translateY(100%);
+  }
+
+  .image {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .panel {
+    transition: none;
+  }
+}

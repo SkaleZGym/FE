@@ -4,10 +4,11 @@
     "description": "We are not born with armor. We forge our own scales. Performance wear for bodybuilders."
   },
   "nav": {
-    "shop": "Shop",
-    "tights": "Tights",
-    "collab": "Collab",
-    "support": "Support",
+    "shop": "SHOP",
+    "newDrops": "NEW DROPS",
+    "tights": "TIGHTS",
+    "collab": "COLLAB",
+    "about": "ABOUT",
     "cart": "Cart",
     "language": "Language",
     "menu": "Menu",
@@ -52,20 +53,71 @@
     "compression": "Compression fit",
     "free": "One size"
   },
+  "fabric": {
+    "cotton": "100% cotton",
+    "cottonPoly": "80% cotton / 20% polyester",
+    "polyRayon": "76% polyester / 24% rayon",
+    "nylonSpandex": "78% nylon / 22% spandex",
+    "polySilicone": "Polyester / silicone non-slip"
+  },
+  "panel": {
+    "title": "[ PRODUCT ]",
+    "close": "Close",
+    "dialog": "Product details",
+    "size": "Size",
+    "qty": "Quantity",
+    "decrease": "Decrease quantity",
+    "increase": "Increase quantity",
+    "add": "Add to cart",
+    "restock": "Notify me when restocked",
+    "soldOutNote": "[ SOLD OUT ] Get notified when it's back",
+    "soon": "Online cart is coming soon. For now, please contact us on KakaoTalk.",
+    "fit": "FIT",
+    "fabric": "FABRIC",
+    "model": "MODEL",
+    "shipping": "SHIPPING",
+    "modelValue": "Model 170cm / 82kg · wears XL",
+    "shippingValue": "$15 · free over $150"
+  },
   "shopBy": {
-    "tights": { "small": "[ CORE LINE ]", "title": "TIGHTS" },
-    "tops": { "small": "[ OVERSIZED · MUSCLE ]", "title": "TOPS" },
-    "hoodies": { "small": "[ WARM UP ]", "title": "HOODIES" }
+    "tights": {
+      "small": "[ CORE LINE ]",
+      "title": "TIGHTS"
+    },
+    "tops": {
+      "small": "[ OVERSIZED · MUSCLE ]",
+      "title": "TOPS"
+    },
+    "hoodies": {
+      "small": "[ WARM UP ]",
+      "title": "HOODIES"
+    }
   },
   "trend": {
     "cta": "Shop now"
   },
   "trust": {
     "items": [
-      { "title": "100%", "accent": "OFFICIAL", "desc": "The official SKALEZ store" },
-      { "title": "SAME-DAY", "accent": "SHIP", "desc": "Orders paid before 2 PM KST ship the same business day" },
-      { "title": "FREE", "accent": "EXCHANGE", "desc": "One free size exchange within 7 days" },
-      { "title": "ALWAYS", "accent": "HERE", "desc": "1:1 chat on KakaoTalk" }
+      {
+        "title": "100%",
+        "accent": "OFFICIAL",
+        "desc": "The official SKALEZ store"
+      },
+      {
+        "title": "SAME-DAY",
+        "accent": "SHIP",
+        "desc": "Orders paid before 2 PM KST ship the same business day"
+      },
+      {
+        "title": "FREE",
+        "accent": "EXCHANGE",
+        "desc": "One free size exchange within 7 days"
+      },
+      {
+        "title": "ALWAYS",
+        "accent": "HERE",
+        "desc": "1:1 chat on KakaoTalk"
+      }
     ]
   },
   "quick": {

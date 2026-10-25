@@ -45,6 +45,68 @@ export const fitOf = (product: Product): Fit =>
 export const sizesOf = (product: Product): string[] =>
   product.category === "tights" ? ["S", "M", "L", "XL"] : product.category === "goods" ? ["FREE"] : ["M", "L", "XL", "2XL", "3XL"];
 
+/** 소재. 사전의 fabric.* 라벨 키와 같다 */
+export type Fabric = "cotton" | "cottonPoly" | "polyRayon" | "nylonSpandex" | "polySilicone";
+
+const fabricById: Partial<Record<number, Fabric>> = {
+  291: "polyRayon",
+  261: "cottonPoly",
+  249: "cottonPoly",
+  251: "cottonPoly",
+  252: "cottonPoly",
+  250: "polySilicone",
+};
+
+/** 없으면 카테고리 기본값 (타이즈=나일론·스판덱스, 그 외=코튼 100%) */
+export const fabricOf = (product: Product): Fabric =>
+  fabricById[product.id] ?? (product.category === "tights" ? "nylonSpandex" : "cotton");
+
+/** 상품 정보 패널에 나오는 설명 (있는 상품만) */
+export const descriptions: Partial<Record<number, Record<Locale, string>>> = {
+  292: {
+    ko: "네추럴 보디빌더 곽현성(KAIDO)과 SKALEZ의 콜라보. 강함은 타고나는 것이 아니라, 스스로 만들어가는 것. 한 겹씩 돋아나는 용의 비늘처럼.",
+    en: "A collaboration between natural bodybuilder Kwak Hyunseong (KAIDO) and SKALEZ. Strength isn't something you're born with. You build it, like dragon scales growing one layer at a time.",
+    ja: "ナチュラルボディビルダー、クァク・ヒョンソン(KAIDO)とSKALEZのコラボ。強さは生まれ持つものではなく、自ら築くもの。一枚ずつ生えそろう竜の鱗のように。",
+    "zh-CN": "自然健美运动员郭贤成(KAIDO)与 SKALEZ 的联名。力量不是与生俱来的，而是自己锻造的。如同一层层生长的龙鳞。",
+  },
+  291: {
+    ko: "KAIDO × SKALEZ 드래곤 스케일 컬렉션. 세미 오버핏으로 어깨는 넓게, 기장은 깔끔하게.",
+    en: "KAIDO × SKALEZ Dragon Scales collection. Semi-oversized: wide through the shoulders, clean at the hem.",
+    ja: "KAIDO × SKALEZ ドラゴンスケイル コレクション。セミオーバーサイズで肩幅は広く、着丈はすっきり。",
+    "zh-CN": "KAIDO × SKALEZ 龙鳞系列。半宽松版型，肩部宽阔，衣长利落。",
+  },
+  278: {
+    ko: "두툼한 헤비 코튼. 운동 중에도 형태가 무너지지 않는 오버핏.",
+    en: "Thick heavyweight cotton. An oversized fit that keeps its shape through every set.",
+    ja: "厚手のヘビーコットン。トレーニング中も形が崩れないオーバーサイズ。",
+    "zh-CN": "厚实重磅棉。训练中也不变形的宽松版型。",
+  },
+  276: {
+    ko: "가볍고 시원한 라이트 코튼. 여름 훈련용 오버핏.",
+    en: "Light, breathable cotton. An oversized fit for summer training.",
+    ja: "軽くて涼しいライトコットン。夏のトレーニング向けオーバーサイズ。",
+    "zh-CN": "轻薄透气的棉质。适合夏季训练的宽松版型。",
+  },
+  251: {
+    ko: "본세트 전, 몸을 데우는 웜업 후드. 두툼한 기모 안감.",
+    en: "A warm-up hoodie for before your working sets. Thick brushed fleece lining.",
+    ja: "本番セット前に体を温めるウォームアップパーカー。厚手の裏起毛。",
+    "zh-CN": "正式组前热身用的连帽衫。厚实抓绒内里。",
+  },
+  164: {
+    ko: "하체 훈련용 컴프레션 쇼츠. 스쿼트 깊이에서도 밀려 올라가지 않는 밑단.",
+    en: "Compression shorts for leg day. The hem stays put even at full squat depth.",
+    ja: "脚トレ用コンプレッションショーツ。深いスクワットでもずり上がらない裾。",
+    "zh-CN": "腿部训练用压缩短裤。深蹲到底也不会上卷的裤脚。",
+  },
+  166: {
+    ko: "SKALEZ 시그니쳐 카모 패턴. 4방향 스트레치 원단으로 무릎 굽힘이 자유롭다.",
+    en: "SKALEZ signature camo pattern. Four-way stretch fabric lets your knees bend freely.",
+    ja: "SKALEZ シグネチャーカモ柄。4方向ストレッチ素材で膝の曲げ伸ばしが自由。",
+    "zh-CN": "SKALEZ 经典迷彩图案。四向弹力面料，屈膝自如。",
+  },
+};
+
 const cdn = "https://cdn.imweb.me";
 
 export const images = {

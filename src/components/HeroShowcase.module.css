@@ -97,6 +97,7 @@
   }
 }
 
+/* 지금 보이는 상품 이름·가격: 누르면 상품 정보 패널이 열린다 */
 .info {
   position: absolute;
   left: 6%;
@@ -104,9 +105,15 @@
   z-index: 3;
   display: grid;
   gap: 4px;
+  padding: 0;
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
+  text-align: left;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
 
   & small {
     color: var(--ink-muted);

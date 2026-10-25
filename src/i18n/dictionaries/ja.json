@@ -4,10 +4,11 @@
     "description": "鎧は生まれ持つものではなく、自ら鍛えるもの。ボディビルダーのためのパフォーマンスウェア、SKALEZ。"
   },
   "nav": {
-    "shop": "商品",
-    "tights": "タイツ",
-    "collab": "コラボ",
-    "support": "サポート",
+    "shop": "SHOP",
+    "newDrops": "NEW DROPS",
+    "tights": "TIGHTS",
+    "collab": "COLLAB",
+    "about": "ABOUT",
     "cart": "カート",
     "language": "言語",
     "menu": "メニュー",
@@ -52,20 +53,71 @@
     "compression": "コンプレッションフィット",
     "free": "フリーサイズ"
   },
+  "fabric": {
+    "cotton": "コットン100%",
+    "cottonPoly": "コットン80% / ポリエステル20%",
+    "polyRayon": "ポリエステル76% / レーヨン24%",
+    "nylonSpandex": "ナイロン78% / スパンデックス22%",
+    "polySilicone": "ポリエステル / シリコンノンスリップ"
+  },
+  "panel": {
+    "title": "[ PRODUCT ]",
+    "close": "閉じる",
+    "dialog": "商品情報",
+    "size": "サイズ",
+    "qty": "数量",
+    "decrease": "数量を減らす",
+    "increase": "数量を増やす",
+    "add": "カートに入れる",
+    "restock": "再入荷のお知らせを受け取る",
+    "soldOutNote": "[ SOLD OUT ] 再入荷のお知らせを受け取れます",
+    "soon": "オンラインカートは近日公開予定です。今はカカオトークでお問い合わせください。",
+    "fit": "FIT",
+    "fabric": "FABRIC",
+    "model": "MODEL",
+    "shipping": "SHIPPING",
+    "modelValue": "モデル 170cm / 82kg · XL着用",
+    "shippingValue": "$15 · $150以上で送料無料"
+  },
   "shopBy": {
-    "tights": { "small": "[ CORE LINE ]", "title": "TIGHTS" },
-    "tops": { "small": "[ OVERSIZED · MUSCLE ]", "title": "TOPS" },
-    "hoodies": { "small": "[ WARM UP ]", "title": "HOODIES" }
+    "tights": {
+      "small": "[ CORE LINE ]",
+      "title": "TIGHTS"
+    },
+    "tops": {
+      "small": "[ OVERSIZED · MUSCLE ]",
+      "title": "TOPS"
+    },
+    "hoodies": {
+      "small": "[ WARM UP ]",
+      "title": "HOODIES"
+    }
   },
   "trend": {
     "cta": "Shop now"
   },
   "trust": {
     "items": [
-      { "title": "100%", "accent": "OFFICIAL", "desc": "SKALEZ 公式ストア" },
-      { "title": "SAME-DAY", "accent": "SHIP", "desc": "平日14時までの決済で当日出荷" },
-      { "title": "FREE", "accent": "EXCHANGE", "desc": "7日以内1回サイズ交換無料" },
-      { "title": "ALWAYS", "accent": "HERE", "desc": "カカオトークで1:1相談" }
+      {
+        "title": "100%",
+        "accent": "OFFICIAL",
+        "desc": "SKALEZ 公式ストア"
+      },
+      {
+        "title": "SAME-DAY",
+        "accent": "SHIP",
+        "desc": "平日14時までの決済で当日出荷"
+      },
+      {
+        "title": "FREE",
+        "accent": "EXCHANGE",
+        "desc": "7日以内1回サイズ交換無料"
+      },
+      {
+        "title": "ALWAYS",
+        "accent": "HERE",
+        "desc": "カカオトークで1:1相談"
+      }
     ]
   },
   "quick": {

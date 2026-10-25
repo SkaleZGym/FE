@@ -188,3 +188,13 @@
     display: none;
   }
 }
+
+/* 메뉴 COLLAB(#drop)이 가리키는 자리: 스크립트가 top을 "히어로가 다 보이는 위치"로 맞춘다 */
+.anchor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}

@@ -4,10 +4,11 @@
     "description": "갑옷은 타고나는 것이 아니라 스스로 만드는 것. 보디빌더를 위한 퍼포먼스 웨어, SKALEZ."
   },
   "nav": {
-    "shop": "상품",
-    "tights": "타이즈",
-    "collab": "콜라보",
-    "support": "고객지원",
+    "shop": "SHOP",
+    "newDrops": "NEW DROPS",
+    "tights": "TIGHTS",
+    "collab": "COLLAB",
+    "about": "ABOUT",
     "cart": "장바구니",
     "language": "언어",
     "menu": "메뉴",
@@ -52,20 +53,71 @@
     "compression": "컴프레션 핏",
     "free": "프리 사이즈"
   },
+  "fabric": {
+    "cotton": "코튼 100%",
+    "cottonPoly": "코튼 80% / 폴리에스터 20%",
+    "polyRayon": "폴리에스터 76% / 레이온 24%",
+    "nylonSpandex": "나일론 78% / 스판덱스 22%",
+    "polySilicone": "폴리에스터 / 실리콘 논슬립"
+  },
+  "panel": {
+    "title": "[ PRODUCT ]",
+    "close": "닫기",
+    "dialog": "상품 정보",
+    "size": "사이즈",
+    "qty": "수량",
+    "decrease": "수량 줄이기",
+    "increase": "수량 늘리기",
+    "add": "장바구니 담기",
+    "restock": "재입고 알림 받기",
+    "soldOutNote": "[ SOLD OUT ] 재입고 알림을 받을 수 있어요",
+    "soon": "온라인 장바구니는 곧 열려요. 지금은 카카오톡으로 문의해 주세요.",
+    "fit": "FIT",
+    "fabric": "FABRIC",
+    "model": "MODEL",
+    "shipping": "SHIPPING",
+    "modelValue": "모델 170cm / 82kg · XL 착용",
+    "shippingValue": "3,000원 · 10만원 이상 무료"
+  },
   "shopBy": {
-    "tights": { "small": "[ CORE LINE ]", "title": "TIGHTS" },
-    "tops": { "small": "[ OVERSIZED · MUSCLE ]", "title": "TOPS" },
-    "hoodies": { "small": "[ WARM UP ]", "title": "HOODIES" }
+    "tights": {
+      "small": "[ CORE LINE ]",
+      "title": "TIGHTS"
+    },
+    "tops": {
+      "small": "[ OVERSIZED · MUSCLE ]",
+      "title": "TOPS"
+    },
+    "hoodies": {
+      "small": "[ WARM UP ]",
+      "title": "HOODIES"
+    }
   },
   "trend": {
     "cta": "Shop now"
   },
   "trust": {
     "items": [
-      { "title": "100%", "accent": "OFFICIAL", "desc": "SKALEZ 공식 스토어" },
-      { "title": "SAME-DAY", "accent": "SHIP", "desc": "평일 오후 2시 전 결제 시 당일 출고" },
-      { "title": "FREE", "accent": "EXCHANGE", "desc": "7일 이내 1회 무료 사이즈 교환" },
-      { "title": "ALWAYS", "accent": "HERE", "desc": "카카오톡 1:1 상담" }
+      {
+        "title": "100%",
+        "accent": "OFFICIAL",
+        "desc": "SKALEZ 공식 스토어"
+      },
+      {
+        "title": "SAME-DAY",
+        "accent": "SHIP",
+        "desc": "평일 오후 2시 전 결제 시 당일 출고"
+      },
+      {
+        "title": "FREE",
+        "accent": "EXCHANGE",
+        "desc": "7일 이내 1회 무료 사이즈 교환"
+      },
+      {
+        "title": "ALWAYS",
+        "accent": "HERE",
+        "desc": "카카오톡 1:1 상담"
+      }
     ]
   },
   "quick": {
