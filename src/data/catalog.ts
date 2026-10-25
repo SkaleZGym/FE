@@ -9,6 +9,9 @@ export type Badge = "NEW" | "SALE" | "BEST" | "HOT";
 
 export type CategoryKey = "top" | "tights" | "women" | "goods";
 
+/** 핏. 사전의 fit.* 라벨 키와 같다 */
+export type Fit = "oversized" | "semi" | "muscle" | "regular" | "compression" | "free";
+
 export type Product = {
   id: number;
   category: CategoryKey;
@@ -19,6 +22,8 @@ export type Product = {
   /** 할인 전 가격 */
   listPrice?: Record<Currency, number>;
   soldOut?: boolean;
+  /** 없으면 카테고리 기본값 (타이즈=컴프레션, 굿즈=프리, 그 외=오버핏) */
+  fit?: Fit;
 };
 
 /** 한국어는 원화, 그 외 언어는 기존 영문 사이트의 달러 가격 */
@@ -33,11 +38,17 @@ export function formatMoney(amount: number, currency: Currency, locale: Locale):
   }).format(amount);
 }
 
+export const fitOf = (product: Product): Fit =>
+  product.fit ?? (product.category === "tights" ? "compression" : product.category === "goods" ? "free" : "oversized");
+
+/** 카테고리별 사이즈 전개 (기존 사이트 기준) */
+export const sizesOf = (product: Product): string[] =>
+  product.category === "tights" ? ["S", "M", "L", "XL"] : product.category === "goods" ? ["FREE"] : ["M", "L", "XL", "2XL", "3XL"];
+
 const cdn = "https://cdn.imweb.me";
 
 export const images = {
   wordmark: `${cdn}/upload/S20210930976effc85cf48/50270fd40561c.png`,
-  kaidoPoster: `${cdn}/thumbnail/20260927/bef722d127522.jpg`,
 };
 
 export const kakaoChannelUrl = "https://pf.kakao.com/_byDUxj/chat";
@@ -50,7 +61,7 @@ function product(
   image: string,
   [ko, en, ja, zhCN]: Names,
   price: [krw: number, usd: number],
-  options: { badges?: Badge[]; list?: [krw: number, usd: number]; soldOut?: boolean } = {},
+  options: { badges?: Badge[]; list?: [krw: number, usd: number]; soldOut?: boolean; fit?: Fit } = {},
 ): Product {
   return {
     id,
@@ -61,6 +72,7 @@ function product(
     price: { KRW: price[0], USD: price[1] },
     listPrice: options.list && { KRW: options.list[0], USD: options.list[1] },
     soldOut: options.soldOut,
+    fit: options.fit,
   };
 }
 
@@ -71,7 +83,7 @@ export const products: Product[] = [
     [69000, 49], { badges: ["NEW", "SALE"], list: [79000, 59] }),
   product(291, "top", "20260927/5b5dac00c0fe4517.png",
     ["매드니스 세미 오버핏 티셔츠", "MADNESS Semi-Oversized T-shirt", "マッドネス セミオーバーサイズTシャツ", "MADNESS 半宽松T恤"],
-    [59000, 39], { badges: ["NEW", "SALE"], list: [69000, 49] }),
+    [59000, 39], { badges: ["NEW", "SALE"], list: [69000, 49], fit: "semi" }),
   product(278, "top", "20250701/237cfa5bb37bd.jpg",
     ["헤비 웨이트 오버핏 티셔츠 화이트", "Heavy Weight Oversized T-Shirt White", "ヘビーウェイト オーバーサイズTシャツ ホワイト", "重磅宽松T恤 白色"],
     [43000, 42.18], { badges: ["BEST", "HOT"] }),
@@ -80,10 +92,10 @@ export const products: Product[] = [
     [43000, 42.18], { badges: ["BEST", "HOT"] }),
   product(273, "top", "20250625/65926f9cca419.jpg",
     ["워크아웃 숄더라인 슬리브리스 화이트", "Workout =/ Homework Sleeveless White", "ワークアウト スリーブレス ホワイト", "Workout 无袖背心 白色"],
-    [38000, 36.91], { badges: ["BEST", "HOT"] }),
+    [38000, 36.91], { badges: ["BEST", "HOT"], fit: "regular" }),
   product(272, "top", "20250625/606212dc38d43.jpg",
     ["워크아웃 숄더라인 슬리브리스 블랙", "Workout =/ Homework Sleeveless Black", "ワークアウト スリーブレス ブラック", "Workout 无袖背心 黑色"],
-    [38000, 36.91], { badges: ["BEST", "HOT"] }),
+    [38000, 36.91], { badges: ["BEST", "HOT"], fit: "regular" }),
   product(275, "top", "20250625/3eff9da129f55.jpg",
     ["파라밸럼 오버핏 티셔츠 화이트", "Si Vis Pacem Para Bellum Oversized T-Shirt White", "パラベラム オーバーサイズTシャツ ホワイト", "Para Bellum 宽松T恤 白色"],
     [43000, 42.18], { badges: ["BEST", "HOT"] }),
@@ -92,28 +104,28 @@ export const products: Product[] = [
     [43000, 42.18], { badges: ["BEST", "HOT"] }),
   product(271, "top", "20250612/d5919d71eb8cd.jpg",
     ["췌 빅로고 머슬핏 티셔츠 화이트", "Chweya Big Logo Muscle Fit T-shirt White", "チェヤ ビッグロゴ マッスルフィットTシャツ ホワイト", "Chweya 大Logo 修身T恤 白色"],
-    [43000, 42.18], { badges: ["BEST", "HOT"] }),
+    [43000, 42.18], { badges: ["BEST", "HOT"], fit: "muscle" }),
   product(270, "top", "20250612/614ff3bae5703.jpg",
     ["췌 빅로고 머슬핏 티셔츠 블랙", "Chweya Big Logo Muscle Fit T-shirt Black", "チェヤ ビッグロゴ マッスルフィットTシャツ ブラック", "Chweya 大Logo 修身T恤 黑色"],
-    [43000, 42.18], { badges: ["BEST", "HOT"] }),
+    [43000, 42.18], { badges: ["BEST", "HOT"], fit: "muscle" }),
   product(269, "top", "20250612/2ddbf3593b758.jpg",
     ["췌 에센셜 머슬핏 티셔츠 화이트", "Chweya Essential Muscle Fit T-shirt White", "チェヤ エッセンシャル マッスルフィットTシャツ ホワイト", "Chweya 基础修身T恤 白色"],
-    [39000, 36.91], { badges: ["BEST", "HOT"] }),
+    [39000, 36.91], { badges: ["BEST", "HOT"], fit: "muscle" }),
   product(268, "top", "20250612/4eb82fca09cc7.jpg",
     ["췌 에센셜 머슬핏 티셔츠 블랙", "Chweya Essential Muscle Fit T-shirt Black", "チェヤ エッセンシャル マッスルフィットTシャツ ブラック", "Chweya 基础修身T恤 黑色"],
-    [39000, 36.91], { badges: ["BEST", "HOT"] }),
+    [39000, 36.91], { badges: ["BEST", "HOT"], fit: "muscle" }),
   product(264, "top", "20250325/636693509b31e.jpg",
     ["FCK 헤비 코튼 오버핏 티셔츠 블랙", "FCK Heavy Cotton Oversized T-shirt Black", "FCK ヘビーコットン オーバーサイズTシャツ ブラック", "FCK 重磅纯棉宽松T恤 黑色"],
     [45000, 52.73], { badges: ["BEST"] }),
   product(265, "top", "20250325/ea072bfaaef19.jpg",
     ["FCK 머슬핏 골지 민소매", "FCK Ribbed Tank Black", "FCK リブタンクトップ ブラック", "FCK 罗纹背心 黑色"],
-    [35000, 36.91], { badges: ["BEST"] }),
+    [35000, 36.91], { badges: ["BEST"], fit: "muscle" }),
   product(261, "top", "20250114/4427b63a9a3bc.jpg",
     ["플리즈 세미 오버핏 후드 빈티지 브라운", "PLEASE Oversized Hoodie Vintage Brown", "PLEASE オーバーサイズパーカー ヴィンテージブラウン", "PLEASE 宽松连帽衫 复古棕"],
-    [85000, 63.28], { badges: ["BEST", "HOT"] }),
+    [85000, 63.28], { badges: ["BEST", "HOT"], fit: "semi" }),
   product(249, "top", "20241129/58ee0b8c399b6.jpg",
     ["플리즈 세미 오버핏 후드 블랙", "PLEASE Oversized Hoodie Black", "PLEASE オーバーサイズパーカー ブラック", "PLEASE 宽松连帽衫 黑色"],
-    [85000, 63.28], { badges: ["BEST", "HOT"] }),
+    [85000, 63.28], { badges: ["BEST", "HOT"], fit: "semi" }),
   product(251, "top", "20241219/98cc17ce37660.jpg",
     ["멘탈리티 웜업 후드 블랙", "Mentality Warm-up Hoodie Black", "メンタリティ ウォームアップパーカー ブラック", "Mentality 热身连帽衫 黑色"],
     [89000, 73.82], { badges: ["BEST", "HOT"] }),
@@ -167,22 +179,27 @@ export const products: Product[] = [
 
 export const productById = (id: number) => products.find((item) => item.id === id)!;
 
-/** BESTSELLER 순서. 주력인 타이즈를 앞에 둔다 (대표님이 원하는 순서로 바꾸면 된다) */
-export const bestIds = [166, 164, 168, 278, 249, 162, 268];
-
-/** 메인 배너(타이즈) 사진: 가운데 큰 사진 + 양옆 작은 사진 2장 */
-export const heroTightsIds = { main: 166, thumbs: [168, 200] };
-
-/** 기존 사이트 COLLAB 메뉴의 콜라보 라인업 (이름은 고유명사라 번역하지 않는다) */
-export const collabs = [
-  "KAIDO",
-  "일반인클라쓰 로니",
-  "머슬툰",
-  "췌이야",
-  "PLEASE EDITION",
-  "IFBB PRO 조초",
-  "작은빌더정권",
+/** 히어로 오른쪽에서 5초마다 돌아가는 대표 상품. line은 상품 위에 작게 붙는 라인 이름(고유명사라 번역하지 않는다) */
+export const heroShowcase = [
+  { id: 292, line: "KAIDO × SKALEZ" },
+  { id: 166, line: "SIGNATURE CAMO" },
+  { id: 291, line: "KAIDO × SKALEZ" },
+  { id: 162, line: "ESSENTIAL" },
 ];
+
+/** FEATURED 카드 4장과 뱃지 (사전의 featured.badges.* 키) */
+export const picks: { id: number; badge: "new" | "best" | "trending" | "soldOut" }[] = [
+  { id: 292, badge: "new" },
+  { id: 166, badge: "best" },
+  { id: 251, badge: "trending" },
+  { id: 152, badge: "soldOut" },
+];
+
+/** SHOP BY 타일 배경에 쓰는 상품 사진 */
+export const shopByTiles = { tights: 166, tops: 278, hoodies: 251 } as const;
+
+/** 트렌드 배너 배경 사진 */
+export const trendImageId = 270;
 
 // TODO: 대표님 확인 필요 — 기존 사이트 하단에 주소가 두 가지로 표기되어 있음
 export const business = {

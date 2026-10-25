@@ -1,120 +1,162 @@
 .card {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  height: 100%;
+  padding: 14px;
+  color: #111;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 10px 30px rgb(0 0 0 / 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.05), 0 20px 40px rgb(0 0 0 / 0.1);
+  }
 }
 
 .image {
   position: relative;
-  aspect-ratio: 4 / 5;
+  display: block;
+  aspect-ratio: 1;
   overflow: hidden;
-  background: #e4e4e2;
-  clip-path: polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
+  border-radius: 6px;
+  background: #ececea;
 
   & img {
     object-fit: cover;
-    transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    mix-blend-mode: multiply;
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 }
 
 .card:hover .image img {
-  transform: scale(1.05);
+  transform: scale(1.06) rotate(-1.5deg);
 }
 
 .card[data-soldout] .image img {
-  filter: grayscale(1);
-  opacity: 0.55;
+  opacity: 0.45;
 }
 
-.rank {
+.badge {
   position: absolute;
-  left: 14px;
-  bottom: 6px;
-  font-family: var(--font-display);
-  font-size: clamp(3rem, 6vw, 5rem);
-  line-height: 1;
-  color: var(--bone);
-  mix-blend-mode: difference;
-}
-
-.soldOut {
-  position: absolute;
-  top: 12px;
-  left: 12px;
+  left: 10px;
+  top: 10px;
+  z-index: 1;
+  padding: 3px 7px;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  padding: 4px 8px;
-  color: var(--bone);
-  background: var(--iron);
-}
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+  background: #111;
 
-.body {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 12px;
-  line-height: 1.45;
+  &[data-tone="red"] {
+    background: var(--red);
+  }
 }
 
 .name {
+  margin-top: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
   text-transform: uppercase;
 }
 
-.badges {
-  display: flex;
-  gap: 10px;
+.sub {
+  margin-top: 2px;
   font-family: var(--font-mono);
-  font-size: 9px;
-  opacity: 0.6;
-
-  & span::before {
-    content: "●";
-    margin-right: 4px;
-    font-size: 7px;
-    vertical-align: 1px;
-  }
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: #8a8a8a;
 }
 
 .price {
-  display: flex;
-  gap: 8px;
+  margin-top: 12px;
   font-family: var(--font-mono);
+  font-size: 13px;
+
+  &[data-sale] {
+    color: var(--red);
+  }
 
   & s {
-    opacity: 0.45;
+    margin-left: 8px;
+    font-size: 11px;
+    color: #9a9a9a;
   }
 }
 
-/* ---------- tile: 밝은 박스형 카드 ---------- */
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 10px;
 
-.tile {
-  height: 100%;
-  gap: 12px;
-  padding: 10px 10px 16px;
-  color: var(--iron);
-  background: var(--tile-bg, var(--bone));
-  border-radius: 6px;
-  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  & span {
+    min-width: 26px;
+    padding: 3px 5px;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    text-align: center;
+    border: 1px solid #d6d6d2;
+    border-radius: 3px;
+  }
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 40px;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 16px;
+
+  & button {
+    height: 40px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    border-radius: 3px;
+  }
+}
+
+.add {
+  color: var(--ink);
+  background: #111;
+  border: 0;
+  transition: background 0.2s ease;
 
   &:hover {
-    transform: translateY(-4px);
+    background: var(--red);
+  }
+}
+
+.heart {
+  display: grid;
+  place-items: center;
+  background: none;
+  border: 1px solid #111;
+
+  & svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: #111;
+    stroke-width: 1.6;
   }
 
-  & .image {
-    aspect-ratio: 1;
-    border-radius: 4px;
-    clip-path: none;
+  &[aria-pressed="true"] svg {
+    fill: var(--red);
+    stroke: var(--red);
+  }
+}
+
+@media (max-width: 560px) {
+  .card {
+    padding: 8px;
   }
 
-  & .body {
-    align-items: center;
-    text-align: center;
-    font-size: 11px;
-  }
-
-  & .badges,
-  & .price {
-    justify-content: center;
+  .sizes {
+    display: none;
   }
 }

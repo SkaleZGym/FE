@@ -1,33 +1,59 @@
+/* 12번 시안의 어두운 헤더: 검은 배경 위 밝은 글자, 로고는 흰색(invert) */
 .header {
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 36px;
   height: 68px;
   padding: 0 var(--gutter);
-  color: var(--concrete-ink);
-  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
+  color: var(--ink);
   border-bottom: 1px solid transparent;
+  transition: background 0.35s ease, border-color 0.35s ease;
 
   &[data-scrolled] {
-    color: var(--concrete-ink);
-    background: rgb(201 201 196 / 0.86);
+    background: rgb(0 0 0 / 0.85);
     backdrop-filter: blur(14px);
-    border-bottom-color: rgb(52 55 59 / 0.12);
+    border-bottom-color: rgb(255 255 255 / 0.12);
   }
 }
 
-/* 메인 배너가 밝은 콘크리트 톤이라 검은 로고를 그대로 쓴다 */
+/* 인트로 동안: 인트로 스크립트가 이 요소에 올리는 변수로 나타난다 (--hdr 전체, --nav 메뉴·버튼).
+   비늘 캔버스 위에서 매 프레임 블러하면 느려지므로 인트로가 끝날 때까지 backdrop-filter는 끈다 */
+.header[data-intro-dim] {
+  opacity: var(--hdr, 0);
+  visibility: var(--hdr-vis, hidden);
+  pointer-events: var(--hdr-pe, none);
+}
+
+.header[data-intro-dim]:not([data-intro-done]) {
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+
+.header[data-intro-dim] .nav,
+.header[data-intro-dim] .actions {
+  opacity: var(--nav, 0);
+  transition: opacity 0.5s ease;
+}
+
 .logo img {
-  width: 122px;
+  width: 118px;
   height: auto;
+  filter: invert(1);
+  transition: filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 큰 로고가 날아와 내려앉는 순간 잠깐 빛난다 (인트로 스크립트가 data-glow를 켠다) */
+.logo img[data-glow] {
+  filter: invert(1) brightness(1.7) drop-shadow(0 0 18px rgb(237 237 237 / 0.45));
 }
 
 .nav {
   display: flex;
-  gap: 28px;
+  gap: 26px;
   font-family: var(--font-mono);
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -59,7 +85,7 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 16px;
   margin-left: auto;
 }
 
@@ -87,9 +113,9 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 32px var(--gutter);
-  background: var(--concrete);
-  color: var(--concrete-ink);
+  padding: 28px var(--gutter);
+  background: #000;
+  color: var(--ink);
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s;
@@ -102,12 +128,12 @@
   & a {
     display: flex;
     align-items: baseline;
-    gap: 16px;
+    gap: 14px;
     padding: 10px 0;
     font-family: var(--font-display);
-    font-size: 2.6rem;
+    font-size: 2.4rem;
     line-height: 1;
-    border-bottom: 1px solid rgb(52 55 59 / 0.12);
+    border-bottom: 1px solid rgb(255 255 255 / 0.12);
     opacity: 0;
     transform: translateY(16px);
     transition: opacity 0.4s ease, transform 0.4s ease;
@@ -146,10 +172,23 @@
   }
 
   .logo img {
-    width: 92px;
+    width: 90px;
   }
 
   .cart {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header[data-intro-dim] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .header[data-intro-dim] .nav,
+  .header[data-intro-dim] .actions {
+    opacity: 1;
   }
 }

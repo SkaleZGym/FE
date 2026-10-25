@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import type { Badge } from "@/data/catalog";
+import { useState } from "react";
 import styles from "./ProductCard.module.css";
 
 /** 서버에서 언어·통화에 맞게 가공해서 넘기는 카드 데이터 */
@@ -7,45 +9,55 @@ export type CardData = {
   id: number;
   image: string;
   name: string;
+  /** 핏 · 카테고리 (예: 오버핏 · GYMWEAR) */
+  sub: string;
   price: string;
   listPrice?: string;
-  badges: Badge[];
+  sizes: string[];
   soldOut: boolean;
-  soldOutLabel: string;
+  badge?: { label: string; tone?: "red" };
 };
 
 type Props = {
   product: CardData;
-  /** BEST 순위 등 카드 위에 크게 붙는 번호 */
-  rank?: number;
-  sizes?: string;
-  /** tile: 밝은 박스 안에 사진과 글자를 넣는 형태 (BESTSELLER·TIGHTS 그리드용) */
-  variant?: "default" | "tile";
+  labels: { add: string; restock: string; wish: string };
 };
 
-export default function ProductCard({ product, rank, sizes = "(max-width: 720px) 50vw, 25vw", variant = "default" }: Props) {
-  const className = variant === "tile" ? `${styles.card} ${styles.tile}` : styles.card;
+/** 12번 시안의 흰 상품 카드: 사진 · 뱃지 · 이름 · 핏 · 가격 · 사이즈 · 담기/찜 */
+export default function ProductCard({ product, labels }: Props) {
+  const [wished, setWished] = useState(false);
+
   return (
-    <a href="#" className={className} data-soldout={product.soldOut || undefined}>
-      <div className={styles.image}>
-        <Image src={product.image} alt={product.name} fill sizes={sizes} />
-        {rank !== undefined && <span className={styles.rank}>{String(rank).padStart(2, "0")}</span>}
-        {product.soldOut && <span className={styles.soldOut}>{product.soldOutLabel}</span>}
-      </div>
-      <div className={styles.body}>
-        <span className={styles.name}>{product.name}</span>
-        {product.badges.length > 0 && (
-          <span className={styles.badges}>
-            {product.badges.map((badge) => (
-              <span key={badge}>{badge}</span>
-            ))}
+    <article className={styles.card} data-soldout={product.soldOut || undefined}>
+      <a href="#" className={styles.image}>
+        <Image src={product.image} alt={product.name} fill sizes="(max-width: 560px) 50vw, (max-width: 1100px) 45vw, 22vw" />
+        {product.badge && (
+          <span className={styles.badge} data-tone={product.badge.tone}>
+            {product.badge.label}
           </span>
         )}
-        <span className={styles.price}>
-          {product.price}
-          {product.listPrice && <s>{product.listPrice}</s>}
-        </span>
+      </a>
+      <h3 className={styles.name}>{product.name}</h3>
+      <div className={styles.sub}>{product.sub}</div>
+      <div className={styles.price} data-sale={product.listPrice ? "" : undefined}>
+        {product.price}
+        {product.listPrice && <s>{product.listPrice}</s>}
       </div>
-    </a>
+      <div className={styles.sizes}>
+        {product.sizes.map((size) => (
+          <span key={size}>{size}</span>
+        ))}
+      </div>
+      <div className={styles.row}>
+        <button type="button" className={styles.add}>
+          {product.soldOut ? labels.restock : labels.add}
+        </button>
+        <button type="button" className={styles.heart} aria-pressed={wished} aria-label={labels.wish} onClick={() => setWished((w) => !w)}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z" />
+          </svg>
+        </button>
+      </div>
+    </article>
   );
 }

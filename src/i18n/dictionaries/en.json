@@ -4,105 +4,68 @@
     "description": "We are not born with armor. We forge our own scales. Performance wear for bodybuilders."
   },
   "nav": {
-    "collab": "Collab",
-    "best": "Best",
     "shop": "Shop",
-    "category": "Category",
+    "tights": "Tights",
+    "collab": "Collab",
     "support": "Support",
     "cart": "Cart",
     "language": "Language",
     "menu": "Menu",
-    "close": "Close",
-    "tights": "Tights"
+    "close": "Close"
   },
   "hero": {
-    "manifesto": "We don't follow fashion. We engineer gear for bodies under load. Every panel and every fit is calculated to endure, not to be looked at.",
-    "scroll": "Scroll",
-    "eyebrow": "Compression tights",
-    "shop": "Shop tights",
-    "note": "Where SKALEZ began, and still its core. Compression tights built for leg day."
-  },
-  "best": {
-    "note": "The pieces lifted most right now.",
-    "viewAll": "View all"
-  },
-  "products": {
-    "eyebrow": "KAIDO × SKALEZ Collab",
-    "note": "A collaboration between natural bodybuilder Kwak Hyunseong (KAIDO) and SKALEZ.",
-    "fit": "Fit: Oversized",
-    "fabric": "76% Polyester / 24% Rayon",
-    "lining": "Mesh lining",
-    "model": "Model 170cm / 82kg · wears XL",
-    "addToCart": "Add to cart",
-    "allNote": "From the newest drops to the steady sellers.",
-    "viewAll": "View all products"
-  },
-  "category": {
-    "note": "Your gear, sorted by type.",
-    "tabs": {
-      "top": "Tops",
-      "tights": "Tights",
-      "women": "Women",
-      "goods": "Goods"
-    },
-    "empty": "New products are on the way."
-  },
-  "collab": {
-    "description": "SKALEZ is built together with people who actually lift.",
-    "label": "Current collab",
-    "past": "Past collabs",
+    "kicker": "[ NEW DROP · 01/26 ]",
+    "lead": "Like dragon scales growing one layer at a time. Compression gear that survives leg day, and the KAIDO × SKALEZ Dragon Scales collection.",
     "shop": "Shop the drop",
-    "story": "A collaboration between natural bodybuilder Kwak Hyunseong (KAIDO) and SKALEZ. Strength isn’t something you’re born with. It’s something you build."
+    "tights": "Tights",
+    "globe": "Worldwide shipping opens in 2027",
+    "prev": "Previous product",
+    "next": "Next product"
   },
-  "notice": {
-    "title": "Notice",
-    "more": "View all",
-    "items": [
-      {
-        "tag": "DROP",
-        "title": "KAIDO × SKALEZ Dragon Scales collection released",
-        "date": "2026.09.28"
-      },
-      {
-        "tag": "RESTOCK",
-        "title": "Signature Camo Tights Shorts Black — 4th restock",
-        "date": ""
-      },
-      {
-        "tag": "NOTICE",
-        "title": "Our new website is coming soon",
-        "date": ""
-      },
-      {
-        "tag": "SHIPPING",
-        "title": "Extra shipping fee for remote areas in Korea",
-        "date": ""
-      }
-    ]
+  "tape": {
+    "line1": "/ COMPRESSION TIGHTS / KAIDO × SKALEZ / FORGED, NOT BORN / BUILT FOR LEG DAY",
+    "line2": "SAME-DAY SHIPPING · FREE SIZE EXCHANGE · WORLDWIDE 2027 ·"
   },
-  "faq": {
-    "title": "FAQ",
+  "featured": {
+    "kicker": "[ OUR PICKS ]",
+    "title": "Featured gear",
+    "viewAll": "View all",
+    "add": "ADD TO CART",
+    "restock": "RESTOCK ALERT",
+    "wish": "Wishlist",
+    "badges": {
+      "new": "NEW",
+      "best": "BEST",
+      "trending": "TRENDING",
+      "soldOut": "SOLD OUT"
+    },
+    "sub": {
+      "compression": "COMPRESSION",
+      "gymwear": "GYMWEAR"
+    }
+  },
+  "fit": {
+    "oversized": "Oversized",
+    "semi": "Semi-oversized",
+    "muscle": "Muscle fit",
+    "regular": "Regular fit",
+    "compression": "Compression fit",
+    "free": "One size"
+  },
+  "shopBy": {
+    "tights": { "small": "[ CORE LINE ]", "title": "TIGHTS" },
+    "tops": { "small": "[ OVERSIZED · MUSCLE ]", "title": "TOPS" },
+    "hoodies": { "small": "[ WARM UP ]", "title": "HOODIES" }
+  },
+  "trend": {
+    "cta": "Shop now"
+  },
+  "trust": {
     "items": [
-      {
-        "q": "How much is shipping?",
-        "a": "Domestic shipping in Korea is ₩3,000 and free on orders of ₩100,000 or more. Remote areas may have an extra fee."
-      },
-      {
-        "q": "How do I choose my size?",
-        "a": "Each product page shows the model's height, weight and size worn (e.g. 170cm / 82kg, wears XL). Please also check the fit, such as oversized or muscle fit."
-      },
-      {
-        "q": "How do reward points work?",
-        "a": "You earn 1% of your purchase amount as points. For example, a ₩69,000 item earns 690 points."
-      },
-      {
-        "q": "How do I exchange or return an item?",
-        "a": "Contact us through our KakaoTalk channel or customer service (+82 10-5817-8169) with your order number."
-      },
-      {
-        "q": "Do you ship internationally?",
-        "a": "International shipping will open step by step. We'll announce it in our notices."
-      }
+      { "title": "100%", "accent": "OFFICIAL", "desc": "The official SKALEZ store" },
+      { "title": "SAME-DAY", "accent": "SHIP", "desc": "Orders paid before 2 PM KST ship the same business day" },
+      { "title": "FREE", "accent": "EXCHANGE", "desc": "One free size exchange within 7 days" },
+      { "title": "ALWAYS", "accent": "HERE", "desc": "1:1 chat on KakaoTalk" }
     ]
   },
   "quick": {
@@ -112,8 +75,10 @@
     "chat": "KakaoTalk chat",
     "top": "Back to top"
   },
-  "product": {
-    "soldOut": "SOLD OUT"
+  "intro": {
+    "skip": "Skip intro",
+    "hint": "Scroll to enter",
+    "replay": "Replay intro"
   },
   "footer": {
     "company": "Company",
@@ -124,10 +89,7 @@
     "contact": "Customer service",
     "email": "Email",
     "terms": "Terms of use",
-    "privacy": "Privacy policy"
-  },
-  "tights": {
-    "note": "The core SKALEZ line. From shorts to full length, compression tights made for leg day.",
-    "viewAll": "View all tights"
+    "privacy": "Privacy policy",
+    "tagline": "BUILT FOR LEG DAY."
   }
 }

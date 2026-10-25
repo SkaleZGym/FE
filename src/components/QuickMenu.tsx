@@ -6,10 +6,12 @@ import styles from "./QuickMenu.module.css";
 
 type Props = {
   labels: { title: string; cart: string; wish: string; chat: string; top: string };
+  /** 인트로가 끝날 때까지 숨겼다가, 인트로 스크립트가 이 요소에 올리는 --qv/--nav 값에 맞춰 나타난다 */
+  introDim?: boolean;
 };
 
 /** 화면 오른쪽 아래에 떠 있는 퀵메뉴. 맨 위로 버튼은 조금 내려왔을 때만 보인다 */
-export default function QuickMenu({ labels }: Props) {
+export default function QuickMenu({ labels, introDim = false }: Props) {
   const [showTop, setShowTop] = useState(false);
 
   useEffect(() => {
@@ -20,7 +22,7 @@ export default function QuickMenu({ labels }: Props) {
   }, []);
 
   return (
-    <nav className={styles.quick} aria-label={labels.title}>
+    <nav className={styles.quick} aria-label={labels.title} data-intro-quick={introDim || undefined}>
       <a href="#" className={styles.item}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8Z" />

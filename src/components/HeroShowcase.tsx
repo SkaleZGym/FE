@@ -1,0 +1,82 @@
+"use client";
+
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import styles from "./HeroShowcase.module.css";
+
+export type ShowcaseItem = { id: number; image: string; name: string; line: string; price: string; listPrice?: string };
+
+type Props = { items: ShowcaseItem[]; labels: { prev: string; next: string } };
+
+const INTERVAL = 5000;
+const pad = (n: number) => String(n).padStart(2, "0");
+
+/** 히어로 오른쪽: 대표 상품 사진이 5초마다 바뀐다 (빛나는 원 위에 떠 있고, 바뀔 때 옆으로 밀려 나간다) */
+export default function HeroShowcase({ items, labels }: Props) {
+  const [index, setIndex] = useState(0);
+  const [leaving, setLeaving] = useState<number | null>(null);
+  const [round, setRound] = useState(0); // 진행 막대 애니메이션을 처음부터 다시 돌리기 위한 키
+
+  const go = (next: number) => {
+    setLeaving(index);
+    setIndex((next + items.length) % items.length);
+    setRound((r) => r + 1);
+  };
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setLeaving(index);
+      setIndex((index + 1) % items.length);
+      setRound((r) => r + 1);
+    }, INTERVAL);
+    return () => clearInterval(id);
+  }, [index, items.length]);
+
+  useEffect(() => {
+    if (leaving === null) return;
+    const id = setTimeout(() => setLeaving(null), 900);
+    return () => clearTimeout(id);
+  }, [leaving]);
+
+  const current = items[index];
+
+  return (
+    <>
+      <div className={styles.prod}>
+        {items.map((item, i) => (
+          <Image
+            key={item.id}
+            src={item.image}
+            alt={item.name}
+            fill
+            sizes="(max-width: 860px) 90vw, 45vw"
+            priority={i === 0}
+            data-state={i === index ? "on" : i === leaving ? "off" : undefined}
+          />
+        ))}
+      </div>
+      <div className={styles.nav}>
+        <button type="button" aria-label={labels.prev} onClick={() => go(index - 1)}>
+          ‹
+        </button>
+        <span>
+          {pad(index + 1)} / {pad(items.length)}
+        </span>
+        <div className={styles.bar}>
+          <i key={round} />
+        </div>
+        <button type="button" aria-label={labels.next} onClick={() => go(index + 1)}>
+          ›
+        </button>
+      </div>
+      <a className={styles.info} href="#featured">
+        <small>{current.line}</small>
+        <b>{current.name}</b>
+        <span className={styles.price}>
+          {current.price}
+          {current.listPrice && <s>{current.listPrice}</s>}
+        </span>
+      </a>
+    </>
+  );
+}

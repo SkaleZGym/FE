@@ -4,105 +4,68 @@
     "description": "铠甲不是与生俱来的，而是自己锻造的。为健美运动员打造的功能服饰 SKALEZ。"
   },
   "nav": {
-    "collab": "联名",
-    "best": "热销",
     "shop": "商品",
-    "category": "分类",
+    "tights": "紧身裤",
+    "collab": "联名",
     "support": "客服",
     "cart": "购物车",
     "language": "语言",
     "menu": "菜单",
-    "close": "关闭",
-    "tights": "紧身裤"
+    "close": "关闭"
   },
   "hero": {
-    "manifesto": "我们不追随潮流。我们为承受重量的身体设计服装。每一块面料、每一种版型，都是为了承受而计算，而不是为了被观看。",
-    "scroll": "向下滚动",
-    "eyebrow": "压缩紧身裤",
-    "shop": "选购紧身裤",
-    "note": "SKALEZ 的起点，也是核心。为练腿日打造的压缩紧身裤。"
+    "kicker": "[ NEW DROP · 01/26 ]",
+    "lead": "如同一层层生长的龙鳞。经得起腿部训练的压缩装备，以及 KAIDO × SKALEZ 龙鳞系列。",
+    "shop": "Shop the drop",
+    "tights": "Tights",
+    "globe": "海外配送预计 2027 年开通",
+    "prev": "上一个商品",
+    "next": "下一个商品"
   },
-  "best": {
-    "note": "当下被举起最多的装备。",
-    "viewAll": "查看全部"
+  "tape": {
+    "line1": "/ COMPRESSION TIGHTS / KAIDO × SKALEZ / FORGED, NOT BORN / BUILT FOR LEG DAY",
+    "line2": "SAME-DAY SHIPPING · FREE SIZE EXCHANGE · WORLDWIDE 2027 ·"
   },
-  "products": {
-    "eyebrow": "KAIDO × SKALEZ 联名",
-    "note": "自然健美运动员郭贤成(KAIDO)与 SKALEZ 的联名合作。",
-    "fit": "版型：宽松",
-    "fabric": "聚酯纤维 76% / 人造丝 24%",
-    "lining": "网眼内衬",
-    "model": "模特 170cm / 82kg · 穿 XL",
-    "addToCart": "加入购物车",
-    "allNote": "从新品到经典款。",
-    "viewAll": "查看全部商品"
-  },
-  "category": {
-    "note": "按类别挑选你的装备。",
-    "tabs": {
-      "top": "上衣",
-      "tights": "紧身裤",
-      "women": "女装",
-      "goods": "周边"
+  "featured": {
+    "kicker": "[ OUR PICKS ]",
+    "title": "Featured gear",
+    "viewAll": "View all",
+    "add": "ADD TO CART",
+    "restock": "RESTOCK ALERT",
+    "wish": "收藏",
+    "badges": {
+      "new": "NEW",
+      "best": "BEST",
+      "trending": "TRENDING",
+      "soldOut": "SOLD OUT"
     },
-    "empty": "新品正在准备中。"
+    "sub": {
+      "compression": "COMPRESSION",
+      "gymwear": "GYMWEAR"
+    }
   },
-  "collab": {
-    "description": "SKALEZ 与真正举铁的人一起打造。",
-    "label": "本期联名",
-    "past": "往期联名",
-    "shop": "查看本期发售",
-    "story": "自然健美运动员郭贤成(KAIDO)与 SKALEZ 的联名。力量不是天生的，而是自己锻造的。"
+  "fit": {
+    "oversized": "宽松版型",
+    "semi": "半宽松版型",
+    "muscle": "修身版型",
+    "regular": "常规版型",
+    "compression": "压缩版型",
+    "free": "均码"
   },
-  "notice": {
-    "title": "公告",
-    "more": "查看全部",
+  "shopBy": {
+    "tights": { "small": "[ CORE LINE ]", "title": "TIGHTS" },
+    "tops": { "small": "[ OVERSIZED · MUSCLE ]", "title": "TOPS" },
+    "hoodies": { "small": "[ WARM UP ]", "title": "HOODIES" }
+  },
+  "trend": {
+    "cta": "Shop now"
+  },
+  "trust": {
     "items": [
-      {
-        "tag": "DROP",
-        "title": "KAIDO × SKALEZ 龙鳞系列正式发售",
-        "date": "2026.09.28"
-      },
-      {
-        "tag": "RESTOCK",
-        "title": "经典迷彩紧身短裤 黑色 第4次补货通知",
-        "date": ""
-      },
-      {
-        "tag": "NOTICE",
-        "title": "新网站即将上线",
-        "date": ""
-      },
-      {
-        "tag": "SHIPPING",
-        "title": "韩国偏远地区额外运费说明",
-        "date": ""
-      }
-    ]
-  },
-  "faq": {
-    "title": "常见问题",
-    "items": [
-      {
-        "q": "运费是多少？",
-        "a": "韩国国内基本运费为 3,000 韩元，满 100,000 韩元免运费。偏远地区可能会产生额外运费。"
-      },
-      {
-        "q": "如何选择尺码？",
-        "a": "每个商品详情页都会注明模特的身高、体重和所穿尺码（例如：170cm / 82kg，穿 XL）。也请一并确认宽松、修身等版型信息。"
-      },
-      {
-        "q": "积分怎么累积？",
-        "a": "按购买金额的 1% 累积积分。例如购买 69,000 韩元的商品可获得 690 积分。"
-      },
-      {
-        "q": "如何换货或退货？",
-        "a": "请通过 KakaoTalk 频道或客服电话（+82 10-5817-8169）联系我们，并提供订单号。"
-      },
-      {
-        "q": "可以寄送海外吗？",
-        "a": "海外配送将陆续开通，开通时会在公告中通知。"
-      }
+      { "title": "100%", "accent": "OFFICIAL", "desc": "SKALEZ 官方商店" },
+      { "title": "SAME-DAY", "accent": "SHIP", "desc": "工作日下午 2 点前付款当日发货" },
+      { "title": "FREE", "accent": "EXCHANGE", "desc": "7 天内 1 次免费换尺码" },
+      { "title": "ALWAYS", "accent": "HERE", "desc": "KakaoTalk 1:1 咨询" }
     ]
   },
   "quick": {
@@ -112,8 +75,10 @@
     "chat": "KakaoTalk 咨询",
     "top": "回到顶部"
   },
-  "product": {
-    "soldOut": "售罄"
+  "intro": {
+    "skip": "跳过片头",
+    "hint": "滚动进入",
+    "replay": "重播片头"
   },
   "footer": {
     "company": "公司名称",
@@ -124,10 +89,7 @@
     "contact": "客服",
     "email": "邮箱",
     "terms": "使用条款",
-    "privacy": "隐私政策"
-  },
-  "tights": {
-    "note": "SKALEZ 的主力系列。从短裤到长裤，为练腿日打造的压缩紧身裤。",
-    "viewAll": "查看全部紧身裤"
+    "privacy": "隐私政策",
+    "tagline": "BUILT FOR LEG DAY."
   }
 }

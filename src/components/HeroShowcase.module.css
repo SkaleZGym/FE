@@ -1,0 +1,149 @@
+/* 대표 상품 사진: 빛나는 원 위에 떠 있고 5초마다 옆으로 밀려 나가며 바뀐다 */
+.prod {
+  position: absolute;
+  inset: 2% 4% 8%;
+  z-index: 1;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 4%;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, #8e8e8a 0%, #4b4b49 42%, #1c1c1b 70%, transparent 100%);
+    animation: glow 6s ease-in-out infinite;
+  }
+
+  & img {
+    object-fit: contain;
+    filter: contrast(1.12) brightness(0.8);
+    -webkit-mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+    mask-image: radial-gradient(closest-side, #000 70%, transparent 100%);
+    opacity: 0;
+    transform: translateX(10%) rotate(4deg) scale(0.94);
+    transition: opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  & img[data-state="on"] {
+    opacity: 1;
+    transform: none;
+    animation: float 6s ease-in-out infinite 1s;
+  }
+
+  & img[data-state="off"] {
+    opacity: 0;
+    transform: translateX(-10%) rotate(-4deg) scale(0.94);
+  }
+}
+
+@keyframes glow {
+  50% {
+    transform: scale(1.04);
+    opacity: 0.85;
+  }
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-12px) rotate(-0.6deg);
+  }
+}
+
+.nav {
+  position: absolute;
+  left: 6%;
+  top: 4%;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #9a9a9a;
+
+  & button {
+    width: 38px;
+    height: 38px;
+    color: var(--ink);
+    background: none;
+    border: 1px solid rgb(255 255 255 / 0.35);
+    border-radius: 50%;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  & button:hover {
+    color: #000;
+    background: var(--ink);
+  }
+}
+
+.bar {
+  width: 80px;
+  height: 2px;
+  background: #333;
+  overflow: hidden;
+
+  & i {
+    display: block;
+    height: 100%;
+    background: var(--ink);
+    transform-origin: left;
+    animation: fill 5s linear infinite;
+  }
+}
+
+@keyframes fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.info {
+  position: absolute;
+  left: 6%;
+  bottom: 10%;
+  z-index: 3;
+  display: grid;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+
+  & small {
+    color: var(--ink-muted);
+    font-size: 10px;
+  }
+
+  & b {
+    font-weight: 400;
+    font-size: 13px;
+  }
+}
+
+.price {
+  color: var(--red);
+
+  & s {
+    margin-left: 6px;
+    color: #6f6f6f;
+  }
+}
+
+@media (max-width: 860px) {
+  .info {
+    left: 2%;
+    bottom: 4%;
+  }
+
+  .nav {
+    left: 2%;
+    top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prod::before,
+  .prod img[data-state="on"],
+  .bar i {
+    animation: none;
+  }
+}

@@ -6,8 +6,7 @@
   display: flex;
   flex-direction: column;
   border: 1px solid rgb(236 235 230 / 0.16);
-  background: rgb(28 30 33 / 0.88);
-  backdrop-filter: blur(10px);
+  background: rgb(28 30 33 / 0.95);
 }
 
 .item {
@@ -81,5 +80,19 @@
 
   .item span {
     display: none;
+  }
+}
+
+/* 인트로 동안: 인트로 스크립트가 이 요소에 올리는 --qv(visibility)·--nav(opacity)로 히어로와 함께 나타난다 */
+.quick[data-intro-quick] {
+  visibility: var(--qv, hidden);
+  opacity: var(--nav, 0);
+  transition: opacity 0.5s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quick[data-intro-quick] {
+    visibility: visible;
+    opacity: 1;
   }
 }
