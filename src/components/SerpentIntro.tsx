@@ -5,11 +5,13 @@ import { SERPENT_FS, SERPENT_VS } from "./serpentShader";
 import styles from "./SerpentIntro.module.css";
 
 /**
- * 서펜트 비늘 인트로 (SKALEZ = scales). 히어로를 감싸고 스크롤 진행도 p(0~1)에 따라 보여 준다.
- *   p .00~.45  검은 화면 오른쪽 아래에서 뱀 비늘이 덮어 온다 (서펜트 셰이더. 느린 초반 빛줄기 장면은 건너뛴다)
- *   p .44~.56  화면 가운데에 로고가 떠오르고, 비늘이 로고를 중심으로 소용돌이치며 모인다
- *   p .64~.90  로고가 S자 경로(아래로 크게 휘었다가 오른쪽으로 쓸고 올라와)로 헤더 로고 자리에 내려앉는다. 소용돌이도 따라간다
- *   p .86~.98  비늘이 걷히고 히어로·헤더·퀵메뉴가 나타난다
+ * 서펜트 비늘 인트로 (SKALEZ = scales). 히어로를 감싸고 연출 진행도 s(0~1)에 따라 보여 준다.
+ * 스크롤 진행도 p(0~1)는 s = .4 + .6p 로 옮긴다: 비늘이 덮어 오는 앞부분(s .00~.40)은 잘라서,
+ * 처음부터 화면 가득 비늘이 일렁이고 곧바로 로고가 떠오른다 (인트로 스크롤 1.4화면, 모바일 1.2화면).
+ *   s .40      화면 전체를 덮은 비늘이 일렁인다 (시작 화면)
+ *   s .44~.56  화면 가운데에 로고가 떠오르고, 비늘이 로고를 중심으로 소용돌이치며 모인다
+ *   s .64~.90  로고가 S자 경로(아래로 크게 휘었다가 오른쪽으로 쓸고 올라와)로 헤더 로고 자리에 내려앉는다. 소용돌이도 따라간다
+ *   s .86~.98  비늘이 걷히고 히어로·헤더·퀵메뉴가 나타난다
  *   그 뒤 한 화면(홀드)만큼은 진행도 1로 고정: 히어로가 붙어 있다가 계속 굴려야 본문으로 넘어간다. 위로 굴리면 거꾸로 재생된다.
  * 가볍게 가는 법: 캔버스 해상도 상한(프레임이 느리면 스스로 더 낮춤), CSS 변수는 값이 바뀔 때만 쓰고 :root에는 쓰지 않는다,
  * 안 보이는 히어로·헤더·퀵메뉴는 visibility: hidden, 인트로가 화면 밖이거나 비늘이 사라진 뒤에는 그리지 않는다.
@@ -27,6 +29,7 @@ type GLCtx = {
 
 const RATIO = 590 / 3000; // 로고 PNG 가로세로 비율
 const START = 0.14; // 서펜트 장면 1(가는 빛줄기)은 거의 생략하고 비늘 점령부터
+const P0 = 0.4; // 연출 진행도 0~.4(비늘이 덮어 오는 구간)는 건너뛴다. 대표님 피드백: 인트로 스크롤 50% 단축 (2026-10-25)
 const SEEN_KEY = "skz.intro";
 
 const clamp = (v: number) => Math.min(1, Math.max(0, v));
@@ -199,7 +202,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     function measure() {
       W = pin!.clientWidth;
       H = pin!.clientHeight;
-      const introVh = mobile() ? 2.4 : 2.8;
+      const introVh = mobile() ? 1.2 : 1.4; // 인트로가 차지하는 스크롤 (화면 높이 배수). 처음 2.4 / 2.8에서 절반으로
       const holdVh = mobile() ? 0.9 : 1.0;
       trackPx = Math.round(H * introVh);
       holdPx = Math.round(H * holdVh);
@@ -227,10 +230,12 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     let logoPos: Pt = center;
     let lastLogo = "";
     function choreography(p: number) {
-      const sp = START + p * (1 - START); // 셰이더 진행도
-      const rise = clamp((p - 0.44) / 0.12); // 로고 떠오름
-      const move = clamp((p - 0.64) / 0.26); // 로고 이동
-      const handoff = clamp((p - 0.9) / 0.03); // 헤더 로고에 자리를 넘김
+      // p = 스크롤 진행도(0~1), s = 연출 진행도. 앞부분(비늘이 덮어 오는 장면)을 잘라 비늘이 화면을 다 덮은 상태, 로고가 떠오르기 직전부터 시작한다
+      const s = P0 + p * (1 - P0);
+      const sp = START + s * (1 - START); // 셰이더 진행도
+      const rise = clamp((s - 0.44) / 0.12); // 로고 떠오름
+      const move = clamp((s - 0.64) / 0.26); // 로고 이동
+      const handoff = clamp((s - 0.9) / 0.03); // 헤더 로고에 자리를 넘김
       const u = easeInOut(move);
       const pos = move > 0 ? bezier(center, c1, c2, dest, u) : center;
       logoPos = pos;
@@ -250,26 +255,26 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
         logoEl!.style.opacity = opacity.toFixed(3);
       }
       // 히어로·캔버스
-      const c = ease(clamp((p - 0.86) / 0.11));
-      const cv = 1 - clamp((p - 0.9) / 0.08);
+      const c = ease(clamp((s - 0.86) / 0.11));
+      const cv = 1 - clamp((s - 0.9) / 0.08);
       setVar(pin, "--c", c);
       setVar(pin, "--cv", cv);
-      setVar(pin, "--p", p);
+      setVar(pin, "--p", p); // 진행 막대는 실제 스크롤 진행도
       setVar(pin, "--h", clamp(p * 8));
       setVar(pin, "--hv", c > 0 ? "visible" : "hidden"); // 안 보이는 히어로는 합성에서 뺀다
       // 헤더: 로고는 큰 로고가 도착하는 순간, 메뉴·퀵메뉴는 히어로와 함께
-      const lg = clamp((p - 0.885) / 0.035);
-      const nav = clamp((p - 0.9) / 0.08);
+      const lg = clamp((s - 0.885) / 0.035);
+      const nav = clamp((s - 0.9) / 0.08);
       setVar(header, "--hdr", lg);
       setVar(header, "--hdr-vis", lg > 0 ? "visible" : "hidden");
-      setVar(header, "--hdr-pe", p > 0.9 ? "auto" : "none");
+      setVar(header, "--hdr-pe", s > 0.9 ? "auto" : "none");
       setVar(header, "--nav", nav);
       setVar(quick, "--nav", nav);
-      setVar(quick, "--qv", p > 0.9 ? "visible" : "hidden");
-      setFlag(brand, "data-glow", p > 0.87 && p < 0.96);
-      setFlag(header, "data-intro-done", p >= 0.98);
-      setFlag(replay, "data-on", p > 0.97);
-      if (p > 0.97) {
+      setVar(quick, "--qv", s > 0.9 ? "visible" : "hidden");
+      setFlag(brand, "data-glow", s > 0.87 && s < 0.96);
+      setFlag(header, "data-intro-done", s >= 0.98);
+      setFlag(replay, "data-on", s > 0.97);
+      if (s > 0.97) {
         try {
           sessionStorage.setItem(SEEN_KEY, "1");
         } catch {}
@@ -333,8 +338,9 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       lastT = now;
       readTarget();
       // 인트로 트랙 안에서 .9를 넘는 순간에만 맞춰 준다. 메뉴 클릭으로 지나가는 중이거나 본문까지 건너뛴 경우에는 끌어오지 않는다
-      if (!snapped && target >= 0.9 && target > lastTarget && scrollY < endY() && now > navUntil) landHero();
-      if (target < 0.85) snapped = false; // 위로 되돌아가면 다음에 또 맞춰 준다
+      const ts = P0 + target * (1 - P0); // 스냅 기준은 연출 진행도로 (히어로가 보이기 시작하는 .9)
+      if (!snapped && ts >= 0.9 && target > lastTarget && scrollY < endY() && now > navUntil) landHero();
+      if (ts < 0.85) snapped = false; // 위로 되돌아가면 다음에 또 맞춰 준다
       lastTarget = target;
       const prev = cur;
       cur += (target - cur) * (1 - Math.exp(-dt / 0.12));
