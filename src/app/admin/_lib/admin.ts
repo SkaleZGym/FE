@@ -196,9 +196,10 @@ export type AdminReview = {
   repliedAt: string | null;
 };
 
-/** 인트로(MAIN_HERO)는 관리 화면에서 다루지 않는다 */
+/** 인트로 애니메이션은 FE 고정이고, 인트로가 끝나면 보이는 히어로 상품 슬라이드부터 관리한다 */
 export type BannerPosition = "MAIN_HERO" | "MAIN_SUB" | "POPUP";
-export const MANAGED_POSITIONS: { value: Exclude<BannerPosition, "MAIN_HERO">; label: string; help: string }[] = [
+export const MANAGED_POSITIONS: { value: BannerPosition; label: string; help: string }[] = [
+  { value: "MAIN_HERO", label: "메인 히어로", help: "첫 화면 상품 슬라이드 (작은 글자·상품명·가격). 켜진 것들이 순서대로 넘어가고, 하나도 없으면 기본 상품이 나와요" },
   { value: "MAIN_SUB", label: "메인 중간 배너", help: "메인 화면 카테고리 타일 아래의 큰 배너 (DON'T FOLLOW THE TREND 자리)" },
   { value: "POPUP", label: "팝업", help: "사이트에 들어오면 뜨는 팝업. 모든 페이지 / 메인에서만 고를 수 있어요" },
 ];

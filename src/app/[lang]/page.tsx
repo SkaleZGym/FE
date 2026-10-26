@@ -63,10 +63,23 @@ export default async function HomePage() {
   const locale = await getLocale();
   const dict = await getDictionary();
 
-  const showcase: ShowcaseItem[] = heroShowcase.map(({ id, line }) => {
-    const product = productById(id);
-    return { id, image: product.image, name: product.name[locale], line, ...priceOf(product, locale) };
-  });
+  // 히어로 상품 슬라이드: 관리자 '메인 히어로' 배너가 켜져 있으면 그 순서대로, 없으면 기본 상품
+  const heroBanners = (await getBanners(locale, "MAIN_HERO")) ?? [];
+  const showcase: ShowcaseItem[] =
+    heroBanners.length > 0
+      ? heroBanners.map((banner) => ({
+          id: -banner.id, // 상품 번호와 겹치지 않게
+          image: banner.imageUrl,
+          name: banner.headline ?? "",
+          line: banner.subtext ?? "",
+          price: banner.price ?? "",
+          href: banner.linkUrl ? localHref(banner.linkUrl, locale, `/${locale}`) : undefined,
+          remote: true,
+        }))
+      : heroShowcase.map(({ id, line }) => {
+          const product = productById(id);
+          return { id, image: product.image, name: product.name[locale], line, ...priceOf(product, locale) };
+        });
   // 13번 시안의 세로 제목 BESTSELLER
   const bestItems: ShelfItem[] = bestsellerIds.map((id) => {
       const product = productById(id);

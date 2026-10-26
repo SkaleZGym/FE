@@ -5,7 +5,11 @@ import { useEffect, useState } from "react";
 import { openProduct } from "./productEvents";
 import styles from "./HeroShowcase.module.css";
 
-export type ShowcaseItem = { id: number; image: string; name: string; line: string; price: string; listPrice?: string };
+/**
+ * 히어로 슬라이드 한 장. 관리자 배너(MAIN_HERO)로 만든 장은 href(연결 상품)로 가고,
+ * 올린 사진을 그대로 쓴다(remote). 배너가 없으면 기본 상품 목록으로 돌린다
+ */
+export type ShowcaseItem = { id: number; image: string; name: string; line: string; price: string; listPrice?: string; href?: string; remote?: boolean };
 
 type Props = { items: ShowcaseItem[]; labels: { prev: string; next: string } };
 
@@ -52,6 +56,7 @@ export default function HeroShowcase({ items, labels }: Props) {
             fill
             sizes="(max-width: 860px) 90vw, 45vw"
             priority={i === 0}
+            unoptimized={item.remote}
             data-state={i === index ? "on" : i === leaving ? "off" : undefined}
           />
         ))}
@@ -70,14 +75,30 @@ export default function HeroShowcase({ items, labels }: Props) {
           ›
         </button>
       </div>
-      <button type="button" className={styles.info} onClick={() => openProduct(current.id)}>
+      <InfoTag item={current}>
         <small>{current.line}</small>
         <b>{current.name}</b>
         <span className={styles.price}>
           {current.price}
           {current.listPrice && <s>{current.listPrice}</s>}
         </span>
-      </button>
+      </InfoTag>
     </>
+  );
+}
+
+/** 지금 상품 이름·가격: 연결 상품이 있으면 링크, 아니면 상품 정보 패널을 연다 */
+function InfoTag({ item, children }: { item: ShowcaseItem; children: React.ReactNode }) {
+  if (item.href) {
+    return (
+      <a className={styles.info} href={item.href}>
+        {children}
+      </a>
+    );
+  }
+  return (
+    <button type="button" className={styles.info} onClick={() => openProduct(item.id)}>
+      {children}
+    </button>
   );
 }

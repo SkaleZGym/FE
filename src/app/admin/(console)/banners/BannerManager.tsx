@@ -25,7 +25,7 @@ const blankTexts = () => Object.fromEntries(LANGS.map(([code]) => [code, { subte
 
 const toDraft = (banner: AdminBanner): Draft => ({
   id: banner.id,
-  position: banner.position === "POPUP" ? "POPUP" : "MAIN_SUB",
+  position: banner.position,
   imageUrl: banner.imageUrl,
   linkUrl: banner.linkUrl ?? "",
   target: banner.target,
@@ -62,7 +62,7 @@ export default function BannerManager() {
 
   const load = useCallback(() => {
     adminApi<AdminBanner[]>("/banners")
-      .then((list) => setBanners(list.filter((banner) => banner.position !== "MAIN_HERO")))
+      .then(setBanners)
       .catch((caught) => setError(errorMessage(caught)));
   }, []);
   useEffect(load, [load]);
@@ -137,8 +137,11 @@ export default function BannerManager() {
             <button className="btn" type="button" onClick={() => edit(newDraft("POPUP"))}>
               + 팝업
             </button>
-            <button className="btn primary" type="button" onClick={() => edit(newDraft("MAIN_SUB"))}>
-              + 메인 배너
+            <button className="btn" type="button" onClick={() => edit(newDraft("MAIN_SUB"))}>
+              + 메인 중간 배너
+            </button>
+            <button className="btn primary" type="button" onClick={() => edit(newDraft("MAIN_HERO"))}>
+              + 히어로 슬라이드
             </button>
           </>
         }
@@ -146,8 +149,8 @@ export default function BannerManager() {
       <div className="notice">
         <span>ⓘ</span>
         <span>
-          메인 첫 화면의 <b>인트로(로고 애니메이션 · 히어로)</b>는 여기서 바꾸지 않아요. 인트로 다음 구간의 배너와 팝업만 관리해요. 같은 자리에 여러 개가 켜져
-          있으면 순서 숫자가 작은 것부터 보여요.
+          <b>메인 히어로</b>는 인트로(로고 애니메이션)가 끝나면 보이는 첫 화면 상품 슬라이드예요. 인트로 애니메이션 자체는 바뀌지 않아요. 같은 자리에 여러 개가
+          켜져 있으면 순서 숫자가 작은 것부터 보여요.
         </span>
       </div>
       {error && <p className="alert">{error}</p>}
@@ -226,7 +229,12 @@ export default function BannerManager() {
               <span>
                 사진 <b>*</b>
               </span>
-              <ImageUpload value={draft.imageUrl} onChange={(url) => set("imageUrl", url)} hint="PC·모바일 모두 이 사진을 써요. 가로로 긴 사진(16:9 정도)이 잘 맞아요." />
+              <ImageUpload value={draft.imageUrl} onChange={(url) => set("imageUrl", url)} hint={
+                  draft.position === "MAIN_HERO"
+                    ? "PC·모바일 모두 이 사진을 써요. 배경이 밝은 정사각형 상품 사진이 잘 맞아요 (원 안에 떠 있는 모양)."
+                    : "PC·모바일 모두 이 사진을 써요. 가로로 긴 사진(16:9 정도)이 잘 맞아요."
+                }
+              />
             </div>
 
             <div className="grid2">
