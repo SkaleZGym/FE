@@ -1,5 +1,5 @@
 :root {
-  /* 12번 시안: 검은 바탕 + 빨간 포인트. 콘크리트/본 토큰은 밝은 섹션(FEATURED)에서 쓴다 */
+  /* 12번 시안: 검은 바탕 + 빨간 포인트. 본 토큰은 상품 카드(ProductShelf)에서 쓴다 */
   --concrete: #c9c9c4;
   --concrete-ink: #34373b;
   --concrete-muted: #6b6e72;

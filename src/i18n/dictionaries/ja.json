@@ -27,23 +27,25 @@
     "line1": "/ COMPRESSION TIGHTS / KAIDO × SKALEZ / FORGED, NOT BORN / BUILT FOR LEG DAY",
     "line2": "SAME-DAY SHIPPING · FREE SIZE EXCHANGE · WORLDWIDE 2027 ·"
   },
-  "featured": {
-    "kicker": "[ OUR PICKS ]",
-    "title": "Featured gear",
-    "viewAll": "View all",
-    "add": "ADD TO CART",
-    "restock": "RESTOCK ALERT",
-    "wish": "お気に入り",
-    "badges": {
-      "new": "NEW",
-      "best": "BEST",
-      "trending": "TRENDING",
-      "soldOut": "SOLD OUT"
+  "shelves": {
+    "best": {
+      "title": "BESTSELLER",
+      "kicker": "[ 01 · MOST WANTED ]"
     },
-    "sub": {
-      "compression": "COMPRESSION",
-      "gymwear": "GYMWEAR"
-    }
+    "tights": {
+      "title": "TIGHTS",
+      "kicker": "[ 02 · CORE LINE ]"
+    },
+    "tops": {
+      "title": "TOPS",
+      "kicker": "[ 03 · UPPER BODY ]"
+    },
+    "viewAll": "VIEW ALL",
+    "quickAdd": "QUICK ADD +",
+    "restock": "RESTOCK ALERT",
+    "soldOut": "SOLD OUT",
+    "sale": "SALE",
+    "more": "すべて見る"
   },
   "fit": {
     "oversized": "オーバーサイズ",
@@ -78,20 +80,6 @@
     "shipping": "SHIPPING",
     "modelValue": "モデル 170cm / 82kg · XL着用",
     "shippingValue": "$15 · $150以上で送料無料"
-  },
-  "shopBy": {
-    "tights": {
-      "small": "[ CORE LINE ]",
-      "title": "TIGHTS"
-    },
-    "tops": {
-      "small": "[ OVERSIZED · MUSCLE ]",
-      "title": "TOPS"
-    },
-    "hoodies": {
-      "small": "[ WARM UP ]",
-      "title": "HOODIES"
-    }
   },
   "trend": {
     "cta": "Shop now"
