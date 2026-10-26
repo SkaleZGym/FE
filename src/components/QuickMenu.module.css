@@ -97,9 +97,10 @@
   }
 }
 
-/* 상품 상세(모바일)의 아래 고정 구매 막대와 겹치지 않게 위로 올린다 */
+/* 상품 상세(모바일)의 아래 고정 구매 막대, 메인(모바일) 히어로 아래쪽 버튼과 겹치지 않게 위로 올린다 */
 @media (max-width: 860px) {
-  :global(body:has([data-buy-bar])) .quick {
+  :global(body:has([data-buy-bar])) .quick,
+  :global(body:has([data-hero-ctas])) .quick {
     bottom: 84px;
   }
 }

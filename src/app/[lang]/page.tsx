@@ -136,7 +136,8 @@ export default async function HomePage() {
                 not <em>born.</em>
               </h1>
               <p className={styles.heroLead}>{dict.hero.lead}</p>
-              <div className={styles.ctas}>
+              {/* data-hero-ctas: 모바일에서 버튼이 화면 아래에 오므로 퀵메뉴가 이걸 보고 위로 비켜선다 */}
+              <div className={styles.ctas} data-hero-ctas>
                 <a className={`${styles.btn} ${styles.btnWhite}`} href={`/${locale}/shop/new`}>
                   {dict.hero.shop} <span>→</span>
                 </a>

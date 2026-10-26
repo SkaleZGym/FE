@@ -156,9 +156,48 @@
     font-size: 16px;
   }
 
+  /* 사진 위에 띄우지 않고 사진 아래 줄로 내린다 (히어로 오른쪽 칸의 격자에 들어간다) */
+  .prod {
+    position: relative;
+    inset: auto;
+    grid-column: 1 / -1;
+    grid-row: 1;
+    min-height: 0;
+
+    /* 세로로 긴 칸에서도 빛무리는 동그랗게, 칸 세로 가운데에 */
+    &::before {
+      inset: auto 4%;
+      top: 50%;
+      aspect-ratio: 1;
+      translate: 0 -50%;
+    }
+
+    /* 사진 가장자리가 네모로 끊겨 보이지 않게 원형으로 흐리게 */
+    & img {
+      -webkit-mask-image: radial-gradient(circle closest-side, #000 72%, transparent 100%);
+      mask-image: radial-gradient(circle closest-side, #000 72%, transparent 100%);
+    }
+  }
+
+  .info {
+    position: relative;
+    inset: auto;
+    grid-column: 1;
+    grid-row: 2;
+    align-self: end;
+  }
+
   .nav {
-    left: 2%;
-    top: 0;
+    position: relative;
+    inset: auto;
+    grid-column: 2;
+    grid-row: 2;
+    align-self: end;
+    gap: 8px;
+  }
+
+  .bar {
+    display: none;
   }
 }
 

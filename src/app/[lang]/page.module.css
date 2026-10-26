@@ -531,15 +531,48 @@
 }
 
 @media (max-width: 860px) {
+  /* 모바일: 위에서부터 제목 → 상품 사진 → 상품 정보·넘기기 → 버튼 두 개.
+     heroLeft 를 풀어(display: contents) 제목과 버튼을 히어로 칸에 바로 놓고 순서를 바꾼다.
+     좌우 여백은 20px 로 모두 같은 선에 맞춘다 */
   .hero {
-    grid-template-columns: 1fr;
-    align-content: start;
-    gap: 4px;
-    padding-top: 84px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* PC의 가운데 정렬을 풀어 제목·버튼을 왼쪽 선에 맞춘다 */
+    gap: 16px;
+    padding: 84px 20px 24px;
+    text-align: left;
   }
 
   .heroLeft {
-    gap: 14px;
+    display: contents;
+  }
+
+  .heroTitle {
+    order: 1;
+    position: relative;
+    z-index: 2;
+  }
+
+  .heroRight {
+    order: 2;
+  }
+
+  .ctas {
+    order: 3;
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    & .btn {
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 14px;
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
   }
 
   /* 모바일: 제목·버튼·상품 사진만 남긴다 */
@@ -550,9 +583,20 @@
     display: none;
   }
 
+  /* 사진은 남는 높이를 채우고, 그 아래 한 줄에 상품 정보(왼쪽)와 넘기기(오른쪽) */
   .heroRight {
-    height: 42svh;
-    max-height: 420px;
+    flex: 1;
+    min-height: 0;
+    height: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr) auto;
+    column-gap: 12px;
+    row-gap: 14px;
+  }
+
+  .shadow {
+    bottom: 64px;
   }
 
   .graffiti {
