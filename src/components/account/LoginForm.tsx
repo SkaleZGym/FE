@@ -61,6 +61,16 @@ export default function LoginForm({ locale, labels, common }: Props) {
       <button className={styles.button} type="submit" disabled={busy}>
         {labels.loginButton}
       </button>
+      <p className={styles.switch} style={{ marginTop: 0 }}>
+        <a href={`/${locale}/forgot-password`}>{labels.forgotLink}</a>
+      </p>
+      {/* 아임웹에서 옮겨 온 회원은 비밀번호가 없어서 로그인이 안 된다 → 비밀번호 설정으로 안내 */}
+      <div className={styles.success}>
+        {labels.legacyNotice}{" "}
+        <a className={styles.link} href={`/${locale}/forgot-password`}>
+          {labels.legacyCta} →
+        </a>
+      </div>
       <p className={styles.switch}>
         {labels.noAccount}
         <a href={`/${locale}/signup${query}`}>{labels.signupLink}</a>
@@ -69,6 +79,6 @@ export default function LoginForm({ locale, labels, common }: Props) {
   );
 }
 
-/** 회원가입 API 응답은 쓰지 않는다 — 가입 직후 같은 정보로 로그인한다 */
-export const signup = (locale: Locale, body: { email: string; password: string; name: string }) =>
+/** 회원가입 API 응답은 쓰지 않는다 — 가입 직후 같은 정보로 로그인한다. agreeTerms 는 필수 약관 동의 */
+export const signup = (locale: Locale, body: { email: string; password: string; name: string; agreeTerms: true; marketingConsent: boolean }) =>
   api("/auth/signup", { method: "POST", body, locale });

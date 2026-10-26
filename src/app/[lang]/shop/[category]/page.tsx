@@ -94,12 +94,14 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
         </header>
 
         <CategoryBrowser
+          locale={locale}
           items={items}
           sizeOrder={sizeOrder}
           labels={{
             ...dict.category,
             sale: dict.shelves.sale,
             soldOutTag: dict.shelves.soldOut,
+            pager: dict.pager,
             newTag: "NEW",
           }}
         />

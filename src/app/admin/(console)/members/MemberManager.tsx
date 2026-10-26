@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 import { Chips, Pager, Top } from "../../_components/ui";
 import { adminApi, dateOnly, errorMessage, toast, type AdminMember, type Page } from "../../_lib/admin";
@@ -49,7 +50,15 @@ export default function MemberManager() {
 
   return (
     <>
-      <Top crumb="STORE / MEMBERS" title="회원 관리" />
+      <Top
+        crumb="STORE / MEMBERS"
+        title="회원 관리"
+        actions={
+          <Link className="btn" href="/admin/members/import">
+            아임웹 회원 가져오기
+          </Link>
+        }
+      />
       <div className="card">
         <div className="toolbar">
           <Chips
@@ -85,6 +94,7 @@ export default function MemberManager() {
                   <th>이메일</th>
                   <th>이름</th>
                   <th>언어</th>
+                  <th>마케팅</th>
                   <th>권한</th>
                   <th>상태</th>
                   <th>가입일</th>
@@ -98,9 +108,15 @@ export default function MemberManager() {
                     <td className="mono">{member.email}</td>
                     <td>{member.name}</td>
                     <td className="muted">{LANGUAGE[member.language] ?? member.language}</td>
+                    <td>{member.marketingConsent ? <span className="badge green">동의</span> : <span className="muted">-</span>}</td>
                     <td>{member.role === "ADMIN" ? <span className="badge violet">관리자</span> : <span className="muted">회원</span>}</td>
                     <td>
                       <span className={`badge ${member.status === "ACTIVE" ? "green" : "red"}`}>{member.status === "ACTIVE" ? "정상" : "정지"}</span>
+                      {member.legacySource && (
+                        <span className={`badge ${member.passwordSet ? "blue" : "amber"}`} style={{ marginLeft: 4 }} title="아임웹에서 옮겨 온 회원">
+                          {member.passwordSet ? "아임웹 이전" : "비밀번호 미설정"}
+                        </span>
+                      )}
                     </td>
                     <td className="mono muted">{dateOnly(member.createdAt)}</td>
                     <td className="num">

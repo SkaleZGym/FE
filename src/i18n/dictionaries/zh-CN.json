@@ -152,6 +152,45 @@
     "reset": "清除筛选",
     "empty": "没有符合条件的商品。"
   },
+  "pager": {
+    "prev": "上一页",
+    "next": "下一页",
+    "page": "第{n}页"
+  },
+  "product": {
+    "tabs": {
+      "detail": "商品详情",
+      "size": "尺码",
+      "reviews": "评价"
+    },
+    "shippingFee": "{fee} · 满{threshold}包邮",
+    "shippingFeeAlways": "{fee}",
+    "shippingExtra": "济州 {jeju} · 偏远岛屿 {island} 另加",
+    "selectSize": "请选择尺码。",
+    "total": "商品合计",
+    "totalNote": "数量{n}件 · 不含运费",
+    "freeLeft": "再买{amount}即可包邮",
+    "freeDone": "已满足包邮条件",
+    "buyNow": "立即购买",
+    "addCart": "加入购物车",
+    "detailTitle": "商品详情",
+    "detailEmpty": "详细说明正在准备中。",
+    "sizeTitle": "尺码指南",
+    "sizeAvailable": "可选尺码",
+    "sizeNote": "实测尺码表即将上线。尺码拿不准时，欢迎通过在线咨询或 KakaoTalk 询问。",
+    "reviewCount": "{n}条评价",
+    "noReviews": "还没有评价，欢迎留下第一条评价。",
+    "writeReview": "写评价",
+    "reviewRule": "只能评价已送达订单中的商品，每件商品限一次。",
+    "reviewLogin": "登录后即可写评价。",
+    "rating": "评分",
+    "reviewPlaceholder": "上身感、尺码、面料怎么样？（1,000字以内）",
+    "reviewSubmit": "提交评价",
+    "reviewDone": "评价已提交，谢谢！",
+    "reply": "SKALEZ 回复",
+    "more": "查看更多",
+    "backToList": "返回列表"
+  },
   "common": {
     "loading": "加载中…",
     "error": "请稍后再试。",
@@ -185,7 +224,22 @@
     "agreeRequired": "请同意必选条款。",
     "passwordRule": "至少8位",
     "passwordMismatch": "两次输入的密码不一致。",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "forgotLink": "忘记密码？",
+    "legacyNotice": "在旧网站注册过的会员，请在新网站重新设置一次密码。",
+    "legacyCta": "设置密码",
+    "forgotTitle": "FORGOT PASSWORD",
+    "forgotLead": "输入注册邮箱，我们会发送设置密码的链接。旧网站的会员也可以在这里设置。",
+    "forgotButton": "发送链接",
+    "forgotSent": "如果该邮箱已注册，我们已发送链接。请查看收件箱（包括垃圾邮件）。1分钟后可再次申请。",
+    "resetTitle": "NEW PASSWORD",
+    "resetLead": "请输入新密码。",
+    "newPassword": "新密码",
+    "resetButton": "保存密码",
+    "resetDone": "密码已保存，请使用新密码登录。",
+    "resetNoToken": "链接无效。请重新打开邮件中的链接或重新申请。",
+    "agreeMarketing": "[可选] 接收活动和优惠信息（邮件・短信）",
+    "emailTaken": "该邮箱已注册。如果您是旧网站的会员，只需重新设置密码。"
   },
   "cart": {
     "title": "CART",
@@ -263,7 +317,8 @@
     "currentPassword": "当前密码",
     "newPassword": "新密码",
     "changePassword": "修改密码",
-    "passwordChanged": "密码已修改。"
+    "passwordChanged": "密码已修改。",
+    "marketing": "接收活动和优惠信息"
   },
   "inquiry": {
     "write": "我要咨询",

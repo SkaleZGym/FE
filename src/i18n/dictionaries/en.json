@@ -152,6 +152,45 @@
     "reset": "Clear filters",
     "empty": "No products match these filters."
   },
+  "pager": {
+    "prev": "Previous page",
+    "next": "Next page",
+    "page": "Page {n}"
+  },
+  "product": {
+    "tabs": {
+      "detail": "Details",
+      "size": "Size",
+      "reviews": "Reviews"
+    },
+    "shippingFee": "{fee} · Free over {threshold}",
+    "shippingFeeAlways": "{fee}",
+    "shippingExtra": "Remote areas: +{jeju} / +{island}",
+    "selectSize": "Please choose a size.",
+    "total": "Total",
+    "totalNote": "{n} item(s) · Shipping not included",
+    "freeLeft": "Add {amount} more for free shipping",
+    "freeDone": "You've got free shipping",
+    "buyNow": "Buy now",
+    "addCart": "Add to cart",
+    "detailTitle": "Product details",
+    "detailEmpty": "Details are coming soon.",
+    "sizeTitle": "Size guide",
+    "sizeAvailable": "Available sizes",
+    "sizeNote": "A measured size chart is coming soon. Not sure about your size? Ask us via inquiry or KakaoTalk.",
+    "reviewCount": "{n} reviews",
+    "noReviews": "No reviews yet. Be the first to write one.",
+    "writeReview": "Write a review",
+    "reviewRule": "You can review products from delivered orders, once per product.",
+    "reviewLogin": "Log in to write a review.",
+    "rating": "Rating",
+    "reviewPlaceholder": "How were the fit, size and fabric? (up to 1,000 characters)",
+    "reviewSubmit": "Submit review",
+    "reviewDone": "Thanks for your review!",
+    "reply": "Reply from SKALEZ",
+    "more": "More reviews",
+    "backToList": "Back to list"
+  },
   "common": {
     "loading": "Loading…",
     "error": "Something went wrong. Please try again.",
@@ -185,7 +224,22 @@
     "agreeRequired": "Please accept the required terms.",
     "passwordRule": "At least 8 characters",
     "passwordMismatch": "Passwords don't match.",
-    "logout": "Log out"
+    "logout": "Log out",
+    "forgotLink": "Forgot your password?",
+    "legacyNotice": "Signed up on our previous store? Please set a new password once to use the new store.",
+    "legacyCta": "Set my password",
+    "forgotTitle": "FORGOT PASSWORD",
+    "forgotLead": "Enter your email and we'll send you a link to set your password. Members of our previous store can set one here too.",
+    "forgotButton": "Send link",
+    "forgotSent": "If that email is registered, we've sent a link. Check your inbox (and spam). You can request again after a minute.",
+    "resetTitle": "NEW PASSWORD",
+    "resetLead": "Enter your new password.",
+    "newPassword": "New password",
+    "resetButton": "Save password",
+    "resetDone": "Your password has been saved. Please log in with your new password.",
+    "resetNoToken": "This link isn't valid. Open the link from the email again or request a new one.",
+    "agreeMarketing": "[Optional] Send me news about events and discounts (email/SMS)",
+    "emailTaken": "This email is already registered. If you were a member of our previous store, just set a new password."
   },
   "cart": {
     "title": "CART",
@@ -263,7 +317,8 @@
     "currentPassword": "Current password",
     "newPassword": "New password",
     "changePassword": "Change password",
-    "passwordChanged": "Your password has been changed."
+    "passwordChanged": "Your password has been changed.",
+    "marketing": "Receive event & discount news"
   },
   "inquiry": {
     "write": "Ask a question",

@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { useMemo, useState, type ReactNode } from "react";
-import { openProduct } from "./productEvents";
 import styles from "./CategoryBrowser.module.css";
 
 /** 서버에서 언어·통화에 맞게 가공해서 넘기는 상품 데이터 */
@@ -39,9 +38,12 @@ export type BrowserLabels = {
   sale: string;
   soldOutTag: string;
   newTag: string;
+  pager: { prev: string; next: string; page: string };
 };
 
 type Props = {
+  /** 카드를 누르면 가는 상세 페이지 주소용 */
+  locale: string;
   items: BrowserItem[];
   /** 사이즈 필터 순서 (S, M, L …) */
   sizeOrder: string[];
@@ -56,9 +58,24 @@ const emptyFilters = (): Filters => ({ fit: new Set(), size: new Set(), stock: n
  * 카테고리 페이지 본문: 툴바(보기 방식 · 정렬) + 왼쪽 필터 + 상품 그리드.
  * 툴바와 본문이 같은 2단 격자(필터 폭 | 나머지)를 써서, 툴바의 칸 경계와 필터 열·상품 그리드 가장자리가 위아래로 맞는다.
  */
-export default function CategoryBrowser({ items, sizeOrder, labels }: Props) {
-  const [filters, setFilters] = useState<Filters>(emptyFilters);
-  const [sort, setSort] = useState<SortKey>("new");
+/** 한 페이지에 보이는 상품 수 (2·3·4열 모두 줄이 딱 떨어지게) */
+const PAGE_SIZE = 24;
+/** 페이지 번호는 최대 5개까지 보인다 */
+const PAGE_WINDOW = 5;
+
+export default function CategoryBrowser({ locale, items, sizeOrder, labels }: Props) {
+  const [filters, setFiltersState] = useState<Filters>(emptyFilters);
+  const [sort, setSortState] = useState<SortKey>("new");
+  const [page, setPage] = useState(0);
+  // 필터·정렬을 바꾸면 첫 페이지로
+  const setFilters = (update: Filters | ((current: Filters) => Filters)) => {
+    setFiltersState(update);
+    setPage(0);
+  };
+  const setSort = (next: SortKey) => {
+    setSortState(next);
+    setPage(0);
+  };
   const [view, setView] = useState<View>("large");
   const [filterOpen, setFilterOpen] = useState(false);
 
@@ -105,6 +122,13 @@ export default function CategoryBrowser({ items, sizeOrder, labels }: Props) {
       return { ...current, [group]: next };
     });
   const countText = labels.count.replace("{n}", String(visible.length));
+  const pageCount = Math.max(1, Math.ceil(visible.length / PAGE_SIZE));
+  const current = Math.min(page, pageCount - 1);
+  const shown = visible.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE);
+  const goTo = (next: number) => {
+    setPage(next);
+    document.getElementById("category-grid")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <div className={styles.browser}>
@@ -178,24 +202,16 @@ export default function CategoryBrowser({ items, sizeOrder, labels }: Props) {
           {visible.length === 0 ? (
             <p className={styles.empty}>{labels.empty}</p>
           ) : (
-            <ul className={styles.grid} data-view={view}>
-              {visible.map((item) => (
+            <ul className={styles.grid} data-view={view} id="category-grid">
+              {shown.map((item) => (
                 <li key={item.id}>
-                  <a
-                    className={styles.card}
-                    href={`#product-${item.id}`}
-                    data-soldout={item.soldOut || undefined}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      openProduct(item.id);
-                    }}
-                  >
+                  <a className={styles.card} href={`/${locale}/product/${item.id}`} data-soldout={item.soldOut || undefined}>
                     <span className={styles.image}>
                       <Image
                         src={item.image}
                         alt=""
                         fill
-                        sizes={view === "small" ? "(max-width: 860px) 50vw, 22vw" : "(max-width: 860px) 100vw, 30vw"}
+                        sizes={view === "small" ? "(max-width: 860px) 34vw, 22vw" : "(max-width: 860px) 50vw, 30vw"}
                       />
                       <span className={styles.tags}>
                         {item.soldOut && <span>{labels.soldOutTag}</span>}
@@ -214,9 +230,37 @@ export default function CategoryBrowser({ items, sizeOrder, labels }: Props) {
               ))}
             </ul>
           )}
+          {pageCount > 1 && <Pagination current={current} count={pageCount} labels={labels.pager} onPage={goTo} />}
         </div>
       </div>
     </div>
+  );
+}
+
+/** 이전 · 번호(최대 5개, 지금 페이지가 가운데 오게) · 다음 */
+function Pagination({ current, count, labels, onPage }: { current: number; count: number; labels: BrowserLabels["pager"]; onPage: (page: number) => void }) {
+  const start = Math.max(0, Math.min(current - Math.floor(PAGE_WINDOW / 2), count - PAGE_WINDOW));
+  const pages = Array.from({ length: Math.min(PAGE_WINDOW, count) }, (_, i) => start + i);
+  return (
+    <nav className={styles.pagination} aria-label="pagination">
+      <button type="button" aria-label={labels.prev} disabled={current === 0} onClick={() => onPage(current - 1)}>
+        ‹
+      </button>
+      {pages.map((page) => (
+        <button
+          key={page}
+          type="button"
+          aria-label={labels.page.replace("{n}", String(page + 1))}
+          aria-current={page === current ? "page" : undefined}
+          onClick={() => onPage(page)}
+        >
+          {page + 1}
+        </button>
+      ))}
+      <button type="button" aria-label={labels.next} disabled={current >= count - 1} onClick={() => onPage(current + 1)}>
+        ›
+      </button>
+    </nav>
   );
 }
 

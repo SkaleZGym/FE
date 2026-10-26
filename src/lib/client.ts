@@ -40,7 +40,7 @@ export const loginHref = (locale: Locale, next?: string) =>
 
 // ---------- BE 응답 모양 ----------
 
-export type Me = { id: number; email: string; name: string; role: string; language: string };
+export type Me = { id: number; email: string; name: string; role: string; language: string; marketingConsent: boolean };
 
 export type BeProduct = {
   id: number;

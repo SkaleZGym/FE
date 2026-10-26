@@ -153,6 +153,12 @@ export type AdminMember = {
   id: number;
   email: string;
   name: string;
+  phone: string | null;
+  marketingConsent: boolean;
+  /** IMWEB = 아임웹에서 옮겨 온 회원 */
+  legacySource: string | null;
+  /** false = 옮겨 온 뒤 아직 새 비밀번호를 정하지 않음 */
+  passwordSet: boolean;
   role: "USER" | "ADMIN";
   status: "ACTIVE" | "SUSPENDED";
   language: string;

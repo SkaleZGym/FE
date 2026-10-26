@@ -305,7 +305,7 @@ function Profile({ locale, labels, me }: { locale: Locale; labels: Labels; me: M
       const updated = await api<Me>("/members/me", {
         method: "PATCH",
         locale,
-        body: { name: String(form.get("name")).trim(), language: form.get("language") },
+        body: { name: String(form.get("name")).trim(), language: form.get("language"), marketingConsent: Boolean(form.get("marketing")) },
       });
       setMe(updated);
       setProfileMessage({ ok: true, text: common.saved });
@@ -362,6 +362,10 @@ function Profile({ locale, labels, me }: { locale: Locale; labels: Labels; me: M
               </option>
             ))}
           </select>
+        </label>
+        <label className={styles.check}>
+          <input type="checkbox" name="marketing" defaultChecked={me.marketingConsent} />
+          {text.marketing}
         </label>
         {profileMessage && <p className={profileMessage.ok ? styles.success : styles.error}>{profileMessage.text}</p>}
         <button className={styles.button} type="submit">

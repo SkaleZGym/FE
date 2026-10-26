@@ -96,3 +96,10 @@
     opacity: 1;
   }
 }
+
+/* 상품 상세(모바일)의 아래 고정 구매 막대와 겹치지 않게 위로 올린다 */
+@media (max-width: 860px) {
+  :global(body:has([data-buy-bar])) .quick {
+    bottom: 84px;
+  }
+}

@@ -36,3 +36,6 @@ const noSubscribe = () => () => {};
 
 /** 주소의 ?쿼리 (서버 렌더링 때는 빈 값 → 브라우저에서 채워진다) */
 export const useSearch = () => useSyncExternalStore(noSubscribe, () => window.location.search, () => "");
+
+/** 서버 렌더링 때는 null (아직 주소를 모름) — "링크가 없다"는 안내가 잠깐 깜빡이지 않게 구분한다 */
+export const useSearchOrNull = () => useSyncExternalStore<string | null>(noSubscribe, () => window.location.search, () => null);

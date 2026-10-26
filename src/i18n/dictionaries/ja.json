@@ -152,6 +152,45 @@
     "reset": "条件をクリア",
     "empty": "条件に合う商品がありません。"
   },
+  "pager": {
+    "prev": "前のページ",
+    "next": "次のページ",
+    "page": "{n}ページ"
+  },
+  "product": {
+    "tabs": {
+      "detail": "商品詳細",
+      "size": "サイズ",
+      "reviews": "レビュー"
+    },
+    "shippingFee": "{fee} · {threshold}以上で送料無料",
+    "shippingFeeAlways": "{fee}",
+    "shippingExtra": "済州 {jeju} · 離島 {island} 追加",
+    "selectSize": "サイズを選んでください。",
+    "total": "商品合計",
+    "totalNote": "数量{n}点 · 送料別",
+    "freeLeft": "あと{amount}で送料無料",
+    "freeDone": "送料無料の条件を満たしました",
+    "buyNow": "今すぐ購入",
+    "addCart": "カートに入れる",
+    "detailTitle": "商品詳細",
+    "detailEmpty": "詳細説明を準備中です。",
+    "sizeTitle": "サイズガイド",
+    "sizeAvailable": "サイズ展開",
+    "sizeNote": "実寸サイズ表はまもなく公開予定です。サイズでお悩みの際はお問い合わせかカカオトークでお気軽にどうぞ。",
+    "reviewCount": "レビュー{n}件",
+    "noReviews": "まだレビューはありません。最初のレビューをお寄せください。",
+    "writeReview": "レビューを書く",
+    "reviewRule": "配達完了したご注文の商品のみ、1商品につき1回レビューできます。",
+    "reviewLogin": "ログインするとレビューを書けます。",
+    "rating": "評価",
+    "reviewPlaceholder": "着心地・サイズ・素材はいかがでしたか？(1,000文字以内)",
+    "reviewSubmit": "レビューを投稿",
+    "reviewDone": "レビューを投稿しました。ありがとうございます！",
+    "reply": "SKALEZからの返信",
+    "more": "もっと見る",
+    "backToList": "一覧へ"
+  },
   "common": {
     "loading": "読み込み中…",
     "error": "しばらくしてから再度お試しください。",
@@ -185,7 +224,22 @@
     "agreeRequired": "必須の規約に同意してください。",
     "passwordRule": "8文字以上",
     "passwordMismatch": "パスワードが一致しません。",
-    "logout": "ログアウト"
+    "logout": "ログアウト",
+    "forgotLink": "パスワードをお忘れの方",
+    "legacyNotice": "以前のサイトで会員登録された方は、新しいサイトでパスワードを一度設定し直してください。",
+    "legacyCta": "パスワードを設定する",
+    "forgotTitle": "FORGOT PASSWORD",
+    "forgotLead": "ご登録のメールアドレスを入力すると、パスワード設定用のリンクをお送りします。以前のサイトの会員の方もこちらから設定できます。",
+    "forgotButton": "リンクを送る",
+    "forgotSent": "ご登録のメールアドレスであれば、リンクを送信しました。受信トレイ(迷惑メールフォルダ含む)をご確認ください。1分後に再度お申し込みいただけます。",
+    "resetTitle": "NEW PASSWORD",
+    "resetLead": "新しいパスワードを入力してください。",
+    "newPassword": "新しいパスワード",
+    "resetButton": "パスワードを保存",
+    "resetDone": "パスワードを保存しました。新しいパスワードでログインしてください。",
+    "resetNoToken": "リンクが正しくありません。メールのリンクをもう一度開くか、再度お申し込みください。",
+    "agreeMarketing": "[任意] イベント・割引のお知らせを受け取る(メール・SMS)",
+    "emailTaken": "すでに登録されているメールアドレスです。以前のサイトの会員の方は、パスワードだけ設定し直してください。"
   },
   "cart": {
     "title": "CART",
@@ -263,7 +317,8 @@
     "currentPassword": "現在のパスワード",
     "newPassword": "新しいパスワード",
     "changePassword": "パスワードを変更",
-    "passwordChanged": "パスワードを変更しました。"
+    "passwordChanged": "パスワードを変更しました。",
+    "marketing": "イベント・割引のお知らせを受け取る"
   },
   "inquiry": {
     "write": "お問い合わせ",
