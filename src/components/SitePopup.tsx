@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import type { SiteBanner } from "@/lib/api";
+import { localHref } from "@/lib/links";
 import styles from "./SitePopup.module.css";
 
 type Props = {
@@ -75,10 +76,11 @@ export default function SitePopup({ locale, banners, labels }: Props) {
         {banner.mobileImageUrl && <source media="(max-width: 560px)" srcSet={banner.mobileImageUrl} />}
         <img src={banner.imageUrl} alt={banner.headline ?? ""} />
       </picture>
-      {(banner.headline || banner.subtext) && (
+      {(banner.headline || banner.subtext || banner.price) && (
         <div className={styles.text}>
-          {banner.headline && <b>{banner.headline}</b>}
           {banner.subtext && <span>{banner.subtext}</span>}
+          {banner.headline && <b>{banner.headline}</b>}
+          {banner.price && <em>{banner.price}</em>}
         </div>
       )}
     </>
@@ -88,7 +90,7 @@ export default function SitePopup({ locale, banners, labels }: Props) {
     <div className={styles.backdrop} role="dialog" aria-modal="true" aria-label={banner.headline ?? "popup"}>
       <div className={styles.popup}>
         {banner.linkUrl ? (
-          <a className={styles.media} href={banner.linkUrl}>
+          <a className={styles.media} href={localHref(banner.linkUrl, locale, `/${locale}`)}>
             {body}
           </a>
         ) : (

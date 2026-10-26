@@ -1,48 +1,41 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import ImageUpload from "../../_components/ImageUpload";
+import ProductPicker from "../../_components/ProductPicker";
 import { Drawer, Top } from "../../_components/ui";
-import { adminApi, dateTime, errorMessage, LANGS, MANAGED_POSITIONS, toast, type AdminBanner, type Lang } from "../../_lib/admin";
+import { adminApi, errorMessage, LANGS, MANAGED_POSITIONS, toast, type AdminBanner, type Lang } from "../../_lib/admin";
 
 type Position = (typeof MANAGED_POSITIONS)[number]["value"];
+type Text = { subtext: string; headline: string; price: string };
 
+/** 노출 기간(시작·끝)은 쓰지 않는다 — 켜면 바로 보이고 끄면 사라진다. 모바일도 같은 사진을 쓴다 */
 type Draft = {
   id: number | null;
   position: Position;
   imageUrl: string;
-  mobileImageUrl: string;
   linkUrl: string;
   target: AdminBanner["target"];
   sortOrder: string;
   active: boolean;
-  startAt: string; // datetime-local 값 (한국 시간)
-  endAt: string;
-  texts: Record<Lang, { headline: string; subtext: string }>;
+  texts: Record<Lang, Text>;
 };
 
-const blankTexts = () => Object.fromEntries(LANGS.map(([code]) => [code, { headline: "", subtext: "" }])) as Draft["texts"];
-
-/** ISO ↔ <input type="datetime-local"> (브라우저 시간대 기준) */
-const toLocal = (iso: string | null) => {
-  if (!iso) return "";
-  const date = new Date(iso);
-  return new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
-};
-const toIso = (local: string) => (local ? new Date(local).toISOString() : null);
+const blankTexts = () => Object.fromEntries(LANGS.map(([code]) => [code, { subtext: "", headline: "", price: "" }])) as Draft["texts"];
 
 const toDraft = (banner: AdminBanner): Draft => ({
   id: banner.id,
   position: banner.position === "POPUP" ? "POPUP" : "MAIN_SUB",
   imageUrl: banner.imageUrl,
-  mobileImageUrl: banner.mobileImageUrl ?? "",
   linkUrl: banner.linkUrl ?? "",
   target: banner.target,
   sortOrder: String(banner.sortOrder),
   active: banner.active,
-  startAt: toLocal(banner.startAt),
-  endAt: toLocal(banner.endAt),
   texts: Object.fromEntries(
-    LANGS.map(([code]) => [code, { headline: banner.texts[code]?.headline ?? "", subtext: banner.texts[code]?.subtext ?? "" }]),
+    LANGS.map(([code]) => [
+      code,
+      { subtext: banner.texts[code]?.subtext ?? "", headline: banner.texts[code]?.headline ?? "", price: banner.texts[code]?.price ?? "" },
+    ]),
   ) as Draft["texts"],
 });
 
@@ -50,15 +43,14 @@ const newDraft = (position: Position): Draft => ({
   id: null,
   position,
   imageUrl: "",
-  mobileImageUrl: "",
   linkUrl: "",
   target: "ALL_PAGES",
   sortOrder: "0",
   active: false,
-  startAt: "",
-  endAt: "",
   texts: blankTexts(),
 });
+
+const filled = (text: Text) => Boolean(text.headline.trim() || text.subtext.trim() || text.price.trim());
 
 export default function BannerManager() {
   const [banners, setBanners] = useState<AdminBanner[] | null>(null);
@@ -82,26 +74,29 @@ export default function BannerManager() {
   };
   const close = useCallback(() => setOpen(false), []);
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setDraft((current) => current && { ...current, [key]: value });
+  const setText = (field: keyof Text, value: string) =>
+    setDraft((current) => current && { ...current, texts: { ...current.texts, [lang]: { ...current.texts[lang], [field]: value } } });
 
   const save = async () => {
     if (!draft) return;
-    if (!draft.imageUrl.trim()) return toast("이미지 주소를 입력해 주세요.", true);
+    if (!draft.imageUrl) return toast("사진을 올려 주세요.", true);
+    const clean = (value: string) => value.trim() || null;
     const texts = Object.fromEntries(
-      LANGS.filter(([code]) => code === "ko" || draft.texts[code].headline.trim() || draft.texts[code].subtext.trim()).map(([code]) => [
+      LANGS.filter(([code]) => code === "ko" || filled(draft.texts[code])).map(([code]) => [
         code,
-        { headline: draft.texts[code].headline.trim() || null, subtext: draft.texts[code].subtext.trim() || null },
+        { subtext: clean(draft.texts[code].subtext), headline: clean(draft.texts[code].headline), price: clean(draft.texts[code].price) },
       ]),
     );
     const body = {
       position: draft.position,
-      imageUrl: draft.imageUrl.trim(),
-      mobileImageUrl: draft.mobileImageUrl.trim() || null,
-      linkUrl: draft.linkUrl.trim() || null,
+      imageUrl: draft.imageUrl,
+      mobileImageUrl: null,
+      linkUrl: draft.linkUrl || null,
       target: draft.position === "POPUP" ? draft.target : "ALL_PAGES",
       sortOrder: Number(draft.sortOrder) || 0,
       active: draft.active,
-      startAt: toIso(draft.startAt),
-      endAt: toIso(draft.endAt),
+      startAt: null,
+      endAt: null,
       texts,
     };
     setBusy(true);
@@ -129,7 +124,8 @@ export default function BannerManager() {
     }
   };
 
-  const shown = draft ? (draft.texts[lang].headline || draft.texts[lang].subtext ? draft.texts[lang] : draft.texts.ko) : null;
+  // 미리보기: 이 언어 문구가 비어 있으면 한국어로 (고객 화면과 같은 규칙)
+  const shown = draft ? (filled(draft.texts[lang]) ? draft.texts[lang] : draft.texts.ko) : null;
 
   return (
     <>
@@ -176,14 +172,15 @@ export default function BannerManager() {
                           {position.label}
                           {banner.position === "POPUP" && ` · ${banner.target === "MAIN_ONLY" ? "메인만" : "모든 페이지"}`}
                         </span>
-                        <b>{banner.texts.ko?.headline || "문구 없음"}</b>
+                        <div className="bcard-text">
+                          {banner.texts.ko?.subtext && <small>{banner.texts.ko.subtext}</small>}
+                          <b>{banner.texts.ko?.headline || "문구 없음"}</b>
+                          {banner.texts.ko?.price && <em>{banner.texts.ko.price}</em>}
+                        </div>
                       </div>
                       <div className="meta">
-                        <span className={`badge ${banner.visibleNow ? "green" : ""}`}>{banner.visibleNow ? "지금 노출 중" : banner.active ? "예약·기간 밖" : "꺼짐"}</span>
-                        <span className="mono muted">
-                          순서 {banner.sortOrder}
-                          {banner.endAt && ` · ~${dateTime(banner.endAt)}`}
-                        </span>
+                        <span className={`badge ${banner.active ? "green" : ""}`}>{banner.active ? "노출 중" : "꺼짐"}</span>
+                        <span className="mono muted">순서 {banner.sortOrder}</span>
                       </div>
                     </button>
                   ))}
@@ -215,13 +212,23 @@ export default function BannerManager() {
         }
       >
         {draft && shown && (
-          <>
+          <div className="form-stack">
+            {/* 미리보기: 작은 글자 → 큰 글자 → 가격 (고객 화면과 같은 순서) */}
             <div className="bpreview" style={{ backgroundImage: draft.imageUrl ? `url("${draft.imageUrl}")` : undefined }}>
               <div className="t">
-                <b>{shown.headline || "큰 글자"}</b>
                 {shown.subtext && <small>{shown.subtext}</small>}
+                <b>{shown.headline || "큰 글자"}</b>
+                {shown.price && <em>{shown.price}</em>}
               </div>
             </div>
+
+            <div className="field">
+              <span>
+                사진 <b>*</b>
+              </span>
+              <ImageUpload value={draft.imageUrl} onChange={(url) => set("imageUrl", url)} hint="PC·모바일 모두 이 사진을 써요. 가로로 긴 사진(16:9 정도)이 잘 맞아요." />
+            </div>
+
             <div className="grid2">
               <label className="field">
                 <span>자리</span>
@@ -248,72 +255,48 @@ export default function BannerManager() {
                 </label>
               )}
             </div>
-            <label className="field">
-              <span>
-                이미지 주소 <b>*</b>
+
+            <div className="field">
+              <span>누르면 갈 상품</span>
+              <ProductPicker value={draft.linkUrl} onChange={(link) => set("linkUrl", link)} />
+            </div>
+
+            <div className="field">
+              <span className="field-head">
+                문구
+                <span className="langtabs" role="tablist">
+                  {LANGS.map(([code, label]) => (
+                    <button key={code} type="button" role="tab" aria-selected={lang === code} className={filled(draft.texts[code]) ? "filled" : ""} onClick={() => setLang(code)}>
+                      {label}
+                    </button>
+                  ))}
+                </span>
               </span>
-              <input className="input" value={draft.imageUrl} onChange={(event) => set("imageUrl", event.target.value)} placeholder="https://…" />
-            </label>
-            <label className="field">
-              <span>모바일 이미지 주소</span>
-              <input className="input" value={draft.mobileImageUrl} onChange={(event) => set("mobileImageUrl", event.target.value)} placeholder="비우면 위 이미지를 써요" />
-            </label>
-            <label className="field">
-              <span>누르면 갈 주소</span>
-              <input className="input" value={draft.linkUrl} onChange={(event) => set("linkUrl", event.target.value)} placeholder="/ko/shop/new 또는 https://…" />
-            </label>
-            <div className="grid2">
-              <label className="field">
-                <span>시작 (비우면 바로)</span>
-                <input className="input" type="datetime-local" value={draft.startAt} onChange={(event) => set("startAt", event.target.value)} />
-              </label>
-              <label className="field">
-                <span>끝 (비우면 계속)</span>
-                <input className="input" type="datetime-local" value={draft.endAt} onChange={(event) => set("endAt", event.target.value)} />
-              </label>
-            </div>
-            <div>
-              <div className="sec-title">문구</div>
-              <div className="langtabs" role="tablist" style={{ marginBottom: 10 }}>
-                {LANGS.map(([code, label]) => (
-                  <button
-                    key={code}
-                    type="button"
-                    role="tab"
-                    aria-selected={lang === code}
-                    className={draft.texts[code].headline.trim() ? "filled" : ""}
-                    onClick={() => setLang(code)}
-                  >
-                    {label}
-                  </button>
-                ))}
+              <div className="text-fields">
+                <label className="field">
+                  <span>작은 글자 (큰 글자 위에 보여요)</span>
+                  <input className="input" placeholder="예: SKALEZ X REXYOON" value={draft.texts[lang].subtext} maxLength={500} onChange={(event) => setText("subtext", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>큰 글자</span>
+                  <input className="input" placeholder="예: HELLO WORLD" value={draft.texts[lang].headline} maxLength={200} onChange={(event) => setText("headline", event.target.value)} />
+                </label>
+                <label className="field">
+                  <span>가격</span>
+                  <input className="input" placeholder={lang === "ko" ? "예: ₩69,000" : "예: $49"} value={draft.texts[lang].price} maxLength={50} onChange={(event) => setText("price", event.target.value)} />
+                </label>
               </div>
-              <div className="stack">
-                <input
-                  className="input"
-                  placeholder="큰 글자 (예: DON'T FOLLOW THE TREND.)"
-                  value={draft.texts[lang].headline}
-                  maxLength={200}
-                  onChange={(event) => set("texts", { ...draft.texts, [lang]: { ...draft.texts[lang], headline: event.target.value } })}
-                />
-                <input
-                  className="input"
-                  placeholder="작은 글자"
-                  value={draft.texts[lang].subtext}
-                  maxLength={500}
-                  onChange={(event) => set("texts", { ...draft.texts, [lang]: { ...draft.texts[lang], subtext: event.target.value } })}
-                />
-                {lang !== "ko" && <span className="hint">비워 두면 이 언어 화면에는 한국어 문구가 보여요.</span>}
-              </div>
+              {lang !== "ko" && <small className="hint">비워 두면 이 언어 화면에는 한국어 문구가 보여요.</small>}
             </div>
-            <label className="field" style={{ gridTemplateColumns: "auto 1fr", alignItems: "center", gap: 10 }}>
+
+            <label className="toggle-row">
               <span className="switch">
                 <input type="checkbox" checked={draft.active} onChange={(event) => set("active", event.target.checked)} aria-label="켜기" />
                 <i />
               </span>
-              <span style={{ color: "var(--ink)", fontSize: 12 }}>{draft.active ? "켜짐 — 기간 안이면 고객 화면에 보여요" : "꺼짐 — 고객 화면에 안 보여요"}</span>
+              <span>{draft.active ? "켜짐 — 고객 화면에 보여요" : "꺼짐 — 고객 화면에 안 보여요"}</span>
             </label>
-          </>
+          </div>
         )}
       </Drawer>
     </>

@@ -28,6 +28,7 @@ import {
 import type { Locale } from "@/i18n/config";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getBanners } from "@/lib/api";
+import { localHref } from "@/lib/links";
 import styles from "./page.module.css";
 
 /** 현재 언어의 통화로 가격 문자열을 만든다 */
@@ -228,6 +229,7 @@ export default async function HomePage() {
             )}
           </div>
           <Reveal>
+            {subBanner?.subtext && <p className={styles.trendKicker}>{subBanner.subtext}</p>}
             {subBanner?.headline ? (
               <h2 className={styles.trendTitle}>{subBanner.headline}</h2>
             ) : (
@@ -239,8 +241,8 @@ export default async function HomePage() {
                 <em>Forge it.</em>
               </h2>
             )}
-            {subBanner?.subtext && <p className={styles.trendSub}>{subBanner.subtext}</p>}
-            <a className={`${styles.btn} ${styles.btnWhite} ${styles.trendCta}`} href={subBanner?.linkUrl || `/${locale}/shop/all`}>
+            {subBanner?.price && <p className={styles.trendPrice}>{subBanner.price}</p>}
+            <a className={`${styles.btn} ${styles.btnWhite} ${styles.trendCta}`} href={localHref(subBanner?.linkUrl, locale, `/${locale}/shop/all`)}>
               {dict.trend.cta} <span>→</span>
             </a>
           </Reveal>

@@ -428,12 +428,21 @@
   }
 }
 
-.trendSub {
-  max-width: 30rem;
-  margin-top: 18px;
-  font-size: 15px;
-  line-height: 1.6;
+/* 관리자 배너: 작은 글자는 큰 글자 위, 가격은 아래 */
+.trendKicker {
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: rgb(255 255 255 / 0.8);
+}
+
+.trendPrice {
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--ink);
 }
 
 .trendCta {

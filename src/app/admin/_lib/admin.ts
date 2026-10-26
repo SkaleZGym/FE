@@ -31,6 +31,20 @@ export async function adminApi<T = void>(path: string, { method = "GET", body }:
   return data as T;
 }
 
+/** 이미지 한 장 올리기 → 저장된 주소. JPG·PNG·WEBP·GIF, 10MB 이하 (서버가 파일 내용으로 다시 확인) */
+export async function uploadImage(file: File): Promise<string> {
+  const body = new FormData();
+  body.append("file", file);
+  const response = await fetch("/api/admin/uploads", { method: "POST", body, headers: { "Accept-Language": "ko" } });
+  if (response.status === 401) {
+    toLogin();
+    throw new ApiError(401, "UNAUTHORIZED", "로그인이 필요해요.");
+  }
+  const data = await response.json().catch(() => null);
+  if (!response.ok) throw new ApiError(response.status, data?.code, data?.message || "사진을 올리지 못했어요. 10MB 이하 JPG·PNG·WEBP·GIF 인지 확인해 주세요.");
+  return data.url as string;
+}
+
 export const errorMessage = (error: unknown) => (error instanceof Error && error.message ? error.message : "요청을 처리하지 못했어요.");
 
 /** 화면 아래 알림. 어느 화면에서든 부르면 관리자 틀(AdminShell)이 띄운다 */
@@ -200,5 +214,6 @@ export type AdminBanner = {
   visibleNow: boolean;
   startAt: string | null;
   endAt: string | null;
-  texts: Partial<Record<Lang, { headline: string | null; subtext: string | null }>>;
+  /** subtext 는 큰 글자 위에 작게, price 는 아래에 */
+  texts: Partial<Record<Lang, { headline: string | null; subtext: string | null; price: string | null }>>;
 };

@@ -67,7 +67,10 @@ export type SiteBanner = {
   linkUrl: string | null;
   target: "ALL_PAGES" | "MAIN_ONLY";
   headline: string | null;
+  /** 큰 글자 위에 작게 */
   subtext: string | null;
+  /** 가격 문구 (예: ₩69,000) */
+  price: string | null;
 };
 
 export const getBanners = (locale: Locale, position: "MAIN_SUB" | "POPUP") =>

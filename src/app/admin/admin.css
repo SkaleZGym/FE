@@ -350,6 +350,12 @@ textarea {
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
+.select {
+  appearance: none;
+  padding-right: 32px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%2375787d' stroke-width='1.5'/%3E%3C/svg%3E") no-repeat right 12px center;
+  cursor: pointer;
+}
 .textarea {
   height: auto;
   min-height: 84px;
@@ -976,17 +982,30 @@ th.num {
   inset: 0;
   background: linear-gradient(180deg, transparent 40%, rgb(0 0 0 / 0.7));
 }
-.bcard .img b {
+.bcard .img .bcard-text {
   position: absolute;
   left: 14px;
   right: 14px;
   bottom: 12px;
   z-index: 1;
+  display: grid;
+  gap: 4px;
+  color: #fff;
+}
+.bcard .img .bcard-text small {
+  font-size: 11px;
+  opacity: 0.85;
+}
+.bcard .img .bcard-text b {
   font-family: var(--font-display);
   font-weight: 400;
   font-size: 24px;
-  color: #fff;
   line-height: 1;
+}
+.bcard .img .bcard-text em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 12px;
 }
 .bcard .img .pos {
   position: absolute;
@@ -1027,6 +1046,8 @@ th.num {
   right: 20px;
   bottom: 20px;
   z-index: 1;
+  display: grid;
+  gap: 6px;
   color: #f2f2f2;
 }
 .bpreview .t b {
@@ -1038,10 +1059,14 @@ th.num {
   text-transform: uppercase;
 }
 .bpreview .t small {
-  display: block;
-  margin-top: 8px;
   font-size: 12px;
+  letter-spacing: 0.06em;
   opacity: 0.85;
+}
+.bpreview .t em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  font-size: 14px;
 }
 
 /* ---------- 토스트 ---------- */
@@ -1121,4 +1146,172 @@ th.num {
   .toolbar .input {
     width: 100%;
   }
+}
+
+/* ---------- 배너 편집 폼: 모든 칸을 같은 왼쪽 선 · 같은 간격으로 ---------- */
+.form-stack {
+  display: grid;
+  gap: 18px;
+}
+.form-stack .grid2 {
+  align-items: end;
+}
+.field-head {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.text-fields {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  background: #f7f7f5;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* ---------- 사진 올리기 ---------- */
+.upload {
+  display: grid;
+  gap: 6px;
+}
+.upload-empty {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 26px 16px;
+  text-align: center;
+  background: #fafaf8;
+  border: 1.5px dashed #c9c9c4;
+  border-radius: 8px;
+  transition: border-color 0.15s, background 0.15s;
+}
+.upload-empty b {
+  font-size: 13px;
+}
+.upload-empty span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.upload[data-over] .upload-empty,
+.upload-empty:hover {
+  background: #f1f1ee;
+  border-color: var(--ink);
+}
+.upload-done {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.upload-done img {
+  width: 96px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+  background: #e4e4e2;
+}
+.upload-done div {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+/* ---------- 상품 고르기 (검색 드롭다운) ---------- */
+.picker {
+  position: relative;
+}
+.picker-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 4px 12px 4px 4px;
+  text-align: left;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.picker-trigger > span:only-of-type:not(:has(b)) {
+  padding-left: 8px;
+}
+.picker-trigger span {
+  display: grid;
+  min-width: 0;
+}
+.picker-trigger b {
+  overflow: hidden;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.picker-trigger i {
+  margin-left: auto;
+  font-style: normal;
+  color: var(--muted);
+}
+.picker-panel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 5;
+  display: grid;
+  gap: 6px;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 10px 28px rgb(0 0 0 / 0.12);
+}
+.picker-panel ul {
+  max-height: 280px;
+  overflow-y: auto;
+}
+.picker-panel li button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 4px 8px;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+}
+.picker-panel li button:hover,
+.picker-panel li button[aria-selected="true"] {
+  background: #f3f3f1;
+}
+.picker-panel li button span {
+  display: grid;
+  min-width: 0;
+}
+.picker-panel li b {
+  overflow: hidden;
+  font-weight: 500;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.picker-empty {
+  padding: 16px 8px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--muted);
 }

@@ -47,8 +47,15 @@
   }
 
   & span {
-    font-size: 13px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
     color: rgb(255 255 255 / 0.8);
+  }
+
+  & em {
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-size: 14px;
   }
 }
 
