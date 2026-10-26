@@ -3,6 +3,9 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { Badge } from "@/data/catalog";
+import type { Locale } from "@/i18n/config";
+import { api, ApiError, loginHref, skuOf, type BeProduct } from "@/lib/client";
+import { refreshCart, refreshWishes, useAccount } from "./account/accountStore";
 import { PRODUCT_EVENT } from "./productEvents";
 import styles from "./ProductPanel.module.css";
 
@@ -32,7 +35,12 @@ export type PanelLabels = {
   add: string;
   restock: string;
   soldOutNote: string;
-  soon: string;
+  added: string;
+  viewCart: string;
+  unavailable: string;
+  restockSoon: string;
+  wish: string;
+  unwish: string;
   fit: string;
   fabric: string;
   model: string;
@@ -41,18 +49,25 @@ export type PanelLabels = {
   shippingValue: string;
 };
 
-type Props = { products: PanelProduct[]; labels: PanelLabels };
+type Props = { locale: Locale; products: PanelProduct[]; labels: PanelLabels };
+
+/** 담기 버튼 아래 안내: 담김(장바구니 링크) · 오류 문구 · 재입고 안내 */
+type Notice = { kind: "added" } | { kind: "message"; text: string } | null;
 
 /**
  * 19번 시안의 상품 정보 패널. PC는 오른쪽에서 밀려 나오고, 모바일은 아래에서 올라오는 시트.
- * openProduct(id)가 보내는 신호를 받아 열리고, 바깥·닫기·Esc로 닫힌다. 장바구니 연결은 BE 연동 때 붙인다.
+ * openProduct(id)가 보내는 신호를 받아 열리고, 바깥·닫기·Esc로 닫힌다.
+ * 담기·찜은 FE 상품 번호를 BE 상품 코드(SKZ-번호)로 찾아 BE 장바구니·위시리스트에 넣는다.
  */
-export default function ProductPanel({ products, labels }: Props) {
+export default function ProductPanel({ locale, products, labels }: Props) {
   const [id, setId] = useState<number | null>(null);
   const [open, setOpen] = useState(false);
   const [size, setSize] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
-  const [note, setNote] = useState(false);
+  const [notice, setNotice] = useState<Notice>(null);
+  const [busy, setBusy] = useState(false);
+  const account = useAccount(locale);
+  const beProducts = useRef(new Map<number, BeProduct>());
   const panelRef = useRef<HTMLElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const opener = useRef<HTMLElement | null>(null);
@@ -67,7 +82,7 @@ export default function ProductPanel({ products, labels }: Props) {
       setId(next.id);
       setSize(next.sizes[Math.min(1, next.sizes.length - 1)] ?? null); // 기본은 두 번째 사이즈 (보통 L)
       setQty(1);
-      setNote(false);
+      setNotice(null);
       setOpen(true);
     };
     window.addEventListener(PRODUCT_EVENT, onOpen);
@@ -91,6 +106,62 @@ export default function ProductPanel({ products, labels }: Props) {
       returnTo?.focus({ preventScroll: true });
     };
   }, [open]);
+
+  const wished = product ? account.wishes.has(skuOf(product.id)) : false;
+
+  /** 로그인 전이면 로그인 화면으로 보냈다가 지금 페이지로 돌아온다 */
+  const goLogin = () => window.location.assign(loginHref(locale, window.location.pathname));
+
+  const beProductOf = async (feId: number) => {
+    const cached = beProducts.current.get(feId);
+    if (cached) return cached;
+    const found = await api<BeProduct>(`/products/sku/${skuOf(feId)}`, { locale });
+    beProducts.current.set(feId, found);
+    return found;
+  };
+
+  const fail = (error: unknown) => {
+    if (error instanceof ApiError && error.status === 401) return goLogin();
+    const text = error instanceof ApiError && error.status === 404 ? labels.unavailable : error instanceof ApiError && error.message ? error.message : labels.unavailable;
+    setNotice({ kind: "message", text });
+  };
+
+  const addToCart = async () => {
+    if (!product || busy) return;
+    if (product.soldOut) return setNotice({ kind: "message", text: labels.restockSoon });
+    if (account.status === "guest") return goLogin();
+    setBusy(true);
+    setNotice(null);
+    try {
+      const variant = (await beProductOf(product.id)).variants.find((item) => item.size === size);
+      if (!variant || variant.stock < qty) {
+        setNotice({ kind: "message", text: labels.unavailable });
+        return;
+      }
+      await api("/cart/items", { method: "POST", body: { variantId: variant.id, quantity: qty }, locale });
+      await refreshCart(locale);
+      setNotice({ kind: "added" });
+    } catch (error) {
+      fail(error);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const toggleWish = async () => {
+    if (!product || busy) return;
+    if (account.status === "guest") return goLogin();
+    setBusy(true);
+    try {
+      const productId = account.wishes.get(skuOf(product.id)) ?? (await beProductOf(product.id)).id;
+      await api(`/wishes/${productId}`, { method: wished ? "DELETE" : "PUT", locale });
+      await refreshWishes(locale);
+    } catch (error) {
+      fail(error);
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <>
@@ -153,15 +224,33 @@ export default function ProductPanel({ products, labels }: Props) {
                 </button>
               </div>
 
-              <button type="button" className={styles.add} onClick={() => setNote(true)}>
-                <span>{product.soldOut ? labels.restock : labels.add}</span>
-                <span aria-hidden="true">→</span>
-              </button>
-              {note && (
-                <p className={styles.note} role="status">
-                  {labels.soon}
-                </p>
-              )}
+              <div className={styles.actions}>
+                <button type="button" className={styles.add} onClick={addToCart} disabled={busy} aria-busy={busy}>
+                  <span>{product.soldOut ? labels.restock : labels.add}</span>
+                  <span aria-hidden="true">→</span>
+                </button>
+                <button
+                  type="button"
+                  className={styles.wish}
+                  onClick={toggleWish}
+                  disabled={busy}
+                  aria-pressed={wished}
+                  aria-label={wished ? labels.unwish : labels.wish}
+                  title={wished ? labels.unwish : labels.wish}
+                >
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M12 20.5 4.2 12.9a4.9 4.9 0 0 1 0-7 4.8 4.8 0 0 1 6.9 0l.9.9.9-.9a4.8 4.8 0 0 1 6.9 0 4.9 4.9 0 0 1 0 7Z" />
+                  </svg>
+                </button>
+              </div>
+              <p className={styles.note} role="status">
+                {notice?.kind === "added" && (
+                  <>
+                    {labels.added} <a href={`/${locale}/cart`}>{labels.viewCart} →</a>
+                  </>
+                )}
+                {notice?.kind === "message" && notice.text}
+              </p>
 
               <dl className={styles.specs}>
                 <div>

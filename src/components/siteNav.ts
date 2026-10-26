@@ -14,3 +14,13 @@ export function siteNav(locale: Locale, nav: Dictionary["nav"]) {
     { label: nav.about, href: `/${locale}#shipping` },
   ];
 }
+
+/** 헤더 오른쪽 글자들 (장바구니·언어·메뉴·로그인/MY) */
+export const headerLabels = (nav: Dictionary["nav"]) => ({
+  cart: nav.cart,
+  language: nav.language,
+  menu: nav.menu,
+  close: nav.close,
+  login: nav.login,
+  my: nav.my,
+});

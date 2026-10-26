@@ -1,9 +1,8 @@
 import { cacheLife } from "next/cache";
 import type { Locale } from "@/i18n/config";
 
-// SKALEZ BE(스프링) API. 서버 컴포넌트에서만 부른다 (브라우저에서 직접 부르지 않으니 CORS와 무관).
-// 로컬은 http://localhost:8080, 배포 때는 환경변수 SKALEZ_API_URL 에 BE 주소를 넣는다.
-const API_BASE = process.env.SKALEZ_API_URL ?? "http://localhost:8080";
+// SKALEZ BE(스프링) API를 서버 컴포넌트에서 부른다 (브라우저용은 lib/client.ts → BFF).
+import { API_BASE } from "./backend";
 
 /**
  * GET 요청 결과를 몇 분간 캐시한다. 관리자에서 고친 내용은 늦어도 몇 분 안에 반영된다.

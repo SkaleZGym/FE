@@ -89,12 +89,23 @@
   margin-left: auto;
 }
 
+.account,
 .cart,
 .menuButton {
   font-family: var(--font-mono);
   font-size: 12px;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+/* 로그인 여부를 알기 전에는 글자를 숨겨 '로그인'→'MY'로 깜빡이지 않게 */
+.account {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+
+  &[data-ready] {
+    opacity: 1;
+  }
 }
 
 .menuButton {
@@ -148,6 +159,14 @@
     font-family: var(--font-mono);
     font-size: 11px;
   }
+
+  & .drawerAccount {
+    margin-top: 18px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    text-transform: uppercase;
+    border-bottom: 0;
+  }
 }
 
 @media (max-width: 1100px) {
@@ -175,7 +194,7 @@
     width: 90px;
   }
 
-  .cart {
+  .account {
     display: none;
   }
 }

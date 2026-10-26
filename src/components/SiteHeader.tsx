@@ -3,14 +3,17 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
+import { useAccount } from "./account/accountStore";
 import LanguageSwitcher from "./LanguageSwitcher";
 import styles from "./SiteHeader.module.css";
+
+export type HeaderLabels = { cart: string; language: string; menu: string; close: string; login: string; my: string };
 
 type Props = {
   locale: Locale;
   logo: string;
   nav: { label: string; href: string }[];
-  labels: { cart: string; language: string; menu: string; close: string };
+  labels: HeaderLabels;
   /** 비늘 인트로가 끝날 때까지 숨겼다가, 인트로 스크립트가 :root에 올리는 --hdr 값에 맞춰 나타난다 */
   introDim?: boolean;
 };
@@ -19,6 +22,9 @@ type Props = {
 export default function SiteHeader({ locale, logo, nav, labels, introDim = false }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const account = useAccount(locale);
+  const member = account.status === "member";
+  const accountLink = { label: member ? labels.my : labels.login, href: member ? `/${locale}/mypage` : `/${locale}/login` };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -48,8 +54,11 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
 
         <div className={styles.actions}>
           <LanguageSwitcher current={locale} label={labels.language} />
-          <a href="#" className={styles.cart}>
-            {labels.cart} <span>(0)</span>
+          <a href={accountLink.href} className={styles.account} data-ready={account.status !== "loading" || undefined}>
+            {accountLink.label}
+          </a>
+          <a href={`/${locale}/cart`} className={styles.cart}>
+            {labels.cart} <span>({account.cartCount})</span>
           </a>
           <button
             type="button"
@@ -75,6 +84,9 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
             {item.label}
           </a>
         ))}
+        <a href={accountLink.href} className={styles.drawerAccount} onClick={() => setMenuOpen(false)}>
+          {accountLink.label}
+        </a>
       </nav>
     </>
   );

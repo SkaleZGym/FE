@@ -177,7 +177,13 @@
   }
 }
 
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
 .add {
+  flex: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -198,12 +204,57 @@
   &:hover span:last-child {
     transform: translateX(6px);
   }
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+/* 찜(하트): 누르면 빨갛게 채워진다 */
+.wish {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  color: var(--iron);
+  background: transparent;
+  border: 1px solid rgb(28 30 33 / 0.3);
+  border-radius: 6px;
+  cursor: pointer;
+
+  & svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+  }
+
+  &[aria-pressed="true"] {
+    color: var(--red);
+    border-color: var(--red);
+
+    & svg {
+      fill: currentColor;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+  }
 }
 
 .note {
+  min-height: 1.6em;
+  margin: 0;
   font-size: 12px;
   line-height: 1.6;
   color: var(--concrete-muted);
+
+  & a {
+    color: var(--iron);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
 
 .specs {

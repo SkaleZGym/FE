@@ -5,7 +5,7 @@ import ProductPanel, { type PanelProduct } from "@/components/ProductPanel";
 import QuickMenu from "@/components/QuickMenu";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { siteNav } from "@/components/siteNav";
+import { headerLabels, siteNav } from "@/components/siteNav";
 import {
   categoryPages,
   currencyFor,
@@ -77,7 +77,7 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
         locale={locale}
         logo={images.wordmark}
         nav={siteNav(locale, dict.nav)}
-        labels={{ cart: dict.nav.cart, language: dict.nav.language, menu: dict.nav.menu, close: dict.nav.close }}
+        labels={headerLabels(dict.nav)}
       />
 
       <main className={styles.main}>
@@ -106,8 +106,8 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
       </main>
 
       <SiteFooter labels={dict.footer} />
-      <QuickMenu labels={dict.quick} />
-      <ProductPanel products={panelProducts} labels={dict.panel} />
+      <QuickMenu locale={locale} labels={dict.quick} />
+      <ProductPanel locale={locale} products={panelProducts} labels={dict.panel} />
     </>
   );
 }

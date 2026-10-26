@@ -9,7 +9,7 @@ import SerpentIntro from "@/components/SerpentIntro";
 import ShippingInfo from "@/components/ShippingInfo";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { siteNav } from "@/components/siteNav";
+import { headerLabels, siteNav } from "@/components/siteNav";
 import {
   bestsellerIds,
   currencyFor,
@@ -119,7 +119,7 @@ export default async function HomePage() {
         introDim
         logo={images.wordmark}
         nav={nav}
-        labels={{ cart: dict.nav.cart, language: dict.nav.language, menu: dict.nav.menu, close: dict.nav.close }}
+        labels={headerLabels(dict.nav)}
       />
 
       <main>
@@ -214,29 +214,7 @@ export default async function HomePage() {
           ))}
         </section>
 
-        {/* 5. 배송 안내 (BE 배송 설정) + 신뢰 바 */}
-        <ShippingInfo locale={locale} labels={dict.shipping} />
-        {/* 5-1. 신뢰 바 */}
-        <section className={styles.trust} id="trust">
-          {dict.trust.items.map((item, index) => (
-            <div className={styles.trustItem} key={item.accent}>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                {trustIcons[index]}
-              </svg>
-              <p>
-                <b>
-                  {item.title} <em>{item.accent}</em>
-                </b>
-                <span>{item.desc}</span>
-              </p>
-            </div>
-          ))}
-        </section>
-
-        {/* 6. 공지사항 · FAQ (BE) */}
-        <NoticeBoard locale={locale} labels={dict.board} />
-
-        {/* 7. 트렌드 배너 */}
+        {/* 5. 트렌드 배너 (쇼핑하기) */}
         <section className={styles.trend} id="trend">
           <div className={styles.trendBg} aria-hidden="true">
             <Image src={trend.image} alt="" fill sizes="100vw" />
@@ -260,13 +238,34 @@ export default async function HomePage() {
           </div>
         </section>
 
+        {/* 6. 배송 안내 (BE 배송 설정) + 신뢰 바 */}
+        <ShippingInfo locale={locale} labels={dict.shipping} />
+        {/* 6-1. 신뢰 바 */}
+        <section className={styles.trust} id="trust">
+          {dict.trust.items.map((item, index) => (
+            <div className={styles.trustItem} key={item.accent}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                {trustIcons[index]}
+              </svg>
+              <p>
+                <b>
+                  {item.title} <em>{item.accent}</em>
+                </b>
+                <span>{item.desc}</span>
+              </p>
+            </div>
+          ))}
+        </section>
+
+        {/* 7. 공지사항 · FAQ (BE) */}
+        <NoticeBoard locale={locale} labels={dict.board} />
       </main>
 
       {/* 8. 푸터 */}
       <SiteFooter labels={dict.footer} />
 
-      <QuickMenu labels={dict.quick} introDim />
-      <ProductPanel products={panelProducts} labels={dict.panel} />
+      <QuickMenu locale={locale} labels={dict.quick} introDim />
+      <ProductPanel locale={locale} products={panelProducts} labels={dict.panel} />
     </>
   );
 }
