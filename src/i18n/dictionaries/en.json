@@ -93,6 +93,63 @@
       }
     ]
   },
+  "category": {
+    "pages": {
+      "all": {
+        "title": "SHOP ALL",
+        "sub": "All products"
+      },
+      "new": {
+        "title": "NEW DROPS",
+        "sub": "New arrivals"
+      },
+      "best": {
+        "title": "BESTSELLER",
+        "sub": "Best sellers"
+      },
+      "tights": {
+        "title": "TIGHTS",
+        "sub": "Compression tights"
+      },
+      "tops": {
+        "title": "TOPS",
+        "sub": "Tops"
+      },
+      "hoodies": {
+        "title": "HOODIES",
+        "sub": "Hoodies"
+      },
+      "goods": {
+        "title": "GOODS",
+        "sub": "Goods"
+      },
+      "sale": {
+        "title": "SALE",
+        "sub": "On sale"
+      }
+    },
+    "count": "{n} products",
+    "fit": "Fit",
+    "size": "Size",
+    "stock": "Availability",
+    "inStock": "In stock",
+    "soldOut": "Sold out",
+    "sort": {
+      "label": "Sort",
+      "new": "Newest",
+      "recommended": "Recommended",
+      "low": "Price: low to high",
+      "high": "Price: high to low"
+    },
+    "view": {
+      "label": "View",
+      "large": "Large view",
+      "small": "Compact view"
+    },
+    "filter": "Filter",
+    "reset": "Clear filters",
+    "empty": "No products match these filters."
+  },
   "fit": {
     "oversized": "Oversized",
     "semi": "Semi-oversized",

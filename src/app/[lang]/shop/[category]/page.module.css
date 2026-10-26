@@ -1,0 +1,76 @@
+/* 카테고리 페이지 머리: 가운데 정렬 제목 + 한 줄 설명 + 카테고리 이동 */
+
+.main {
+  padding-top: 68px; /* 고정 헤더 높이 */
+  min-height: 100svh;
+}
+
+.head {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 64px var(--gutter) 28px;
+  text-align: center;
+
+  & h1 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 6vw, 4.6rem);
+    line-height: 0.95;
+    letter-spacing: 0.06em;
+  }
+
+  & p {
+    font-size: 13px;
+    color: var(--ink-muted);
+  }
+}
+
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+
+  & a {
+    padding: 7px 14px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--ink-muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition: color 0.2s, border-color 0.2s;
+
+    &:hover {
+      color: var(--ink);
+      border-color: rgb(255 255 255 / 0.4);
+    }
+
+    &[aria-current="page"] {
+      color: #000;
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+  }
+}
+
+@media (max-width: 860px) {
+  .head {
+    padding-top: 40px;
+  }
+
+  /* 칩이 많아 모바일은 한 줄 가로 스크롤 */
+  .categories {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    & a {
+      flex: none;
+    }
+  }
+}

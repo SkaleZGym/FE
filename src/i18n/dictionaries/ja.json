@@ -93,6 +93,63 @@
       }
     ]
   },
+  "category": {
+    "pages": {
+      "all": {
+        "title": "SHOP ALL",
+        "sub": "すべての商品"
+      },
+      "new": {
+        "title": "NEW DROPS",
+        "sub": "新商品"
+      },
+      "best": {
+        "title": "BESTSELLER",
+        "sub": "ベストセラー"
+      },
+      "tights": {
+        "title": "TIGHTS",
+        "sub": "タイツ"
+      },
+      "tops": {
+        "title": "TOPS",
+        "sub": "トップス"
+      },
+      "hoodies": {
+        "title": "HOODIES",
+        "sub": "パーカー"
+      },
+      "goods": {
+        "title": "GOODS",
+        "sub": "グッズ"
+      },
+      "sale": {
+        "title": "SALE",
+        "sub": "セール"
+      }
+    },
+    "count": "{n}件の商品",
+    "fit": "フィット",
+    "size": "サイズ",
+    "stock": "在庫",
+    "inStock": "在庫あり",
+    "soldOut": "売り切れ",
+    "sort": {
+      "label": "並び替え",
+      "new": "新着順",
+      "recommended": "おすすめ順",
+      "low": "価格の安い順",
+      "high": "価格の高い順"
+    },
+    "view": {
+      "label": "表示",
+      "large": "大きく表示",
+      "small": "小さく表示"
+    },
+    "filter": "絞り込み",
+    "reset": "条件をクリア",
+    "empty": "条件に合う商品がありません。"
+  },
   "fit": {
     "oversized": "オーバーサイズ",
     "semi": "セミオーバーサイズ",

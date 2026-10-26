@@ -7,10 +7,11 @@ import QuickMenu from "@/components/QuickMenu";
 import Reveal from "@/components/Reveal";
 import SerpentIntro from "@/components/SerpentIntro";
 import ShippingInfo from "@/components/ShippingInfo";
+import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { siteNav } from "@/components/siteNav";
 import {
   bestsellerIds,
-  business,
   currencyFor,
   descriptions,
   fabricOf,
@@ -109,14 +110,7 @@ export default async function HomePage() {
     };
   });
 
-  // 19번 시안의 메뉴 5개. COLLAB은 인트로가 끝난 히어로 자리(#drop), ABOUT은 아직 소개 페이지가 없어 배송·신뢰 안내로
-  const nav = [
-    { label: dict.nav.shop, href: "#best" },
-    { label: dict.nav.newDrops, href: "#best" },
-    { label: dict.nav.tights, href: "#shopby" },
-    { label: dict.nav.collab, href: "#drop" },
-    { label: dict.nav.about, href: "#shipping" },
-  ];
+  const nav = siteNav(locale, dict.nav);
 
   return (
     <>
@@ -141,10 +135,10 @@ export default async function HomePage() {
               </h1>
               <p className={styles.heroLead}>{dict.hero.lead}</p>
               <div className={styles.ctas}>
-                <a className={`${styles.btn} ${styles.btnWhite}`} href="#best">
+                <a className={`${styles.btn} ${styles.btnWhite}`} href={`/${locale}/shop/new`}>
                   {dict.hero.shop} <span>→</span>
                 </a>
-                <a className={`${styles.btn} ${styles.btnGhost}`} href="#shopby">
+                <a className={`${styles.btn} ${styles.btnGhost}`} href={`/${locale}/shop/tights`}>
                   {dict.hero.tights} <span>→</span>
                 </a>
               </div>
@@ -198,13 +192,13 @@ export default async function HomePage() {
         </div>
 
         {/* 3. BESTSELLER (13번 시안의 세로 제목 섹션) */}
-        <ProductShelf id="best" title={dict.shelves.best.title} kicker={dict.shelves.best.kicker} ranked items={bestItems} moreHref="#" labels={shelfLabels} />
+        <ProductShelf id="best" title={dict.shelves.best.title} kicker={dict.shelves.best.kicker} ranked items={bestItems} moreHref={`/${locale}/shop/best`} labels={shelfLabels} />
 
         {/* 4. 카테고리 타일 */}
         <section className={styles.shopBy} id="shopby">
           {tiles.map((tile, index) => (
             <Reveal key={tile.key} delay={index * 100}>
-              <a className={styles.tile} href="#">
+              <a className={styles.tile} href={`/${locale}/shop/${tile.key}`}>
                 <div className={styles.tileImage}>
                   <Image src={tile.image} alt="" fill sizes="(max-width: 860px) 100vw, 40vw" />
                 </div>
@@ -255,7 +249,7 @@ export default async function HomePage() {
               <br />
               <em>Forge it.</em>
             </h2>
-            <a className={`${styles.btn} ${styles.btnWhite} ${styles.trendCta}`} href="#best">
+            <a className={`${styles.btn} ${styles.btnWhite} ${styles.trendCta}`} href={`/${locale}/shop/all`}>
               {dict.trend.cta} <span>→</span>
             </a>
           </Reveal>
@@ -269,46 +263,7 @@ export default async function HomePage() {
       </main>
 
       {/* 8. 푸터 */}
-      <footer className={styles.footer}>
-        <div className={styles.footerTop}>
-          <Image src={images.wordmark} alt="SKALEZ" width={110} height={22} style={{ height: "auto" }} />
-          <span>{dict.footer.tagline} · © 2026 SKALEZ</span>
-        </div>
-        <dl className={styles.business}>
-          <div>
-            <dt>{dict.footer.company}</dt>
-            <dd>{business.company}</dd>
-          </div>
-          <div>
-            <dt>{dict.footer.ceo}</dt>
-            <dd>{business.ceo}</dd>
-          </div>
-          <div>
-            <dt>{dict.footer.businessNumber}</dt>
-            <dd>{business.businessNumber}</dd>
-          </div>
-          <div>
-            <dt>{dict.footer.mailOrder}</dt>
-            <dd>{business.mailOrder}</dd>
-          </div>
-          <div>
-            <dt>{dict.footer.address}</dt>
-            <dd>{business.address}</dd>
-          </div>
-          <div>
-            <dt>{dict.footer.contact}</dt>
-            <dd>{business.contact}</dd>
-          </div>
-          <div>
-            <dt>{dict.footer.email}</dt>
-            <dd>{business.email}</dd>
-          </div>
-        </dl>
-        <div className={styles.footerLinks}>
-          <a href="#">{dict.footer.terms}</a>
-          <a href="#">{dict.footer.privacy}</a>
-        </div>
-      </footer>
+      <SiteFooter labels={dict.footer} />
 
       <QuickMenu labels={dict.quick} introDim />
       <ProductPanel products={panelProducts} labels={dict.panel} />

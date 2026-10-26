@@ -93,6 +93,63 @@
       }
     ]
   },
+  "category": {
+    "pages": {
+      "all": {
+        "title": "SHOP ALL",
+        "sub": "전체 상품"
+      },
+      "new": {
+        "title": "NEW DROPS",
+        "sub": "신상품"
+      },
+      "best": {
+        "title": "BESTSELLER",
+        "sub": "베스트"
+      },
+      "tights": {
+        "title": "TIGHTS",
+        "sub": "타이즈"
+      },
+      "tops": {
+        "title": "TOPS",
+        "sub": "상의"
+      },
+      "hoodies": {
+        "title": "HOODIES",
+        "sub": "후드"
+      },
+      "goods": {
+        "title": "GOODS",
+        "sub": "굿즈"
+      },
+      "sale": {
+        "title": "SALE",
+        "sub": "세일"
+      }
+    },
+    "count": "{n}개의 상품",
+    "fit": "핏",
+    "size": "사이즈",
+    "stock": "재고",
+    "inStock": "재고 있음",
+    "soldOut": "품절",
+    "sort": {
+      "label": "정렬",
+      "new": "신상품",
+      "recommended": "추천순",
+      "low": "낮은 가격순",
+      "high": "높은 가격순"
+    },
+    "view": {
+      "label": "보기 방식",
+      "large": "크게 보기",
+      "small": "작게 보기"
+    },
+    "filter": "필터",
+    "reset": "필터 초기화",
+    "empty": "조건에 맞는 상품이 없어요."
+  },
   "fit": {
     "oversized": "오버핏",
     "semi": "세미 오버핏",

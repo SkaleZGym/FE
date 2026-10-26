@@ -258,6 +258,32 @@ export const bestsellerIds = [166, 164, 168, 278, 249, 162, 268] as const;
 /** SHOP BY 카테고리 타일 배경에 쓰는 상품 사진 */
 export const shopByTiles = { tights: 166, tops: 278, hoodies: 251 } as const;
 
+// ---------- 카테고리 페이지 (/[lang]/shop/[category]) ----------
+
+/** 주소에 쓰는 카테고리. 사전의 category.pages.* 키와 같다 */
+export const categoryPages = ["all", "new", "best", "tights", "tops", "hoodies", "goods", "sale"] as const;
+export type CategoryPage = (typeof categoryPages)[number];
+export const isCategoryPage = (value: string): value is CategoryPage => (categoryPages as readonly string[]).includes(value);
+
+/** 후드는 상의 카테고리 안에 있어서 상품 번호로 묶는다 (BE 연동 후 카테고리로 바꾼다) */
+const hoodieIds = new Set([261, 249, 251, 252]);
+
+export function productsOf(page: CategoryPage): Product[] {
+  switch (page) {
+    case "all": return products;
+    case "new": return products.filter((product) => product.badges.includes("NEW"));
+    case "best": return products.filter((product) => product.badges.includes("BEST"));
+    case "tights": return products.filter((product) => product.category === "tights");
+    case "tops": return products.filter((product) => product.category === "top" && !hoodieIds.has(product.id));
+    case "hoodies": return products.filter((product) => hoodieIds.has(product.id));
+    case "goods": return products.filter((product) => product.category === "goods");
+    case "sale": return products.filter((product) => product.listPrice);
+  }
+}
+
+/** 사이즈 필터에 보여 줄 순서 */
+export const sizeOrder = ["S", "M", "L", "XL", "2XL", "3XL", "FREE"];
+
 /** 트렌드 배너 배경 사진 */
 export const trendImageId = 270;
 
