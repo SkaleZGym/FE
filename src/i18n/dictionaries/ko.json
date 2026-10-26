@@ -239,7 +239,34 @@
     "resetDone": "비밀번호를 저장했어요. 새 비밀번호로 로그인해 주세요.",
     "resetNoToken": "링크가 올바르지 않아요. 메일의 링크를 다시 눌러 주시거나 비밀번호 찾기를 다시 요청해 주세요.",
     "agreeMarketing": "[선택] 이벤트·할인 소식 받기 (이메일·문자)",
-    "emailTaken": "이미 가입된 이메일이에요. 기존 사이트 회원이라면 비밀번호만 새로 설정하면 돼요."
+    "emailTaken": "이미 가입된 이메일이에요. 기존 사이트 회원이라면 비밀번호만 새로 설정하면 돼요.",
+    "auth": {
+      "welcomeTitle": "WELCOME BACK",
+      "welcomeText": "이미 회원이신가요? 로그인하고 주문 내역과 위시리스트를 이어서 보세요.",
+      "welcomeCta": "로그인",
+      "helloTitle": "NEW HERE?",
+      "helloText": "가입하고 새 드롭 소식과 회원 혜택을 가장 먼저 받아 보세요.",
+      "helloCta": "회원가입",
+      "remember": "로그인 상태 유지",
+      "or": "또는",
+      "kakao": "카카오로 계속하기",
+      "naver": "네이버로 계속하기",
+      "showPassword": "비밀번호 보기",
+      "hidePassword": "비밀번호 숨기기",
+      "socialTitle": "SIGN UP",
+      "socialLead": "간편 로그인 계정으로 가입해요. 약관에 동의하면 바로 시작할 수 있어요.",
+      "socialButton": "동의하고 가입하기",
+      "errors": {
+        "SOCIAL_LOGIN_NOT_CONFIGURED": "간편 로그인을 준비하고 있어요. 지금은 이메일로 로그인해 주세요.",
+        "SOCIAL_LOGIN_FAILED": "간편 로그인에 실패했어요. 잠시 후 다시 시도해 주세요.",
+        "SOCIAL_EMAIL_REQUIRED": "이메일 제공에 동의해야 가입할 수 있어요.",
+        "SOCIAL_EMAIL_IN_USE": "이미 이 이메일로 가입된 계정이 있어요. 이메일로 로그인해 주세요.",
+        "SOCIAL_SIGNUP_EXPIRED": "가입 시간이 지났어요. 간편 로그인을 다시 시도해 주세요.",
+        "CANCELLED": "간편 로그인을 취소했어요.",
+        "STATE": "보안 확인에 실패했어요. 다시 시도해 주세요."
+      }
+    },
+    "agreeAll": "전체 동의 (선택 항목 포함)"
   },
   "cart": {
     "title": "CART",

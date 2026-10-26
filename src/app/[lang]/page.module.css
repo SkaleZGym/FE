@@ -538,8 +538,9 @@
     display: flex;
     flex-direction: column;
     align-items: stretch; /* PC의 가운데 정렬을 풀어 제목·버튼을 왼쪽 선에 맞춘다 */
-    gap: 16px;
-    padding: 84px 20px 24px;
+    gap: 14px;
+    height: max(76svh, 560px); /* 인트로 무대(모바일)와 같은 높이. 작은 폰에서도 사진이 너무 작아지지 않게 최소 560px */
+    padding: 80px 20px 20px;
     text-align: left;
   }
 

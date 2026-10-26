@@ -1,8 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { API_BASE, TOKEN_COOKIE } from "@/lib/backend";
+import { API_BASE, tokenCookie } from "@/lib/backend";
 
-/** 로그인: BE에서 토큰을 받아 httpOnly 쿠키에 넣는다. 토큰은 응답 본문으로 돌려주지 않는다 */
+/**
+ * 로그인: BE에서 토큰을 받아 httpOnly 쿠키에 넣는다. 토큰은 응답 본문으로 돌려주지 않는다.
+ * remember=false('로그인 상태 유지' 해제)면 브라우저를 닫을 때 쿠키가 지워진다
+ */
 export async function POST(request: NextRequest) {
+  const { remember = true, ...credentials } = (await request.json().catch(() => ({}))) as { remember?: boolean; email?: string; password?: string };
   let response: Response;
   try {
     response = await fetch(`${API_BASE}/api/auth/login`, {
@@ -11,7 +15,7 @@ export async function POST(request: NextRequest) {
         "content-type": "application/json",
         "accept-language": request.headers.get("accept-language") ?? "ko",
       },
-      body: await request.text(),
+      body: JSON.stringify(credentials),
       cache: "no-store",
     });
   } catch {
@@ -27,12 +31,6 @@ export async function POST(request: NextRequest) {
 
   const { accessToken, expiresIn } = (await response.json()) as { accessToken: string; expiresIn: number };
   const result = new NextResponse(null, { status: 204 });
-  result.cookies.set(TOKEN_COOKIE, accessToken, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: expiresIn,
-  });
+  result.cookies.set(tokenCookie(accessToken, expiresIn, remember !== false));
   return result;
 }

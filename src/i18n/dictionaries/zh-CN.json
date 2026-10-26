@@ -239,7 +239,34 @@
     "resetDone": "密码已保存，请使用新密码登录。",
     "resetNoToken": "链接无效。请重新打开邮件中的链接或重新申请。",
     "agreeMarketing": "[可选] 接收活动和优惠信息（邮件・短信）",
-    "emailTaken": "该邮箱已注册。如果您是旧网站的会员，只需重新设置密码。"
+    "emailTaken": "该邮箱已注册。如果您是旧网站的会员，只需重新设置密码。",
+    "auth": {
+      "welcomeTitle": "WELCOME BACK",
+      "welcomeText": "已经是会员？登录后继续查看订单和心愿单。",
+      "welcomeCta": "登录",
+      "helloTitle": "NEW HERE?",
+      "helloText": "注册后第一时间获取新品发售和会员福利。",
+      "helloCta": "注册",
+      "remember": "保持登录",
+      "or": "或",
+      "kakao": "使用 Kakao 继续",
+      "naver": "使用 Naver 继续",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
+      "socialTitle": "SIGN UP",
+      "socialLead": "使用快捷登录账号注册，同意条款后即可开始。",
+      "socialButton": "同意并注册",
+      "errors": {
+        "SOCIAL_LOGIN_NOT_CONFIGURED": "快捷登录正在准备中，请使用邮箱登录。",
+        "SOCIAL_LOGIN_FAILED": "快捷登录失败，请稍后再试。",
+        "SOCIAL_EMAIL_REQUIRED": "需要同意提供邮箱才能注册。",
+        "SOCIAL_EMAIL_IN_USE": "该邮箱已注册账号，请使用邮箱登录。",
+        "SOCIAL_SIGNUP_EXPIRED": "注册已超时，请重新进行快捷登录。",
+        "CANCELLED": "已取消快捷登录。",
+        "STATE": "安全验证失败，请重试。"
+      }
+    },
+    "agreeAll": "全部同意（含可选项）"
   },
   "cart": {
     "title": "CART",

@@ -239,7 +239,34 @@
     "resetDone": "パスワードを保存しました。新しいパスワードでログインしてください。",
     "resetNoToken": "リンクが正しくありません。メールのリンクをもう一度開くか、再度お申し込みください。",
     "agreeMarketing": "[任意] イベント・割引のお知らせを受け取る(メール・SMS)",
-    "emailTaken": "すでに登録されているメールアドレスです。以前のサイトの会員の方は、パスワードだけ設定し直してください。"
+    "emailTaken": "すでに登録されているメールアドレスです。以前のサイトの会員の方は、パスワードだけ設定し直してください。",
+    "auth": {
+      "welcomeTitle": "WELCOME BACK",
+      "welcomeText": "すでに会員の方はログインして、注文履歴やお気に入りをご覧ください。",
+      "welcomeCta": "ログイン",
+      "helloTitle": "NEW HERE?",
+      "helloText": "登録すると新作ドロップや会員特典のお知らせをいち早くお届けします。",
+      "helloCta": "新規登録",
+      "remember": "ログイン状態を保持",
+      "or": "または",
+      "kakao": "カカオで続ける",
+      "naver": "NAVERで続ける",
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを隠す",
+      "socialTitle": "SIGN UP",
+      "socialLead": "簡単ログインのアカウントで登録します。規約に同意するとすぐに始められます。",
+      "socialButton": "同意して登録",
+      "errors": {
+        "SOCIAL_LOGIN_NOT_CONFIGURED": "簡単ログインは準備中です。メールアドレスでログインしてください。",
+        "SOCIAL_LOGIN_FAILED": "簡単ログインに失敗しました。しばらくしてから再度お試しください。",
+        "SOCIAL_EMAIL_REQUIRED": "登録にはメールアドレスの提供への同意が必要です。",
+        "SOCIAL_EMAIL_IN_USE": "このメールアドレスで登録済みのアカウントがあります。メールアドレスでログインしてください。",
+        "SOCIAL_SIGNUP_EXPIRED": "登録の有効時間が過ぎました。もう一度お試しください。",
+        "CANCELLED": "簡単ログインをキャンセルしました。",
+        "STATE": "セキュリティ確認に失敗しました。もう一度お試しください。"
+      }
+    },
+    "agreeAll": "すべてに同意(任意項目を含む)"
   },
   "cart": {
     "title": "CART",

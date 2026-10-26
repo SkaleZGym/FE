@@ -239,7 +239,34 @@
     "resetDone": "Your password has been saved. Please log in with your new password.",
     "resetNoToken": "This link isn't valid. Open the link from the email again or request a new one.",
     "agreeMarketing": "[Optional] Send me news about events and discounts (email/SMS)",
-    "emailTaken": "This email is already registered. If you were a member of our previous store, just set a new password."
+    "emailTaken": "This email is already registered. If you were a member of our previous store, just set a new password.",
+    "auth": {
+      "welcomeTitle": "WELCOME BACK",
+      "welcomeText": "Already a member? Log in to pick up your orders and wishlist.",
+      "welcomeCta": "Log in",
+      "helloTitle": "NEW HERE?",
+      "helloText": "Create an account to hear about new drops and member perks first.",
+      "helloCta": "Sign up",
+      "remember": "Keep me logged in",
+      "or": "or",
+      "kakao": "Continue with Kakao",
+      "naver": "Continue with Naver",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "socialTitle": "SIGN UP",
+      "socialLead": "You're signing up with your social account. Accept the terms to get started.",
+      "socialButton": "Agree and sign up",
+      "errors": {
+        "SOCIAL_LOGIN_NOT_CONFIGURED": "Social login isn't available yet. Please log in with your email.",
+        "SOCIAL_LOGIN_FAILED": "Social login failed. Please try again shortly.",
+        "SOCIAL_EMAIL_REQUIRED": "We need access to your email to sign you up.",
+        "SOCIAL_EMAIL_IN_USE": "An account with this email already exists. Please log in with your email.",
+        "SOCIAL_SIGNUP_EXPIRED": "Your sign-up session expired. Please try social login again.",
+        "CANCELLED": "Social login was cancelled.",
+        "STATE": "Security check failed. Please try again."
+      }
+    },
+    "agreeAll": "Agree to all (including optional)"
   },
   "cart": {
     "title": "CART",

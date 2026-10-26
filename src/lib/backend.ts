@@ -11,3 +11,23 @@ export const TOKEN_COOKIE = "skz_at";
  */
 export const ADMIN_TOKEN_COOKIE = "skz_admin";
 export const ADMIN_COOKIE_PATH = "/api/admin";
+
+/** 고객이 보는 쇼핑몰 주소 (간편 로그인 콜백 주소용). BE 의 skalez.site.url 과 같아야 한다 */
+export const SITE_URL = process.env.SITE_URL ?? "http://localhost:3010";
+/** 간편 로그인 진행 중 위조 방지 값(state)과 돌아갈 곳을 담는 쿠키 */
+export const OAUTH_STATE_COOKIE = "skz_oauth";
+/** 간편 로그인으로 처음 온 사람의 가입 표 (약관 동의 화면까지 10분) */
+export const SOCIAL_SIGNUP_COOKIE = "skz_social";
+
+/** 로그인 토큰 쿠키. remember=false 면 브라우저를 닫을 때 지워지는 쿠키 */
+export function tokenCookie(accessToken: string, expiresIn: number, remember = true) {
+  return {
+    name: TOKEN_COOKIE,
+    value: accessToken,
+    httpOnly: true,
+    sameSite: "lax" as const,
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    ...(remember ? { maxAge: expiresIn } : {}),
+  };
+}
