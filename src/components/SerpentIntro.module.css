@@ -26,14 +26,6 @@
   height: 100svh;
 }
 
-/* 모바일: 히어로(인트로 무대)를 화면의 76%(최소 560px)만 써서 다음 구간이 바로 이어 보이게 */
-@media (max-width: 860px) {
-  .pin,
-  .heroSlot > * {
-    height: max(76svh, 560px);
-  }
-}
-
 .scales {
   position: absolute;
   inset: 0;

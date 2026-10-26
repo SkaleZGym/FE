@@ -539,8 +539,8 @@
     flex-direction: column;
     align-items: stretch; /* PC의 가운데 정렬을 풀어 제목·버튼을 왼쪽 선에 맞춘다 */
     gap: 14px;
-    height: max(76svh, 560px); /* 인트로 무대(모바일)와 같은 높이. 작은 폰에서도 사진이 너무 작아지지 않게 최소 560px */
-    padding: 80px 20px 20px;
+    justify-content: center; /* 제목·사진·정보·버튼을 빈틈 없이 붙여 화면 가운데에 모은다 */
+    padding: 80px 20px 24px;
     text-align: left;
   }
 
@@ -586,12 +586,11 @@
 
   /* 사진은 남는 높이를 채우고, 그 아래 한 줄에 상품 정보(왼쪽)와 넘기기(오른쪽) */
   .heroRight {
-    flex: 1;
-    min-height: 0;
+    flex: none;
     height: auto;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-rows: min(44svh, 84vw) auto;
     column-gap: 12px;
     row-gap: 14px;
   }
