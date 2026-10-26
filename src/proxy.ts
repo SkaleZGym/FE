@@ -35,6 +35,6 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // _next, API, 정적 파일(확장자 있는 경로)은 건너뛴다
-  matcher: ["/((?!_next|api|.*\\..*).*)"],
+  // _next, API, 관리자 화면(/admin, 한국어 전용), 정적 파일(확장자 있는 경로)은 건너뛴다
+  matcher: ["/((?!_next|api|admin|.*\\..*).*)"],
 };

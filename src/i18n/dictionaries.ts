@@ -16,7 +16,8 @@ const dictionaries: Record<Locale, () => Promise<Dictionary>> = {
 /** 현재 URL의 언어(/ko, /en …)를 읽어 사전을 돌려준다. */
 export async function getLocale(): Promise<Locale> {
   const locale = await lang();
-  if (!hasLocale(locale)) notFound();
+  // 관리자 화면(/admin)은 언어 경로가 없어서 lang 이 비어 있을 수 있다
+  if (!locale || !hasLocale(locale)) notFound();
   return locale;
 }
 

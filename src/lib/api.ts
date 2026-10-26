@@ -57,3 +57,18 @@ export async function getLatestNotices(locale: Locale, size = 5): Promise<Notice
 }
 
 export const getFaqs = (locale: Locale) => getJson<Faq[]>("/api/faqs", locale);
+
+/** 관리자 '배너·팝업'에서 켠 배너 (현재 언어 문구). 인트로(MAIN_HERO)는 FE 고정이라 여기서 쓰지 않는다 */
+export type SiteBanner = {
+  id: number;
+  position: "MAIN_HERO" | "MAIN_SUB" | "POPUP";
+  imageUrl: string;
+  mobileImageUrl: string | null;
+  linkUrl: string | null;
+  target: "ALL_PAGES" | "MAIN_ONLY";
+  headline: string | null;
+  subtext: string | null;
+};
+
+export const getBanners = (locale: Locale, position: "MAIN_SUB" | "POPUP") =>
+  getJson<SiteBanner[]>(`/api/banners?position=${position}`, locale);

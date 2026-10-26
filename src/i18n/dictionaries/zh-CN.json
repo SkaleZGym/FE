@@ -381,5 +381,9 @@
     "terms": "使用条款",
     "privacy": "隐私政策",
     "tagline": "BUILT FOR LEG DAY."
+  },
+  "popup": {
+    "close": "关闭",
+    "hideToday": "今天不再显示"
   }
 }

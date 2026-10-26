@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Anton, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_KR, Noto_Sans_SC } from "next/font/google";
 import { locales } from "@/i18n/config";
+import SitePopup from "@/components/SitePopup";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
+import { getBanners } from "@/lib/api";
 import "../globals.css";
 
 // 헤드라인용 영문 장체. 한·중·일 글자는 없어서 아래 본문 폰트로 자동 대체된다.
@@ -29,9 +31,17 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const fontVariables = [display, mono, notoKr, notoJp, notoSc].map((font) => font.variable).join(" ");
 
+  const locale = await getLocale();
+  const dict = await getDictionary();
+  // 관리자에서 켠 팝업 (BE가 꺼져 있으면 없음)
+  const popups = (await getBanners(locale, "POPUP")) ?? [];
+
   return (
-    <html lang={await getLocale()} className={fontVariables}>
-      <body>{children}</body>
+    <html lang={locale} className={fontVariables}>
+      <body>
+        {children}
+        <SitePopup locale={locale} banners={popups} labels={dict.popup} />
+      </body>
     </html>
   );
 }

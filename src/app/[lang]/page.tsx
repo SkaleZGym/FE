@@ -27,6 +27,7 @@ import {
 } from "@/data/catalog";
 import type { Locale } from "@/i18n/config";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
+import { getBanners } from "@/lib/api";
 import styles from "./page.module.css";
 
 /** 현재 언어의 통화로 가격 문자열을 만든다 */
@@ -92,6 +93,7 @@ export default async function HomePage() {
     ...dict.shopBy[key],
   }));
   const trend = productById(trendImageId);
+  const subBanner = (await getBanners(locale, "MAIN_SUB"))?.[0];
   // 상품 정보 패널에서 열 수 있는 상품: 히어로 로테이션 + BESTSELLER
   const panelIds = [...heroShowcase.map((item) => item.id), ...bestsellerIds];
   const panelProducts: PanelProduct[] = [...new Set(panelIds)].map((id) => {
@@ -217,17 +219,27 @@ export default async function HomePage() {
         {/* 5. 트렌드 배너 (쇼핑하기) */}
         <section className={styles.trend} id="trend">
           <div className={styles.trendBg} aria-hidden="true">
-            <Image src={trend.image} alt="" fill sizes="100vw" />
+            {/* 관리자 '메인 중간 배너'가 켜져 있으면 그 사진·문구, 없으면 기본 문구 */}
+            {subBanner ? (
+              <Image src={subBanner.imageUrl} alt="" fill sizes="100vw" unoptimized />
+            ) : (
+              <Image src={trend.image} alt="" fill sizes="100vw" />
+            )}
           </div>
           <Reveal>
-            <h2 className={styles.trendTitle}>
-              Don&apos;t follow
-              <br />
-              the trend.
-              <br />
-              <em>Forge it.</em>
-            </h2>
-            <a className={`${styles.btn} ${styles.btnWhite} ${styles.trendCta}`} href={`/${locale}/shop/all`}>
+            {subBanner?.headline ? (
+              <h2 className={styles.trendTitle}>{subBanner.headline}</h2>
+            ) : (
+              <h2 className={styles.trendTitle}>
+                Don&apos;t follow
+                <br />
+                the trend.
+                <br />
+                <em>Forge it.</em>
+              </h2>
+            )}
+            {subBanner?.subtext && <p className={styles.trendSub}>{subBanner.subtext}</p>}
+            <a className={`${styles.btn} ${styles.btnWhite} ${styles.trendCta}`} href={subBanner?.linkUrl || `/${locale}/shop/all`}>
               {dict.trend.cta} <span>→</span>
             </a>
           </Reveal>

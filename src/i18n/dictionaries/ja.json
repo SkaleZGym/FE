@@ -381,5 +381,9 @@
     "terms": "利用規約",
     "privacy": "プライバシーポリシー",
     "tagline": "BUILT FOR LEG DAY."
+  },
+  "popup": {
+    "close": "閉じる",
+    "hideToday": "今日は表示しない"
   }
 }

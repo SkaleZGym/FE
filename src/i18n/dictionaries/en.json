@@ -381,5 +381,9 @@
     "terms": "Terms of use",
     "privacy": "Privacy policy",
     "tagline": "BUILT FOR LEG DAY."
+  },
+  "popup": {
+    "close": "Close",
+    "hideToday": "Don't show today"
   }
 }
