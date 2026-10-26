@@ -32,20 +32,66 @@
       "title": "BESTSELLER",
       "kicker": "[ 01 · MOST WANTED ]"
     },
-    "tights": {
-      "title": "TIGHTS",
-      "kicker": "[ 02 · CORE LINE ]"
-    },
-    "tops": {
-      "title": "TOPS",
-      "kicker": "[ 03 · UPPER BODY ]"
-    },
     "viewAll": "VIEW ALL",
     "quickAdd": "QUICK ADD +",
     "restock": "RESTOCK ALERT",
     "soldOut": "SOLD OUT",
     "sale": "SALE",
     "more": "查看全部"
+  },
+  "shopBy": {
+    "tights": {
+      "small": "[ CORE LINE ]",
+      "title": "TIGHTS"
+    },
+    "tops": {
+      "small": "[ OVERSIZED · MUSCLE ]",
+      "title": "TOPS"
+    },
+    "hoodies": {
+      "small": "[ WARM UP ]",
+      "title": "HOODIES"
+    }
+  },
+  "shipping": {
+    "kicker": "[ SHIPPING ]",
+    "title": "Shipping",
+    "base": "基本运费",
+    "free": "免运费",
+    "freeValue": "满{amount}",
+    "noFree": "无",
+    "remote": "济州 / 偏远岛屿",
+    "remoteNote": "额外运费 (免运费订单也收取)"
+  },
+  "board": {
+    "noticeKicker": "[ NOTICE ]",
+    "noticeTitle": "Notice",
+    "faqKicker": "[ FAQ ]",
+    "faqTitle": "FAQ",
+    "empty": "暂无公告。",
+    "pinned": "置顶",
+    "categories": {
+      "NOTICE": "公告",
+      "EVENT": "活动"
+    },
+    "fallbackFaqs": [
+      {
+        "question": "配送需要多久？",
+        "answer": "工作日下午2点(韩国时间)前付款当天发货，通常1~2天送达。"
+      },
+      {
+        "question": "可以换尺码吗？",
+        "answer": "可以。收货后7天内，未穿着的商品可免费换货一次。"
+      },
+      {
+        "question": "济州岛和偏远岛屿可以配送吗？",
+        "answer": "可以，根据地区会收取额外运费。"
+      },
+      {
+        "question": "什么时候开通海外配送？",
+        "answer": "预计2027年开通海外配送。"
+      }
+    ]
   },
   "fit": {
     "oversized": "宽松版型",

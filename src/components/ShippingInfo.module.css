@@ -1,0 +1,73 @@
+/* 배송 안내: 왼쪽 큰 제목 + 오른쪽 숫자 카드. 바로 아래 신뢰 바(당일 출고·무료 교환 등)와 이어진다 */
+
+.shipping {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 2fr);
+  gap: clamp(20px, 4vw, 64px);
+  align-items: end;
+  padding: 80px var(--gutter) 56px;
+  color: var(--ink);
+  background: #000;
+  border-top: 1px solid var(--line);
+}
+
+.head h2 {
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(3rem, 7vw, 6.4rem);
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--red);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.stat {
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  height: 100%;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+
+  & dt {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--ink-muted);
+  }
+
+  & dd {
+    font-family: var(--font-mono);
+    font-size: clamp(18px, 2vw, 24px);
+  }
+
+  & small {
+    font-size: 11px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+  }
+}
+
+@media (max-width: 860px) {
+  .shipping {
+    grid-template-columns: 1fr;
+    padding-top: 56px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}

@@ -32,20 +32,66 @@
       "title": "BESTSELLER",
       "kicker": "[ 01 · MOST WANTED ]"
     },
-    "tights": {
-      "title": "TIGHTS",
-      "kicker": "[ 02 · CORE LINE ]"
-    },
-    "tops": {
-      "title": "TOPS",
-      "kicker": "[ 03 · UPPER BODY ]"
-    },
     "viewAll": "VIEW ALL",
     "quickAdd": "QUICK ADD +",
     "restock": "RESTOCK ALERT",
     "soldOut": "SOLD OUT",
     "sale": "SALE",
     "more": "전체 보기"
+  },
+  "shopBy": {
+    "tights": {
+      "small": "[ CORE LINE ]",
+      "title": "TIGHTS"
+    },
+    "tops": {
+      "small": "[ OVERSIZED · MUSCLE ]",
+      "title": "TOPS"
+    },
+    "hoodies": {
+      "small": "[ WARM UP ]",
+      "title": "HOODIES"
+    }
+  },
+  "shipping": {
+    "kicker": "[ SHIPPING ]",
+    "title": "Shipping",
+    "base": "기본 배송비",
+    "free": "무료 배송",
+    "freeValue": "{amount} 이상",
+    "noFree": "무료 배송 없음",
+    "remote": "제주 / 도서산간",
+    "remoteNote": "추가 배송비 (무료 배송 주문 포함)"
+  },
+  "board": {
+    "noticeKicker": "[ NOTICE ]",
+    "noticeTitle": "Notice",
+    "faqKicker": "[ FAQ ]",
+    "faqTitle": "FAQ",
+    "empty": "등록된 공지가 없어요.",
+    "pinned": "고정",
+    "categories": {
+      "NOTICE": "공지",
+      "EVENT": "이벤트"
+    },
+    "fallbackFaqs": [
+      {
+        "question": "배송은 얼마나 걸리나요?",
+        "answer": "평일 오후 2시 전에 결제하면 당일 출고되고, 보통 1~2일 안에 받아요."
+      },
+      {
+        "question": "사이즈 교환이 되나요?",
+        "answer": "받은 날로부터 7일 이내, 착용하지 않은 상품은 1회 무료로 사이즈를 교환할 수 있어요."
+      },
+      {
+        "question": "제주·도서산간도 배송되나요?",
+        "answer": "네, 배송돼요. 지역에 따라 추가 배송비가 붙어요."
+      },
+      {
+        "question": "해외 배송은 언제 되나요?",
+        "answer": "2027년에 해외 배송을 열 예정이에요."
+      }
+    ]
   },
   "fit": {
     "oversized": "오버핏",

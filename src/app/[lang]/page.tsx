@@ -1,12 +1,15 @@
 import Image from "next/image";
 import HeroShowcase, { type ShowcaseItem } from "@/components/HeroShowcase";
+import NoticeBoard from "@/components/NoticeBoard";
 import ProductPanel, { type PanelProduct } from "@/components/ProductPanel";
 import ProductShelf, { type ShelfItem } from "@/components/ProductShelf";
 import QuickMenu from "@/components/QuickMenu";
 import Reveal from "@/components/Reveal";
 import SerpentIntro from "@/components/SerpentIntro";
+import ShippingInfo from "@/components/ShippingInfo";
 import SiteHeader from "@/components/SiteHeader";
 import {
+  bestsellerIds,
   business,
   currencyFor,
   descriptions,
@@ -16,7 +19,7 @@ import {
   heroShowcase,
   images,
   productById,
-  shelves,
+  shopByTiles,
   sizesOf,
   trendImageId,
   type Product,
@@ -61,9 +64,8 @@ export default async function HomePage() {
     const product = productById(id);
     return { id, image: product.image, name: product.name[locale], line, ...priceOf(product, locale) };
   });
-  // 13번 시안의 세로 제목 상품 섹션 3개 (BESTSELLER · TIGHTS · TOPS)
-  const shelfItems = (ids: readonly number[]): ShelfItem[] =>
-    ids.map((id) => {
+  // 13번 시안의 세로 제목 BESTSELLER
+  const bestItems: ShelfItem[] = bestsellerIds.map((id) => {
       const product = productById(id);
       return {
         id,
@@ -73,7 +75,7 @@ export default async function HomePage() {
         ...priceOf(product, locale),
         soldOut: Boolean(product.soldOut),
       };
-    });
+  });
   const shelfLabels = {
     viewAll: dict.shelves.viewAll,
     more: dict.shelves.more,
@@ -82,9 +84,15 @@ export default async function HomePage() {
     soldOut: dict.shelves.soldOut,
     sale: dict.shelves.sale,
   };
+  // SHOP BY 카테고리 타일
+  const tiles = (["tights", "tops", "hoodies"] as const).map((key) => ({
+    key,
+    image: productById(shopByTiles[key]).image,
+    ...dict.shopBy[key],
+  }));
   const trend = productById(trendImageId);
-  // 상품 정보 패널에서 열 수 있는 상품: 히어로 로테이션 + 세 섹션의 상품
-  const panelIds = [...heroShowcase.map((item) => item.id), ...shelves.best, ...shelves.tights, ...shelves.tops];
+  // 상품 정보 패널에서 열 수 있는 상품: 히어로 로테이션 + BESTSELLER
+  const panelIds = [...heroShowcase.map((item) => item.id), ...bestsellerIds];
   const panelProducts: PanelProduct[] = [...new Set(panelIds)].map((id) => {
     const product = productById(id);
     return {
@@ -101,13 +109,13 @@ export default async function HomePage() {
     };
   });
 
-  // 19번 시안의 메뉴 5개. COLLAB은 인트로가 끝난 히어로 자리(#drop), ABOUT은 아직 소개 페이지가 없어 신뢰 바로
+  // 19번 시안의 메뉴 5개. COLLAB은 인트로가 끝난 히어로 자리(#drop), ABOUT은 아직 소개 페이지가 없어 배송·신뢰 안내로
   const nav = [
     { label: dict.nav.shop, href: "#best" },
-    { label: dict.nav.newDrops, href: "#tops" },
-    { label: dict.nav.tights, href: "#tights" },
+    { label: dict.nav.newDrops, href: "#best" },
+    { label: dict.nav.tights, href: "#shopby" },
     { label: dict.nav.collab, href: "#drop" },
-    { label: dict.nav.about, href: "#trust" },
+    { label: dict.nav.about, href: "#shipping" },
   ];
 
   return (
@@ -136,7 +144,7 @@ export default async function HomePage() {
                 <a className={`${styles.btn} ${styles.btnWhite}`} href="#best">
                   {dict.hero.shop} <span>→</span>
                 </a>
-                <a className={`${styles.btn} ${styles.btnGhost}`} href="#tights">
+                <a className={`${styles.btn} ${styles.btnGhost}`} href="#shopby">
                   {dict.hero.tights} <span>→</span>
                 </a>
               </div>
@@ -189,11 +197,52 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* 3·4. 세로 제목 상품 섹션 (13번 시안): BESTSELLER(제목 왼쪽) → TIGHTS(제목 오른쪽) */}
-        <ProductShelf id="best" title={dict.shelves.best.title} kicker={dict.shelves.best.kicker} ranked items={shelfItems(shelves.best)} moreHref="#" labels={shelfLabels} />
-        <ProductShelf id="tights" title={dict.shelves.tights.title} kicker={dict.shelves.tights.kicker} flip items={shelfItems(shelves.tights)} moreHref="#" labels={shelfLabels} />
+        {/* 3. BESTSELLER (13번 시안의 세로 제목 섹션) */}
+        <ProductShelf id="best" title={dict.shelves.best.title} kicker={dict.shelves.best.kicker} ranked items={bestItems} moreHref="#" labels={shelfLabels} />
 
-        {/* 5. 트렌드 배너 */}
+        {/* 4. 카테고리 타일 */}
+        <section className={styles.shopBy} id="shopby">
+          {tiles.map((tile, index) => (
+            <Reveal key={tile.key} delay={index * 100}>
+              <a className={styles.tile} href="#">
+                <div className={styles.tileImage}>
+                  <Image src={tile.image} alt="" fill sizes="(max-width: 860px) 100vw, 40vw" />
+                </div>
+                <div className={styles.tileText}>
+                  <div>
+                    <small>{tile.small}</small>
+                    <b>{tile.title}</b>
+                  </div>
+                  <span className={styles.go}>→</span>
+                </div>
+              </a>
+            </Reveal>
+          ))}
+        </section>
+
+        {/* 5. 배송 안내 (BE 배송 설정) + 신뢰 바 */}
+        <ShippingInfo locale={locale} labels={dict.shipping} />
+        {/* 5-1. 신뢰 바 */}
+        <section className={styles.trust} id="trust">
+          {dict.trust.items.map((item, index) => (
+            <div className={styles.trustItem} key={item.accent}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                {trustIcons[index]}
+              </svg>
+              <p>
+                <b>
+                  {item.title} <em>{item.accent}</em>
+                </b>
+                <span>{item.desc}</span>
+              </p>
+            </div>
+          ))}
+        </section>
+
+        {/* 6. 공지사항 · FAQ (BE) */}
+        <NoticeBoard locale={locale} labels={dict.board} />
+
+        {/* 7. 트렌드 배너 */}
         <section className={styles.trend} id="trend">
           <div className={styles.trendBg} aria-hidden="true">
             <Image src={trend.image} alt="" fill sizes="100vw" />
@@ -217,28 +266,9 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* 5-1. TOPS (제목 왼쪽) */}
-        <ProductShelf id="tops" title={dict.shelves.tops.title} kicker={dict.shelves.tops.kicker} items={shelfItems(shelves.tops)} moreHref="#" labels={shelfLabels} />
-
-        {/* 6. 신뢰 바 */}
-        <section className={styles.trust} id="trust">
-          {dict.trust.items.map((item, index) => (
-            <div className={styles.trustItem} key={item.accent}>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                {trustIcons[index]}
-              </svg>
-              <p>
-                <b>
-                  {item.title} <em>{item.accent}</em>
-                </b>
-                <span>{item.desc}</span>
-              </p>
-            </div>
-          ))}
-        </section>
       </main>
 
-      {/* 7. 푸터 */}
+      {/* 8. 푸터 */}
       <footer className={styles.footer}>
         <div className={styles.footerTop}>
           <Image src={images.wordmark} alt="SKALEZ" width={110} height={22} style={{ height: "auto" }} />

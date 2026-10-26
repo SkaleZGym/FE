@@ -32,20 +32,66 @@
       "title": "BESTSELLER",
       "kicker": "[ 01 · MOST WANTED ]"
     },
-    "tights": {
-      "title": "TIGHTS",
-      "kicker": "[ 02 · CORE LINE ]"
-    },
-    "tops": {
-      "title": "TOPS",
-      "kicker": "[ 03 · UPPER BODY ]"
-    },
     "viewAll": "VIEW ALL",
     "quickAdd": "QUICK ADD +",
     "restock": "RESTOCK ALERT",
     "soldOut": "SOLD OUT",
     "sale": "SALE",
     "more": "View all"
+  },
+  "shopBy": {
+    "tights": {
+      "small": "[ CORE LINE ]",
+      "title": "TIGHTS"
+    },
+    "tops": {
+      "small": "[ OVERSIZED · MUSCLE ]",
+      "title": "TOPS"
+    },
+    "hoodies": {
+      "small": "[ WARM UP ]",
+      "title": "HOODIES"
+    }
+  },
+  "shipping": {
+    "kicker": "[ SHIPPING ]",
+    "title": "Shipping",
+    "base": "Standard shipping",
+    "free": "Free shipping",
+    "freeValue": "Orders over {amount}",
+    "noFree": "Not available",
+    "remote": "Jeju / remote islands",
+    "remoteNote": "Extra fee, also on free-shipping orders"
+  },
+  "board": {
+    "noticeKicker": "[ NOTICE ]",
+    "noticeTitle": "Notice",
+    "faqKicker": "[ FAQ ]",
+    "faqTitle": "FAQ",
+    "empty": "No notices yet.",
+    "pinned": "Pinned",
+    "categories": {
+      "NOTICE": "Notice",
+      "EVENT": "Event"
+    },
+    "fallbackFaqs": [
+      {
+        "question": "How long does shipping take?",
+        "answer": "Orders paid before 2 PM (KST) on weekdays ship the same day and usually arrive in 1–2 days."
+      },
+      {
+        "question": "Can I exchange for another size?",
+        "answer": "Yes. Unworn items can be exchanged once for free within 7 days of delivery."
+      },
+      {
+        "question": "Do you ship to Jeju and remote islands?",
+        "answer": "Yes. An extra shipping fee applies depending on the area."
+      },
+      {
+        "question": "When will international shipping open?",
+        "answer": "We plan to open international shipping in 2027."
+      }
+    ]
   },
   "fit": {
     "oversized": "Oversized",

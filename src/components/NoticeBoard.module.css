@@ -1,0 +1,163 @@
+/* 공지사항 · FAQ (08번 시안의 2단 구성, 어두운 바탕) */
+
+.board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  color: var(--ink);
+  background: var(--iron);
+  border-top: 1px solid var(--line);
+}
+
+.col {
+  padding: 64px var(--gutter) 72px;
+
+  & + & {
+    border-left: 1px solid var(--line);
+  }
+
+  & h2 {
+    margin: 10px 0 24px;
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 5vw, 4.4rem);
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--red);
+}
+
+/* ---------- 공지 ---------- */
+
+.notices li {
+  border-top: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+}
+
+.notice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 14px;
+  padding: 15px 0;
+  font-size: 13px;
+  transition: padding 0.3s;
+
+  &:hover {
+    padding-left: 8px;
+  }
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: var(--ink-muted);
+
+  &[data-event] {
+    color: var(--red);
+  }
+}
+
+.title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.notice time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+}
+
+.empty {
+  padding: 18px 0;
+  font-size: 13px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+/* ---------- FAQ (열고 닫기) ---------- */
+
+.faq {
+  border-top: 1px solid var(--line);
+
+  &:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  & summary {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 16px 36px 16px 0;
+    font-size: 13px;
+    list-style: none;
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+
+    /* + 아이콘. 열리면 세로 막대가 누워서 − 가 된다 */
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      right: 4px;
+      top: 50%;
+      width: 12px;
+      height: 1px;
+      background: currentColor;
+      transition: transform 0.3s;
+    }
+
+    &::after {
+      transform: rotate(90deg);
+    }
+  }
+
+  &[open] summary::after {
+    transform: rotate(0);
+  }
+
+  & p {
+    padding: 0 36px 18px 30px;
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: #bdbdbd;
+  }
+}
+
+.q {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--red);
+}
+
+@media (max-width: 860px) {
+  .board {
+    grid-template-columns: 1fr;
+  }
+
+  .col {
+    padding-top: 48px;
+    padding-bottom: 48px;
+
+    & + & {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+}

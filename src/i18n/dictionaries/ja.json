@@ -32,20 +32,66 @@
       "title": "BESTSELLER",
       "kicker": "[ 01 · MOST WANTED ]"
     },
-    "tights": {
-      "title": "TIGHTS",
-      "kicker": "[ 02 · CORE LINE ]"
-    },
-    "tops": {
-      "title": "TOPS",
-      "kicker": "[ 03 · UPPER BODY ]"
-    },
     "viewAll": "VIEW ALL",
     "quickAdd": "QUICK ADD +",
     "restock": "RESTOCK ALERT",
     "soldOut": "SOLD OUT",
     "sale": "SALE",
     "more": "すべて見る"
+  },
+  "shopBy": {
+    "tights": {
+      "small": "[ CORE LINE ]",
+      "title": "TIGHTS"
+    },
+    "tops": {
+      "small": "[ OVERSIZED · MUSCLE ]",
+      "title": "TOPS"
+    },
+    "hoodies": {
+      "small": "[ WARM UP ]",
+      "title": "HOODIES"
+    }
+  },
+  "shipping": {
+    "kicker": "[ SHIPPING ]",
+    "title": "Shipping",
+    "base": "基本送料",
+    "free": "送料無料",
+    "freeValue": "{amount}以上",
+    "noFree": "なし",
+    "remote": "済州 / 離島",
+    "remoteNote": "追加送料 (送料無料の注文にもかかります)"
+  },
+  "board": {
+    "noticeKicker": "[ NOTICE ]",
+    "noticeTitle": "Notice",
+    "faqKicker": "[ FAQ ]",
+    "faqTitle": "FAQ",
+    "empty": "お知らせはまだありません。",
+    "pinned": "固定",
+    "categories": {
+      "NOTICE": "お知らせ",
+      "EVENT": "イベント"
+    },
+    "fallbackFaqs": [
+      {
+        "question": "配送にはどのくらいかかりますか？",
+        "answer": "平日14時(韓国時間)までのお支払いで当日出荷し、通常1〜2日でお届けします。"
+      },
+      {
+        "question": "サイズ交換はできますか？",
+        "answer": "お届けから7日以内、未着用の商品は1回まで無料で交換できます。"
+      },
+      {
+        "question": "済州島・離島にも配送できますか？",
+        "answer": "はい。地域によって追加送料がかかります。"
+      },
+      {
+        "question": "海外配送はいつ始まりますか？",
+        "answer": "2027年に海外配送を開始する予定です。"
+      }
+    ]
   },
   "fit": {
     "oversized": "オーバーサイズ",

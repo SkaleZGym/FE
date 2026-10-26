@@ -250,14 +250,13 @@ export const heroShowcase = [
 ];
 
 /**
- * 13번 시안의 세로 제목 상품 섹션. 섹션당 7개 + 마지막 칸 "전체 보기".
- * BESTSELLER는 순위(01~07) 순서다 — BE 연동 후에는 실제 판매량으로 바꾼다
+ * 13번 시안의 세로 제목 BESTSELLER 섹션. 7개 + 마지막 칸 "전체 보기".
+ * 순위(01~07) 순서다 — BE 연동 후에는 실제 판매량으로 바꾼다
  */
-export const shelves = {
-  best: [166, 164, 168, 278, 249, 162, 268],
-  tights: [200, 202, 166, 162, 165, 168, 216],
-  tops: [292, 291, 251, 252, 261, 271, 264],
-} as const;
+export const bestsellerIds = [166, 164, 168, 278, 249, 162, 268] as const;
+
+/** SHOP BY 카테고리 타일 배경에 쓰는 상품 사진 */
+export const shopByTiles = { tights: 166, tops: 278, hoodies: 251 } as const;
 
 /** 트렌드 배너 배경 사진 */
 export const trendImageId = 270;
