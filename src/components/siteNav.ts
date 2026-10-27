@@ -18,6 +18,7 @@ export function siteNav(locale: Locale, nav: Dictionary["nav"]) {
 /** 헤더 오른쪽 글자들 (장바구니·언어·메뉴·로그인/MY) */
 export const headerLabels = (nav: Dictionary["nav"]) => ({
   cart: nav.cart,
+  search: nav.search,
   language: nav.language,
   menu: nav.menu,
   close: nav.close,

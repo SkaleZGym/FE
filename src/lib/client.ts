@@ -85,8 +85,32 @@ export type Order = {
   courier: string | null;
   trackingNumber: string | null;
   trackingUrl: string | null;
-  items: { productId: number; productName: string; size: string; unitPrice: number; quantity: number; lineTotal: number }[];
+  items: { id: number; productId: number; productName: string; size: string; unitPrice: number; quantity: number; lineTotal: number }[];
   createdAt: string;
+  deliveredAt: string | null;
+};
+
+/** 교환·반품 신청 (금액은 최소 단위) */
+export type Claim = {
+  id: number;
+  orderNumber: string;
+  currency: string;
+  orderTotal: number;
+  recipient: string;
+  type: "EXCHANGE" | "RETURN";
+  reason: "SIZE" | "DEFECT" | "WRONG_ITEM" | "CHANGE_OF_MIND" | "OTHER";
+  detail: string | null;
+  status: "REQUESTED" | "APPROVED" | "REJECTED" | "COMPLETED";
+  adminMemo: string | null;
+  items: { orderItemId: number; productName: string; size: string; unitPrice: number; quantity: number; exchangeSize: string | null }[];
+  itemsAmount: number;
+  refundAmount: number | null;
+  courier: string | null;
+  trackingNumber: string | null;
+  trackingUrl: string | null;
+  createdAt: string;
+  processedAt: string | null;
+  completedAt: string | null;
 };
 
 export type Inquiry = {

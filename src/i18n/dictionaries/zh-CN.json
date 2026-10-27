@@ -14,7 +14,8 @@
     "menu": "菜单",
     "close": "关闭",
     "login": "登录",
-    "my": "MY"
+    "my": "MY",
+    "search": "搜索"
   },
   "hero": {
     "kicker": "[ NEW DROP · 01/26 ]",
@@ -93,7 +94,23 @@
         "question": "什么时候开通海外配送？",
         "answer": "预计2027年开通海外配送。"
       }
-    ]
+    ],
+    "more": "查看全部",
+    "back": "返回列表",
+    "notFound": "找不到该公告。",
+    "noticeLead": "SKALEZ 最新消息与公告。",
+    "faqLead": "常见问题汇总。",
+    "faqHelp": "没有找到答案？",
+    "faqAsk": "在线咨询",
+    "faqCategories": {
+      "ALL": "全部",
+      "ORDER": "订单·支付",
+      "SHIPPING": "配送",
+      "EXCHANGE_RETURN": "换货·退货",
+      "PRODUCT": "商品",
+      "MEMBER": "会员",
+      "ETC": "其他"
+    }
   },
   "category": {
     "pages": {
@@ -266,7 +283,8 @@
         "STATE": "安全验证失败，请重试。"
       }
     },
-    "agreeAll": "全部同意（含可选项）"
+    "agreeAll": "全部同意（含可选项）",
+    "viewTerms": "查看"
   },
   "cart": {
     "title": "CART",
@@ -462,10 +480,75 @@
     "email": "邮箱",
     "terms": "使用条款",
     "privacy": "隐私政策",
-    "tagline": "BUILT FOR LEG DAY."
+    "tagline": "BUILT FOR LEG DAY.",
+    "hosting": "托管服务商",
+    "privacyOfficer": "个人信息保护负责人",
+    "notice": "公告",
+    "faq": "常见问题"
   },
   "popup": {
     "close": "关闭",
     "hideToday": "今天不再显示"
+  },
+  "legal": {
+    "effective": "生效日期",
+    "koreanOnly": "本文件以韩语提供，以韩语版本为准。",
+    "view": "查看"
+  },
+  "search": {
+    "title": "SEARCH",
+    "placeholder": "输入商品名称",
+    "submit": "搜索",
+    "popular": "推荐",
+    "keywords": [
+      "紧身裤",
+      "迷彩",
+      "宽松",
+      "连帽衫",
+      "短裤"
+    ],
+    "hint": "请输入商品名称。",
+    "empty": "没有找到与“{query}”匹配的商品。",
+    "results": "共{count}件",
+    "recommend": "热门商品",
+    "emptyTip": "换个关键词，或点击上方的推荐词试试。"
+  },
+  "claim": {
+    "tab": "换货·退货",
+    "request": "申请换货/退货",
+    "type": "申请类型",
+    "types": {
+      "EXCHANGE": "换货",
+      "RETURN": "退货(退款)"
+    },
+    "items": "申请商品",
+    "quantity": "数量",
+    "exchangeSize": "更换尺码",
+    "sameSize": "同尺码换货",
+    "reason": "原因",
+    "reasons": {
+      "SIZE": "尺码不合适",
+      "DEFECT": "商品有问题",
+      "WRONG_ITEM": "收到错误商品",
+      "CHANGE_OF_MIND": "个人原因",
+      "OTHER": "其他"
+    },
+    "detail": "详细说明(选填)",
+    "detailPlaceholder": "请填写商品状态或您的需求。",
+    "shippingNote": "尺码更换或个人原因由您承担往返运费，质量问题或发错货由 SKALEZ 承担。",
+    "submit": "提交申请",
+    "close": "关闭",
+    "pickItem": "请至少选择一件商品。",
+    "deadline": "签收后7天内可在订单记录中申请。",
+    "none": "暂无换货/退货申请。",
+    "status": {
+      "REQUESTED": "已受理",
+      "APPROVED": "已批准·取件中",
+      "REJECTED": "已拒绝",
+      "COMPLETED": "已完成"
+    },
+    "memo": "说明",
+    "refund": "退款金额",
+    "resend": "查询换货物流"
   }
 }

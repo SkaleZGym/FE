@@ -218,3 +218,124 @@ export type AdminBanner = {
   /** subtext 는 큰 글자 위에 작게, price 는 아래에 */
   texts: Partial<Record<Lang, { headline: string | null; subtext: string | null; price: string | null }>>;
 };
+
+export const COURIERS = [
+  ["CJ", "CJ대한통운"],
+  ["LOTTE", "롯데택배"],
+  ["HANJIN", "한진택배"],
+  ["EPOST", "우체국택배"],
+  ["LOGEN", "로젠택배"],
+] as const;
+
+// ---------- 교환·반품 ----------
+
+export type ClaimStatus = "REQUESTED" | "APPROVED" | "REJECTED" | "COMPLETED";
+export const CLAIM_STATUS: Record<ClaimStatus, { label: string; tone: string }> = {
+  REQUESTED: { label: "접수", tone: "amber" },
+  APPROVED: { label: "승인 · 회수 중", tone: "blue" },
+  REJECTED: { label: "거절", tone: "red" },
+  COMPLETED: { label: "완료", tone: "green" },
+};
+export const CLAIM_TYPE = { EXCHANGE: "교환", RETURN: "반품" } as const;
+export const CLAIM_REASON = {
+  SIZE: "사이즈",
+  DEFECT: "불량",
+  WRONG_ITEM: "오배송",
+  CHANGE_OF_MIND: "단순 변심",
+  OTHER: "기타",
+} as const;
+/** 회사가 배송비를 부담하는 사유 (불량·오배송) */
+export const COMPANY_FAULT: (keyof typeof CLAIM_REASON)[] = ["DEFECT", "WRONG_ITEM"];
+
+export type AdminClaim = {
+  id: number;
+  orderNumber: string;
+  currency: string;
+  orderTotal: number;
+  recipient: string;
+  type: keyof typeof CLAIM_TYPE;
+  reason: keyof typeof CLAIM_REASON;
+  detail: string | null;
+  status: ClaimStatus;
+  adminMemo: string | null;
+  items: { orderItemId: number; productName: string; size: string; unitPrice: number; quantity: number; exchangeSize: string | null }[];
+  itemsAmount: number;
+  refundAmount: number | null;
+  courier: string | null;
+  trackingNumber: string | null;
+  trackingUrl: string | null;
+  createdAt: string;
+  processedAt: string | null;
+  completedAt: string | null;
+};
+
+// ---------- 쿠폰 ----------
+
+export type AdminCoupon = {
+  id: number;
+  code: string;
+  name: string;
+  discountType: "PERCENT" | "FIXED";
+  discountValue: number;
+  maxDiscountAmount: number | null;
+  minOrderAmount: number;
+  currency: "KRW" | "USD";
+  startAt: string | null;
+  endAt: string | null;
+  usageLimit: number | null;
+  perMemberLimit: number;
+  usedCount: number;
+  active: boolean;
+  createdAt: string;
+};
+
+// ---------- 공지 · FAQ ----------
+
+export type BoardText = { title: string; content: string };
+export type AdminNotice = {
+  id: number;
+  category: "NOTICE" | "EVENT";
+  pinned: boolean;
+  published: boolean;
+  viewCount: number;
+  texts: Partial<Record<Lang, BoardText>>;
+  createdAt: string;
+  updatedAt: string;
+};
+export type FaqCategory = "ORDER" | "SHIPPING" | "EXCHANGE_RETURN" | "PRODUCT" | "MEMBER" | "ETC";
+export const FAQ_CATEGORY: Record<FaqCategory, string> = {
+  ORDER: "주문·결제",
+  SHIPPING: "배송",
+  EXCHANGE_RETURN: "교환·반품",
+  PRODUCT: "상품",
+  MEMBER: "회원",
+  ETC: "기타",
+};
+export type AdminFaq = {
+  id: number;
+  category: FaqCategory;
+  sortOrder: number;
+  published: boolean;
+  texts: Partial<Record<Lang, BoardText>>;
+  updatedAt: string;
+};
+
+// ---------- 배송 · 문구 ----------
+
+export type ShippingSetting = {
+  currency: "KRW" | "USD";
+  baseFee: number;
+  freeThreshold: number | null;
+  jejuExtraFee: number;
+  islandExtraFee: number;
+  autoDeliverDays: number;
+  updatedAt: string | null;
+};
+export type RemoteArea = { id: number; type: "JEJU" | "ISLAND"; zipFrom: number; zipTo: number; memo: string | null };
+
+export type SiteText = { key: string; description: string | null; values: Partial<Record<Lang, string>>; updatedAt: string };
+
+/** 화면 금액 입력(원 · 달러) ↔ BE 최소 단위(원 · 센트) */
+export const toMinor = (value: string, currency: string) => Math.round(Number(value || 0) * (currency === "USD" ? 100 : 1));
+export const fromMinor = (amount: number | null | undefined, currency: string) =>
+  amount === null || amount === undefined ? "" : String(currency === "USD" ? amount / 100 : amount);

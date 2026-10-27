@@ -16,6 +16,12 @@ const icons = {
   inquiries: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10Z",
   members: "M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm14 10v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8",
   banners: "M3 5h18v14H3zM3 15l5-5 4 4 3-3 6 6",
+  claims: "M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5",
+  coupons: "M3 7h18v4a2 2 0 0 0 0 4v4H3v-4a2 2 0 0 0 0-4V7Zm9 0v12",
+  categories: "M3 4h7v7H3zM14 4h7v7h-7zM3 15h7v6H3zM14 15h7v6h-7z",
+  shipping: "M1 4h14v12H1zM15 9h4l3 3v4h-7M5.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z",
+  board: "M4 4h16v16H4zM8 8h8M8 12h8M8 16h5",
+  texts: "M4 7V4h16v3M9 20h6M12 4v16",
   shop: "M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
 };
 
@@ -73,7 +79,11 @@ export default function AdminShell({ children }: { children: ReactNode }) {
       title: "STORE",
       items: [
         { href: "/admin/orders", label: "주문 관리", icon: "orders", count: counts?.ordersToShip },
+        { href: "/admin/claims", label: "교환·반품", icon: "claims" },
         { href: "/admin/products", label: "상품 관리", icon: "products" },
+        { href: "/admin/categories", label: "카테고리", icon: "categories" },
+        { href: "/admin/coupons", label: "쿠폰", icon: "coupons" },
+        { href: "/admin/shipping", label: "배송 설정", icon: "shipping" },
         { href: "/admin/reviews", label: "후기 관리", icon: "reviews" },
         { href: "/admin/inquiries", label: "1:1 문의", icon: "inquiries", count: counts?.waitingInquiries },
         { href: "/admin/members", label: "회원 관리", icon: "members" },
@@ -81,7 +91,11 @@ export default function AdminShell({ children }: { children: ReactNode }) {
     },
     {
       title: "CONTENT",
-      items: [{ href: "/admin/banners", label: "배너·팝업", icon: "banners" }],
+      items: [
+        { href: "/admin/banners", label: "배너·팝업", icon: "banners" },
+        { href: "/admin/board", label: "공지·FAQ", icon: "board" },
+        { href: "/admin/texts", label: "사이트 문구", icon: "texts" },
+      ],
     },
   ];
   const isCurrent = (href: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));

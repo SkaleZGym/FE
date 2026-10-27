@@ -25,6 +25,7 @@
     font-size: clamp(2.6rem, 6vw, 4.2rem);
     line-height: 0.95;
     letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
 
   & p {
@@ -523,6 +524,32 @@ select.input {
   & b {
     font-weight: 400;
     color: var(--ink);
+  }
+}
+
+/* 교환·반품 진행 단계: 칸마다 위에 굵은 선, 지난 단계는 밝게 */
+.claimSteps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  & li {
+    padding-top: 8px;
+    font-size: 11px;
+    color: var(--ink-muted);
+    border-top: 2px solid var(--line);
+  }
+
+  & li[data-done] {
+    color: var(--ink);
+    border-top-color: var(--ink);
+  }
+
+  & li[aria-current="step"] {
+    border-top-color: var(--red);
   }
 }
 

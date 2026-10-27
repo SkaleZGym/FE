@@ -296,4 +296,5 @@ export const business = {
   address: "경기 고양시 덕양구 서삼릉길 340-1 (원흥동) 1층",
   contact: "010-5817-8169",
   email: "skalez@naver.com",
+  hosting: "Amazon Web Services, Inc.",
 };

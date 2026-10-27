@@ -79,10 +79,16 @@ export default function SocialSignupForm({ locale, labels, common }: { locale: L
         <label className={styles.check}>
           <input type="checkbox" checked={agree.terms} onChange={(event) => setAgree({ ...agree, terms: event.target.checked })} />
           {labels.agreeTerms}
+          <a className={styles.view} href={`/${locale}/terms`} target="_blank" rel="noreferrer">
+            {labels.viewTerms}
+          </a>
         </label>
         <label className={styles.check}>
           <input type="checkbox" checked={agree.privacy} onChange={(event) => setAgree({ ...agree, privacy: event.target.checked })} />
           {labels.agreePrivacy}
+          <a className={styles.view} href={`/${locale}/privacy`} target="_blank" rel="noreferrer">
+            {labels.viewTerms}
+          </a>
         </label>
         <label className={styles.check}>
           <input type="checkbox" checked={agree.marketing} onChange={(event) => setAgree({ ...agree, marketing: event.target.checked })} />

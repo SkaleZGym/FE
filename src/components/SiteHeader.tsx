@@ -7,7 +7,7 @@ import { useAccount } from "./account/accountStore";
 import LanguageSwitcher from "./LanguageSwitcher";
 import styles from "./SiteHeader.module.css";
 
-export type HeaderLabels = { cart: string; language: string; menu: string; close: string; login: string; my: string };
+export type HeaderLabels = { cart: string; search: string; language: string; menu: string; close: string; login: string; my: string };
 
 type Props = {
   locale: Locale;
@@ -54,6 +54,9 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
 
         <div className={styles.actions}>
           <LanguageSwitcher current={locale} label={labels.language} />
+          <a href={`/${locale}/search`} className={styles.search}>
+            {labels.search}
+          </a>
           <a href={accountLink.href} className={styles.account} data-ready={account.status !== "loading" || undefined}>
             {accountLink.label}
           </a>
@@ -84,6 +87,9 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
             {item.label}
           </a>
         ))}
+        <a href={`/${locale}/search`} className={styles.drawerAccount} onClick={() => setMenuOpen(false)}>
+          {labels.search}
+        </a>
         <a href={accountLink.href} className={styles.drawerAccount} onClick={() => setMenuOpen(false)}>
           {accountLink.label}
         </a>

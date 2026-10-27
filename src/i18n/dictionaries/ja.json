@@ -14,7 +14,8 @@
     "menu": "メニュー",
     "close": "閉じる",
     "login": "ログイン",
-    "my": "MY"
+    "my": "MY",
+    "search": "検索"
   },
   "hero": {
     "kicker": "[ NEW DROP · 01/26 ]",
@@ -93,7 +94,23 @@
         "question": "海外配送はいつ始まりますか？",
         "answer": "2027年に海外配送を開始する予定です。"
       }
-    ]
+    ],
+    "more": "すべて見る",
+    "back": "一覧へ",
+    "notFound": "お知らせが見つかりません。",
+    "noticeLead": "SKALEZからのお知らせです。",
+    "faqLead": "よくある質問をまとめました。",
+    "faqHelp": "お探しの答えが見つかりませんか？",
+    "faqAsk": "お問い合わせ",
+    "faqCategories": {
+      "ALL": "すべて",
+      "ORDER": "注文・決済",
+      "SHIPPING": "配送",
+      "EXCHANGE_RETURN": "交換・返品",
+      "PRODUCT": "商品",
+      "MEMBER": "会員",
+      "ETC": "その他"
+    }
   },
   "category": {
     "pages": {
@@ -266,7 +283,8 @@
         "STATE": "セキュリティ確認に失敗しました。もう一度お試しください。"
       }
     },
-    "agreeAll": "すべてに同意(任意項目を含む)"
+    "agreeAll": "すべてに同意(任意項目を含む)",
+    "viewTerms": "見る"
   },
   "cart": {
     "title": "CART",
@@ -462,10 +480,75 @@
     "email": "メール",
     "terms": "利用規約",
     "privacy": "プライバシーポリシー",
-    "tagline": "BUILT FOR LEG DAY."
+    "tagline": "BUILT FOR LEG DAY.",
+    "hosting": "ホスティング",
+    "privacyOfficer": "個人情報保護責任者",
+    "notice": "お知らせ",
+    "faq": "FAQ"
   },
   "popup": {
     "close": "閉じる",
     "hideToday": "今日は表示しない"
+  },
+  "legal": {
+    "effective": "施行日",
+    "koreanOnly": "本文書は韓国語で提供しています。韓国語版が正式な内容となります。",
+    "view": "見る"
+  },
+  "search": {
+    "title": "SEARCH",
+    "placeholder": "商品名を入力",
+    "submit": "検索",
+    "popular": "おすすめ",
+    "keywords": [
+      "タイツ",
+      "カモ",
+      "オーバーサイズ",
+      "パーカー",
+      "ショーツ"
+    ],
+    "hint": "商品名を入力してください。",
+    "empty": "「{query}」に一致する商品はありません。",
+    "results": "{count}件",
+    "recommend": "人気の商品",
+    "emptyTip": "別のキーワードか、上のおすすめワードをお試しください。"
+  },
+  "claim": {
+    "tab": "交換・返品",
+    "request": "交換・返品を申請",
+    "type": "申請の種類",
+    "types": {
+      "EXCHANGE": "交換",
+      "RETURN": "返品(返金)"
+    },
+    "items": "対象商品",
+    "quantity": "数量",
+    "exchangeSize": "交換後のサイズ",
+    "sameSize": "同じサイズで交換",
+    "reason": "理由",
+    "reasons": {
+      "SIZE": "サイズが合わない",
+      "DEFECT": "商品に不具合がある",
+      "WRONG_ITEM": "違う商品が届いた",
+      "CHANGE_OF_MIND": "お客様都合",
+      "OTHER": "その他"
+    },
+    "detail": "詳細(任意)",
+    "detailPlaceholder": "商品の状態やご希望をご記入ください。",
+    "shippingNote": "サイズ交換・お客様都合の場合は往復送料をご負担いただき、不良・誤配送の場合はSKALEZが負担します。",
+    "submit": "申請する",
+    "close": "閉じる",
+    "pickItem": "対象商品を1つ以上選んでください。",
+    "deadline": "配達完了から7日以内に注文履歴から申請できます。",
+    "none": "交換・返品の申請はありません。",
+    "status": {
+      "REQUESTED": "受付",
+      "APPROVED": "承認・回収中",
+      "REJECTED": "却下",
+      "COMPLETED": "完了"
+    },
+    "memo": "ご案内",
+    "refund": "返金額",
+    "resend": "交換商品の配送状況"
   }
 }

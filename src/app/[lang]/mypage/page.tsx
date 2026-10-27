@@ -15,7 +15,7 @@ export default async function MyPageRoute() {
     <PageShell title={dict.mypage.title}>
       <MyPage
         locale={locale}
-        labels={{ mypage: dict.mypage, order: dict.order, inquiry: dict.inquiry, account: dict.account, common: dict.common }}
+        labels={{ mypage: dict.mypage, order: dict.order, inquiry: dict.inquiry, claim: dict.claim, account: dict.account, common: dict.common }}
       />
     </PageShell>
   );

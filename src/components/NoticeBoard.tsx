@@ -23,12 +23,15 @@ export default async function NoticeBoard({ locale, labels }: Props) {
       <div className={styles.col}>
         <span className={styles.kicker}>{labels.noticeKicker}</span>
         <h2>{labels.noticeTitle}</h2>
+        <a className={styles.more} href={`/${locale}/notice`}>
+          {labels.more} →
+        </a>
         {notices && notices.length > 0 ? (
           <ul className={styles.notices}>
             {notices.map((notice, index) => (
               <li key={notice.id}>
                 <Reveal delay={index * 60}>
-                  <a href={`#notice-${notice.id}`} className={styles.notice}>
+                  <a href={`/${locale}/notice/${notice.id}`} className={styles.notice}>
                     <span className={styles.tag} data-event={notice.category === "EVENT" || undefined}>
                       {notice.pinned ? labels.pinned : labels.categories[notice.category]}
                     </span>
@@ -47,6 +50,9 @@ export default async function NoticeBoard({ locale, labels }: Props) {
       <div className={styles.col}>
         <span className={styles.kicker}>{labels.faqKicker}</span>
         <h2>{labels.faqTitle}</h2>
+        <a className={styles.more} href={`/${locale}/faq`}>
+          {labels.more} →
+        </a>
         <div className={styles.faqs}>
           {faqItems.slice(0, 6).map((faq) => (
             <details key={faq.id} className={styles.faq}>

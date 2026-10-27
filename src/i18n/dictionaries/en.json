@@ -14,7 +14,8 @@
     "menu": "Menu",
     "close": "Close",
     "login": "Log in",
-    "my": "MY"
+    "my": "MY",
+    "search": "Search"
   },
   "hero": {
     "kicker": "[ NEW DROP · 01/26 ]",
@@ -93,7 +94,23 @@
         "question": "When will international shipping open?",
         "answer": "We plan to open international shipping in 2027."
       }
-    ]
+    ],
+    "more": "View all",
+    "back": "Back to list",
+    "notFound": "Notice not found.",
+    "noticeLead": "News and updates from SKALEZ.",
+    "faqLead": "Answers to common questions.",
+    "faqHelp": "Can't find your answer?",
+    "faqAsk": "Contact us",
+    "faqCategories": {
+      "ALL": "All",
+      "ORDER": "Order & payment",
+      "SHIPPING": "Shipping",
+      "EXCHANGE_RETURN": "Exchange & return",
+      "PRODUCT": "Product",
+      "MEMBER": "Account",
+      "ETC": "Other"
+    }
   },
   "category": {
     "pages": {
@@ -266,7 +283,8 @@
         "STATE": "Security check failed. Please try again."
       }
     },
-    "agreeAll": "Agree to all (including optional)"
+    "agreeAll": "Agree to all (including optional)",
+    "viewTerms": "View"
   },
   "cart": {
     "title": "CART",
@@ -462,10 +480,75 @@
     "email": "Email",
     "terms": "Terms of use",
     "privacy": "Privacy policy",
-    "tagline": "BUILT FOR LEG DAY."
+    "tagline": "BUILT FOR LEG DAY.",
+    "hosting": "Hosting",
+    "privacyOfficer": "Privacy officer",
+    "notice": "Notice",
+    "faq": "FAQ"
   },
   "popup": {
     "close": "Close",
     "hideToday": "Don't show today"
+  },
+  "legal": {
+    "effective": "Effective date",
+    "koreanOnly": "This document is provided in Korean. The Korean version is the legally binding version.",
+    "view": "View"
+  },
+  "search": {
+    "title": "SEARCH",
+    "placeholder": "Search products",
+    "submit": "Search",
+    "popular": "Try",
+    "keywords": [
+      "tights",
+      "camo",
+      "oversized",
+      "hoodie",
+      "shorts"
+    ],
+    "hint": "Type a product name to search.",
+    "empty": "Nothing matches '{query}'.",
+    "results": "{count} results",
+    "recommend": "Popular right now",
+    "emptyTip": "Try another word or one of the suggestions above."
+  },
+  "claim": {
+    "tab": "Returns",
+    "request": "Exchange / return",
+    "type": "Request type",
+    "types": {
+      "EXCHANGE": "Exchange",
+      "RETURN": "Return (refund)"
+    },
+    "items": "Items",
+    "quantity": "Qty",
+    "exchangeSize": "New size",
+    "sameSize": "Same size",
+    "reason": "Reason",
+    "reasons": {
+      "SIZE": "Wrong size",
+      "DEFECT": "Defective item",
+      "WRONG_ITEM": "Received wrong item",
+      "CHANGE_OF_MIND": "Changed my mind",
+      "OTHER": "Other"
+    },
+    "detail": "Details (optional)",
+    "detailPlaceholder": "Tell us about the item's condition or what you need.",
+    "shippingNote": "For size changes or change of mind, you pay return shipping. For defects or wrong items, SKALEZ covers it.",
+    "submit": "Submit",
+    "close": "Close",
+    "pickItem": "Please select at least one item.",
+    "deadline": "You can request an exchange or return from your orders within 7 days of delivery.",
+    "none": "No exchange or return requests.",
+    "status": {
+      "REQUESTED": "Received",
+      "APPROVED": "Approved · pickup",
+      "REJECTED": "Declined",
+      "COMPLETED": "Completed"
+    },
+    "memo": "Note",
+    "refund": "Refunded",
+    "resend": "Track exchange"
   }
 }

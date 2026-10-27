@@ -36,7 +36,7 @@ export default async function PageShell({
         )}
         {children}
       </main>
-      <SiteFooter labels={dict.footer} />
+      <SiteFooter locale={locale} labels={dict.footer} />
       <QuickMenu locale={locale} labels={dict.quick} />
     </>
   );

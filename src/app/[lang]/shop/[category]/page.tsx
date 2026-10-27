@@ -107,7 +107,7 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
         />
       </main>
 
-      <SiteFooter labels={dict.footer} />
+      <SiteFooter locale={locale} labels={dict.footer} />
       <QuickMenu locale={locale} labels={dict.quick} />
       <ProductPanel locale={locale} products={panelProducts} labels={dict.panel} />
     </>

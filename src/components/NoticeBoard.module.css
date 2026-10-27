@@ -25,6 +25,21 @@
   }
 }
 
+/* 제목 아래 '전체 보기' */
+.more {
+  display: inline-block;
+  margin: -12px 0 20px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+
+  &:hover {
+    color: var(--ink);
+  }
+}
+
 .kicker {
   font-family: var(--font-mono);
   font-size: 11px;

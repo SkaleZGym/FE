@@ -14,7 +14,8 @@
     "menu": "메뉴",
     "close": "닫기",
     "login": "로그인",
-    "my": "MY"
+    "my": "MY",
+    "search": "검색"
   },
   "hero": {
     "kicker": "[ NEW DROP · 01/26 ]",
@@ -93,7 +94,23 @@
         "question": "해외 배송은 언제 되나요?",
         "answer": "2027년에 해외 배송을 열 예정이에요."
       }
-    ]
+    ],
+    "more": "전체 보기",
+    "back": "목록으로",
+    "notFound": "공지를 찾을 수 없어요.",
+    "noticeLead": "SKALEZ 소식과 안내를 확인하세요.",
+    "faqLead": "자주 묻는 질문을 모았어요.",
+    "faqHelp": "찾는 답이 없나요?",
+    "faqAsk": "1:1 문의하기",
+    "faqCategories": {
+      "ALL": "전체",
+      "ORDER": "주문·결제",
+      "SHIPPING": "배송",
+      "EXCHANGE_RETURN": "교환·반품",
+      "PRODUCT": "상품",
+      "MEMBER": "회원",
+      "ETC": "기타"
+    }
   },
   "category": {
     "pages": {
@@ -266,7 +283,8 @@
         "STATE": "보안 확인에 실패했어요. 다시 시도해 주세요."
       }
     },
-    "agreeAll": "전체 동의 (선택 항목 포함)"
+    "agreeAll": "전체 동의 (선택 항목 포함)",
+    "viewTerms": "보기"
   },
   "cart": {
     "title": "CART",
@@ -462,10 +480,75 @@
     "email": "이메일",
     "terms": "이용약관",
     "privacy": "개인정보처리방침",
-    "tagline": "BUILT FOR LEG DAY."
+    "tagline": "BUILT FOR LEG DAY.",
+    "hosting": "호스팅 제공자",
+    "privacyOfficer": "개인정보보호책임자",
+    "notice": "공지사항",
+    "faq": "FAQ"
   },
   "popup": {
     "close": "닫기",
     "hideToday": "오늘 하루 보지 않기"
+  },
+  "legal": {
+    "effective": "시행일",
+    "koreanOnly": "",
+    "view": "보기"
+  },
+  "search": {
+    "title": "SEARCH",
+    "placeholder": "상품명을 입력하세요",
+    "submit": "검색",
+    "popular": "추천 검색어",
+    "keywords": [
+      "타이즈",
+      "카모",
+      "오버핏",
+      "후드",
+      "쇼츠"
+    ],
+    "hint": "찾는 상품 이름을 입력해 보세요.",
+    "empty": "'{query}'에 맞는 상품이 없어요.",
+    "results": "검색 결과 {count}개",
+    "recommend": "많이 찾는 상품",
+    "emptyTip": "다른 단어로 찾거나 위의 추천 검색어를 눌러 보세요."
+  },
+  "claim": {
+    "tab": "교환·반품",
+    "request": "교환·반품 신청",
+    "type": "신청 종류",
+    "types": {
+      "EXCHANGE": "교환",
+      "RETURN": "반품(환불)"
+    },
+    "items": "신청할 상품",
+    "quantity": "수량",
+    "exchangeSize": "바꿀 사이즈",
+    "sameSize": "같은 사이즈로 교환",
+    "reason": "사유",
+    "reasons": {
+      "SIZE": "사이즈가 맞지 않아요",
+      "DEFECT": "상품에 문제가 있어요",
+      "WRONG_ITEM": "다른 상품이 왔어요",
+      "CHANGE_OF_MIND": "단순 변심",
+      "OTHER": "기타"
+    },
+    "detail": "자세한 내용 (선택)",
+    "detailPlaceholder": "상품 상태나 원하는 내용을 적어 주세요.",
+    "shippingNote": "사이즈·단순 변심은 왕복 배송비를 고객님이 부담하고, 불량·오배송은 SKALEZ가 부담해요.",
+    "submit": "신청하기",
+    "close": "닫기",
+    "pickItem": "신청할 상품을 하나 이상 골라 주세요.",
+    "deadline": "배송 완료 후 7일 안에 주문 내역에서 신청할 수 있어요.",
+    "none": "교환·반품 신청 내역이 없어요.",
+    "status": {
+      "REQUESTED": "접수",
+      "APPROVED": "승인 · 회수 중",
+      "REJECTED": "거절",
+      "COMPLETED": "완료"
+    },
+    "memo": "안내",
+    "refund": "환불 금액",
+    "resend": "교환 상품 배송 조회"
   }
 }

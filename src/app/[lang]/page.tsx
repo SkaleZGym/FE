@@ -290,7 +290,7 @@ export default async function HomePage() {
       </main>
 
       {/* 8. 푸터 */}
-      <SiteFooter labels={dict.footer} />
+      <SiteFooter locale={locale} labels={dict.footer} />
 
       <QuickMenu locale={locale} labels={dict.quick} introDim />
       <ProductPanel locale={locale} products={panelProducts} labels={dict.panel} />

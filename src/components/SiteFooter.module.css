@@ -58,4 +58,10 @@
   & a:hover {
     color: var(--ink);
   }
+
+  /* 개인정보처리방침은 눈에 띄게 (개인정보 보호법 권고) */
+  & b {
+    color: var(--ink);
+    font-weight: 700;
+  }
 }

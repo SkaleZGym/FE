@@ -2,18 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Chips, Drawer, Pager, Top, useQueryParam } from "../../_components/ui";
-import { adminApi, dateTime, errorMessage, money, ORDER_STATUS, toast, type AdminOrder, type OrderStatus, type Page } from "../../_lib/admin";
+import { COURIERS, adminApi, dateTime, errorMessage, money, ORDER_STATUS, toast, type AdminOrder, type OrderStatus, type Page } from "../../_lib/admin";
 
 const STATUSES = Object.keys(ORDER_STATUS) as OrderStatus[];
 const FLOW: OrderStatus[] = ["PAID", "PREPARING", "SHIPPED", "DELIVERED"];
-const COURIERS = [
-  ["CJ", "CJ대한통운"],
-  ["LOTTE", "롯데택배"],
-  ["HANJIN", "한진택배"],
-  ["EPOST", "우체국택배"],
-  ["LOGEN", "로젠택배"],
-] as const;
-
 export default function OrderManager() {
   const statusParam = useQueryParam("status") as OrderStatus | null;
   const openParam = useQueryParam("open");

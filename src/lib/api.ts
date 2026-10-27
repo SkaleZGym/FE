@@ -56,6 +56,10 @@ export async function getLatestNotices(locale: Locale, size = 5): Promise<Notice
   return page && page.content;
 }
 
+export type Notice = NoticeSummary & { content: string };
+
+export const getNotice = (locale: Locale, id: number) => getJson<Notice>(`/api/notices/${id}`, locale);
+
 export const getFaqs = (locale: Locale) => getJson<Faq[]>("/api/faqs", locale);
 
 /** 관리자 '배너·팝업'에서 켠 배너 (현재 언어 문구). MAIN_HERO = 첫 화면 히어로 상품 슬라이드 (인트로 애니메이션은 FE 고정) */
@@ -75,3 +79,6 @@ export type SiteBanner = {
 
 export const getBanners = (locale: Locale, position: "MAIN_HERO" | "MAIN_SUB" | "POPUP") =>
   getJson<SiteBanner[]>(`/api/banners?position=${position}`, locale);
+
+/** 관리자 '사이트 문구'에서 바꾼 글자 (현재 언어, 없으면 한국어). 키 예: footer.tagline */
+export const getSiteTexts = (locale: Locale) => getJson<Record<string, string>>("/api/site-texts", locale);

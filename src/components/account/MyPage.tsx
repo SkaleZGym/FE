@@ -3,9 +3,10 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { localeLabels, locales, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { api, money, type Inquiry, type Me, type Order } from "@/lib/client";
+import { api, money, type Claim, type Inquiry, type Me, type Order } from "@/lib/client";
 import styles from "./account.module.css";
 import { logout, setMe } from "./accountStore";
+import { canClaim, ClaimForm, ClaimList } from "./Claims";
 import { fill } from "./CartView";
 import { errorText, useMember, useSearch } from "./useMember";
 
@@ -13,28 +14,33 @@ type Labels = {
   mypage: Dictionary["mypage"];
   order: Dictionary["order"];
   inquiry: Dictionary["inquiry"];
+  claim: Dictionary["claim"];
   account: Dictionary["account"];
   common: Dictionary["common"];
 };
 
-type Tab = "orders" | "inquiries" | "profile";
-const tabs: Tab[] = ["orders", "inquiries", "profile"];
+type Tab = "orders" | "claims" | "inquiries" | "profile";
+const tabs: Tab[] = ["orders", "claims", "inquiries", "profile"];
 
 const dateOf = (iso: string, locale: Locale) => new Date(iso).toLocaleDateString(locale, { year: "numeric", month: "2-digit", day: "2-digit" });
 
-/** 마이페이지: 주문 내역 · 1:1 문의 · 내 정보. ?tab=inquiries 처럼 바로 열 수 있다 */
+/** 마이페이지: 주문 내역 · 교환·반품 · 1:1 문의 · 내 정보. ?tab=inquiries 처럼 바로 열 수 있다 */
 export default function MyPage({ locale, labels }: { locale: Locale; labels: Labels }) {
   const account = useMember(locale);
   const fromUrl = new URLSearchParams(useSearch()).get("tab") as Tab | null;
   const [picked, setPicked] = useState<Tab | null>(null);
   const tab = picked ?? (fromUrl && tabs.includes(fromUrl) ? fromUrl : "orders");
   const [orders, setOrders] = useState<Order[] | null>(null);
+  const [claims, setClaims] = useState<Claim[] | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
     if (account.status !== "member") return;
-    api<Order[]>("/orders", { locale })
-      .then(setOrders)
+    Promise.all([api<Order[]>("/orders", { locale }), api<Claim[]>("/claims", { locale })])
+      .then(([orderList, claimList]) => {
+        setOrders(orderList);
+        setClaims(claimList);
+      })
       .catch((caught) => setError(errorText(caught, labels.common)));
   }, [account.status, locale, labels.common]);
 
@@ -54,12 +60,25 @@ export default function MyPage({ locale, labels }: { locale: Locale; labels: Lab
       <div className={styles.tabs} role="tablist">
         {tabs.map((key) => (
           <button key={key} type="button" role="tab" aria-selected={tab === key} onClick={() => pick(key)}>
-            {labels.mypage.tabs[key]}
+            {key === "claims" ? labels.claim.tab : labels.mypage.tabs[key]}
           </button>
         ))}
       </div>
       {error && <p className={styles.error}>{error}</p>}
-      {tab === "orders" && <Orders locale={locale} labels={labels} orders={orders} setOrders={setOrders} />}
+      {tab === "orders" && (
+        <Orders
+          locale={locale}
+          labels={labels}
+          orders={orders}
+          setOrders={setOrders}
+          claims={claims ?? []}
+          onClaim={(claim) => {
+            setClaims((current) => [claim, ...(current ?? [])]);
+            pick("claims");
+          }}
+        />
+      )}
+      {tab === "claims" && <ClaimList locale={locale} claims={claims} labels={labels} />}
       {tab === "inquiries" && <Inquiries locale={locale} labels={labels} orders={orders ?? []} />}
       {tab === "profile" && <Profile locale={locale} labels={labels} me={account.me} />}
     </>
@@ -76,13 +95,18 @@ function Orders({
   labels,
   orders,
   setOrders,
+  claims,
+  onClaim,
 }: {
   locale: Locale;
   labels: Labels;
   orders: Order[] | null;
   setOrders: (update: (current: Order[] | null) => Order[] | null) => void;
+  claims: Claim[];
+  onClaim: (claim: Claim) => void;
 }) {
   const [error, setError] = useState("");
+  const [claiming, setClaiming] = useState<string | null>(null);
   const { order: text } = labels;
 
   const cancel = async (orderNumber: string) => {
@@ -141,8 +165,26 @@ function Orders({
                   {text.cancel}
                 </button>
               )}
+              {canClaim(order, claims) && claiming !== order.orderNumber && (
+                <button className={styles.button} data-variant="ghost" data-size="small" type="button" onClick={() => setClaiming(order.orderNumber)}>
+                  {labels.claim.request}
+                </button>
+              )}
             </div>
           </div>
+          {claiming === order.orderNumber && (
+            <ClaimForm
+              locale={locale}
+              order={order}
+              claims={claims}
+              labels={labels}
+              onClose={() => setClaiming(null)}
+              onDone={(claim) => {
+                setClaiming(null);
+                onClaim(claim);
+              }}
+            />
+          )}
         </article>
       ))}
     </div>
