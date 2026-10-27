@@ -21,7 +21,6 @@ export default async function NoticeBoard({ locale, labels }: Props) {
   return (
     <section className={styles.board} id="notice">
       <div className={styles.col}>
-        <span className={styles.kicker}>{labels.noticeKicker}</span>
         <h2>{labels.noticeTitle}</h2>
         <a className={styles.more} href={`/${locale}/notice`}>
           {labels.more} →
@@ -48,7 +47,6 @@ export default async function NoticeBoard({ locale, labels }: Props) {
       </div>
 
       <div className={styles.col}>
-        <span className={styles.kicker}>{labels.faqKicker}</span>
         <h2>{labels.faqTitle}</h2>
         <a className={styles.more} href={`/${locale}/faq`}>
           {labels.more} →

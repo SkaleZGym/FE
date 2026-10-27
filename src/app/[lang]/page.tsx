@@ -143,7 +143,6 @@ export default async function HomePage() {
         <SerpentIntro logo={images.wordmark} labels={dict.intro}>
           <section className={styles.hero} id="hero">
             <div className={styles.heroLeft}>
-              <span className={styles.kicker}>{dict.hero.kicker}</span>
               <h1 className={styles.heroTitle}>
                 Forged,
                 <br />
@@ -209,7 +208,7 @@ export default async function HomePage() {
         </div>
 
         {/* 3. BESTSELLER (13번 시안의 세로 제목 섹션) */}
-        <ProductShelf id="best" title={dict.shelves.best.title} kicker={dict.shelves.best.kicker} ranked items={bestItems} moreHref={`/${locale}/shop/best`} labels={shelfLabels} />
+        <ProductShelf id="best" title={dict.shelves.best.title} ranked items={bestItems} moreHref={`/${locale}/shop/best`} labels={shelfLabels} />
 
         {/* 4. 카테고리 타일 */}
         <section className={styles.shopBy} id="shopby">
@@ -221,7 +220,6 @@ export default async function HomePage() {
                 </div>
                 <div className={styles.tileText}>
                   <div>
-                    <small>{tile.small}</small>
                     <b>{tile.title}</b>
                   </div>
                   <span className={styles.go}>→</span>

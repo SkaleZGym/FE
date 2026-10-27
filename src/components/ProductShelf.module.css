@@ -32,18 +32,10 @@
   align-items: center;
   gap: 18px;
 
-  & small,
   & h2,
   & a {
     writing-mode: vertical-rl;
     transform: rotate(180deg);
-  }
-
-  & small {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    color: var(--ink-muted);
   }
 
   /* 외곽선 글자 위로 흰색이 --fill 만큼 차오른다 (세로라 to bottom = 화면에서는 아래→위) */
@@ -274,15 +266,10 @@
     align-items: end;
     justify-content: space-between;
 
-    & small,
     & h2,
     & a {
       writing-mode: horizontal-tb;
       transform: none;
-    }
-
-    & small {
-      display: none;
     }
 
     & h2 {

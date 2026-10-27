@@ -23,7 +23,6 @@ type Props = {
   /** 세로로 세우는 큰 제목. 예: BESTSELLER */
   title: string;
   /** 제목 옆 작은 글씨. 예: [ 01 · MOST WANTED ] */
-  kicker: string;
   /** true면 제목이 오른쪽 */
   flip?: boolean;
   /** true면 카드에 01, 02 … 순위 */
@@ -38,7 +37,7 @@ type Props = {
  * 큰 제목이 세로로 서 있다가 스크롤하는 만큼 아래에서 위로(모바일은 왼쪽에서 오른쪽으로) 채워진다.
  * 카드 7개 + 마지막 칸 "전체 보기". 카드를 누르면 상품 정보 패널이 열린다.
  */
-export default function ProductShelf({ id, title, kicker, flip, ranked, items, moreHref, labels }: Props) {
+export default function ProductShelf({ id, title, flip, ranked, items, moreHref, labels }: Props) {
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
@@ -70,7 +69,6 @@ export default function ProductShelf({ id, title, kicker, flip, ranked, items, m
   return (
     <section ref={sectionRef} className={styles.shelf} data-flip={flip || undefined} id={id}>
       <div className={styles.titleCol}>
-        <small>{kicker}</small>
         <h2 ref={titleRef}>{title}</h2>
         <a href={moreHref}>{labels.viewAll} →</a>
       </div>

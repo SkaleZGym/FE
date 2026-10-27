@@ -41,7 +41,6 @@ export default async function ShippingInfo({ locale, labels }: Props) {
   return (
     <section className={styles.shipping} id="shipping">
       <div className={styles.head}>
-        <span className={styles.kicker}>{labels.kicker}</span>
         <h2>{labels.title}</h2>
       </div>
       <dl className={styles.stats}>
