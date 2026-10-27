@@ -54,7 +54,7 @@
     position: absolute;
     right: calc(100% + 8px);
     padding: 5px 9px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 11px;
     white-space: nowrap;
     color: var(--bone);

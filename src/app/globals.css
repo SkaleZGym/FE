@@ -17,12 +17,22 @@
   /* 모노 폰트에도 한·중·일 글자가 없어서 본문 폰트로 대체 */
   --font-mono: var(--font-jetbrains), var(--font-body);
   --font-body: var(--font-noto-kr), system-ui, sans-serif;
+  /* 라벨(버튼·탭·상태 등) 글꼴: 영어 화면은 고정폭, 한·중·일 화면은 본문 글꼴 (아래 :lang 규칙) */
+  --font-label: var(--font-mono);
+  --label-tracking: 0.06em;
 
   --gutter: clamp(16px, 4vw, 48px);
   --max-width: 1280px;
 }
 
 /* 언어별 본문 폰트 */
+:root:lang(ko),
+:root:lang(ja),
+:root:lang(zh-CN) {
+  --font-label: var(--font-body);
+  --label-tracking: 0.01em;
+}
+
 :root:lang(ja) {
   --font-body: var(--font-noto-jp), system-ui, sans-serif;
 }

@@ -93,7 +93,7 @@
 .account,
 .cart,
 .menuButton {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 12px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -163,7 +163,7 @@
 
   & .drawerAccount {
     margin-top: 18px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 13px;
     text-transform: uppercase;
     border-bottom: 0;

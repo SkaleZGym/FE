@@ -93,9 +93,9 @@
   gap: 8px;
   height: 34px;
   padding: 0 14px;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 11px;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--label-tracking);
   color: var(--ink);
   background: none;
   border: 1px solid var(--line);

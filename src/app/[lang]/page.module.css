@@ -13,9 +13,9 @@
   gap: 22px;
   height: 52px;
   padding: 0 24px;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 12px;
-  letter-spacing: 0.1em;
+  letter-spacing: var(--label-tracking);
   text-transform: uppercase;
   color: inherit;
   background: none;

@@ -43,9 +43,9 @@
   border-radius: 8px;
 
   & dt {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 10px;
-    letter-spacing: 0.14em;
+    letter-spacing: var(--label-tracking);
     color: var(--ink-muted);
   }
 

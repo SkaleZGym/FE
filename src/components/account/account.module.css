@@ -11,6 +11,13 @@
   }
 }
 
+/* 오른쪽 아래 퀵메뉴(52px)가 본문 오른쪽 끝(가격·버튼)을 가리지 않게, 화면이 좁은 PC에서는 양옆을 넉넉히 */
+@media (min-width: 861px) and (max-width: 1439px) {
+  .main:not([data-narrow]) {
+    padding-inline: 96px;
+  }
+}
+
 .head {
   display: grid;
   justify-items: center;
@@ -48,9 +55,9 @@
   gap: 7px;
 
   & > span {
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 11px;
-    letter-spacing: 0.08em;
+    letter-spacing: var(--label-tracking);
     text-transform: uppercase;
     color: var(--ink-muted);
   }
@@ -125,9 +132,9 @@ select.input {
   align-items: center;
   gap: 10px;
   padding: 16px 20px;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 13px;
-  letter-spacing: 0.06em;
+  letter-spacing: var(--label-tracking);
   text-transform: uppercase;
   color: #000;
   background: var(--ink);
@@ -344,10 +351,10 @@ select.input {
 
   & h2 {
     margin: 0;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 12px;
     font-weight: 400;
-    letter-spacing: 0.1em;
+    letter-spacing: var(--label-tracking);
     text-transform: uppercase;
     color: var(--ink-muted);
   }
@@ -409,10 +416,10 @@ select.input {
 
   & h2 {
     margin: 0;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 12px;
     font-weight: 400;
-    letter-spacing: 0.1em;
+    letter-spacing: var(--label-tracking);
     text-transform: uppercase;
     color: var(--ink-muted);
   }
@@ -479,9 +486,9 @@ select.input {
 
   & button {
     padding: 12px 18px;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 12px;
-    letter-spacing: 0.06em;
+    letter-spacing: var(--label-tracking);
     text-transform: uppercase;
     color: var(--ink-muted);
     background: none;
@@ -517,7 +524,7 @@ select.input {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 12px;
   color: var(--ink-muted);
 
@@ -566,15 +573,17 @@ select.input {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 }
 
 .status {
   padding: 4px 9px;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 10px;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--label-tracking);
   color: var(--ink);
   border: 1px solid var(--line);
   border-radius: 999px;
@@ -641,7 +650,7 @@ select.input {
     display: grid;
     gap: 6px;
     margin: 0;
-    font-family: var(--font-mono);
+    font-family: var(--font-label);
     font-size: 13px;
   }
 

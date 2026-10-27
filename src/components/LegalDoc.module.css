@@ -83,7 +83,7 @@
 
 .meta {
   margin-bottom: 20px;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 12px;
   color: var(--ink-muted);
 }

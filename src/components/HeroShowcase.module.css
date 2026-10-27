@@ -1,4 +1,4 @@
-/* 대표 상품 사진: 빛나는 원 위에 떠 있고 5초마다 옆으로 밀려 나가며 바뀐다 */
+/* 대표 상품 사진: 빛나는 원 위에 제자리로 놓이고, 5초마다 옆으로 밀려 나가며 바뀐다 */
 .prod {
   position: absolute;
   inset: 2% 4% 8%;
@@ -26,7 +26,6 @@
   & img[data-state="on"] {
     opacity: 1;
     transform: none;
-    animation: float 6s ease-in-out infinite 1s;
   }
 
   & img[data-state="off"] {
@@ -42,11 +41,6 @@
   }
 }
 
-@keyframes float {
-  50% {
-    transform: translateY(-12px) rotate(-0.6deg);
-  }
-}
 
 .nav {
   position: absolute;
