@@ -22,6 +22,7 @@ const icons = {
   shipping: "M1 4h14v12H1zM15 9h4l3 3v4h-7M5.5 19a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm13 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z",
   board: "M4 4h16v16H4zM8 8h8M8 12h8M8 16h5",
   texts: "M4 7V4h16v3M9 20h6M12 4v16",
+  import: "M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2",
   shop: "M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
 };
 
@@ -87,6 +88,7 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         { href: "/admin/reviews", label: "후기 관리", icon: "reviews" },
         { href: "/admin/inquiries", label: "1:1 문의", icon: "inquiries", count: counts?.waitingInquiries },
         { href: "/admin/members", label: "회원 관리", icon: "members" },
+        { href: "/admin/import", label: "데이터 가져오기", icon: "import" },
       ],
     },
     {

@@ -354,6 +354,8 @@
       "profile": "내 정보"
     },
     "noOrders": "주문 내역이 없어요.",
+    "legacyTitle": "이전 쇼핑몰 주문",
+    "legacyNote": "사이트 개편 전에 주문한 내역이에요. 교환·반품은 1:1 문의로 알려 주세요.",
     "noInquiries": "문의 내역이 없어요.",
     "profileTitle": "내 정보",
     "language": "기본 언어",

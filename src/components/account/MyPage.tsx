@@ -78,6 +78,7 @@ export default function MyPage({ locale, labels }: { locale: Locale; labels: Lab
           }}
         />
       )}
+      {tab === "orders" && <LegacyOrders locale={locale} labels={labels} />}
       {tab === "claims" && <ClaimList locale={locale} claims={claims} labels={labels} />}
       {tab === "inquiries" && <Inquiries locale={locale} labels={labels} orders={orders ?? []} />}
       {tab === "profile" && <Profile locale={locale} labels={labels} me={account.me} />}
@@ -188,6 +189,51 @@ function Orders({
         </article>
       ))}
     </div>
+  );
+}
+
+// ---------- 이전 쇼핑몰(아임웹) 주문: 회원 이메일로 이어진 기록만 보여 준다 ----------
+
+type LegacyOrder = { orderNumber: string; orderedAt: string | null; status: string | null; items: string; totalAmount: number | null; currency: string };
+
+function LegacyOrders({ locale, labels }: { locale: Locale; labels: Labels }) {
+  const [items, setItems] = useState<LegacyOrder[]>([]);
+
+  useEffect(() => {
+    api<LegacyOrder[]>("/orders/legacy", { locale })
+      .then(setItems)
+      .catch(() => setItems([]));
+  }, [locale]);
+
+  if (items.length === 0) return null;
+  return (
+    <section className={styles.cards} style={{ marginTop: 40 }}>
+      <div className={styles.hello}>
+        {labels.mypage.legacyTitle}
+        <span>{labels.mypage.legacyNote}</span>
+      </div>
+      {items.map((order) => (
+        <article className={styles.box} key={order.orderNumber}>
+          <div className={styles.boxHead}>
+            <span>
+              <b>{order.orderNumber}</b>
+              {order.orderedAt && ` · ${dateOf(order.orderedAt, locale)}`}
+            </span>
+            {order.status && <span className={styles.status}>{order.status}</span>}
+          </div>
+          <div className={styles.boxBody}>
+            {order.items.split("\n").map((line, index) => (
+              <span key={index}>{line}</span>
+            ))}
+          </div>
+          {order.totalAmount != null && (
+            <div className={styles.boxFoot}>
+              <span>{money(order.totalAmount, order.currency, locale)}</span>
+            </div>
+          )}
+        </article>
+      ))}
+    </section>
   );
 }
 

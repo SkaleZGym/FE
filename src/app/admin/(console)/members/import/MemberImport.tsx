@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useState, type ChangeEvent } from "react";
 import { Top } from "../../../_components/ui";
 import { adminApi, errorMessage, toast } from "../../../_lib/admin";
-import { decodeCsv, FIELDS, guessMapping, isYes, maskEmail, maskName, maskPhone, parseCsv, toIsoKst, type Field } from "./csv";
+import { readSheets } from "../../../_lib/sheet";
+import { FIELDS, guessMapping, isYes, maskEmail, maskName, maskPhone, toIsoKst, type Field } from "./csv";
 
 type Row = { email: string; name: string; phone: string; joinedAt: string | null; marketingConsent: boolean; legacyId: string };
 type ImportResult = { created: number; skipped: number; failures: { index: number; email: string; reason: string }[] };
@@ -26,18 +27,25 @@ export default function MemberImport() {
   const [progress, setProgress] = useState("");
   const [result, setResult] = useState<ImportResult | null>(null);
 
+  // 아임웹은 한 번에 50명씩 내보내기도 해서, 여러 파일을 한 번에 골라 하나로 합친다 (엑셀 .xlsx · CSV)
   const onFile = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    const rows = parseCsv(decodeCsv(await file.arrayBuffer()));
-    if (rows.length < 2) {
-      toast("읽을 수 있는 행이 없어요. CSV 파일인지 확인해 주세요.", true);
+    const files = [...(event.target.files ?? [])];
+    if (files.length === 0) return;
+    let sheet;
+    try {
+      sheet = await readSheets(files);
+    } catch (caught) {
+      toast(errorMessage(caught), true);
       return;
     }
-    setFileName(file.name);
-    setHeaders(rows[0]);
-    setRecords(rows.slice(1));
-    setMapping(guessMapping(rows[0]));
+    if (sheet.rows.length === 0) {
+      toast("읽을 수 있는 행이 없어요. 엑셀(.xlsx)이나 CSV 파일인지 확인해 주세요.", true);
+      return;
+    }
+    setFileName(files.length > 1 ? `파일 ${files.length}개` : files[0].name);
+    setHeaders(sheet.headers);
+    setRecords(sheet.rows);
+    setMapping(guessMapping(sheet.headers));
     setResult(null);
     // 같은 파일을 다시 고를 수 있게 비운다
     event.target.value = "";
@@ -113,7 +121,7 @@ export default function MemberImport() {
       <div className="notice">
         <span>ⓘ</span>
         <span>
-          아임웹 관리자 <b>고객 &gt; 고객 목록 &gt; 내보내기</b>로 받은 엑셀을 <b>CSV</b>로 저장해서 올려 주세요. 파일은 이 브라우저 안에서만 읽고, 아래에서 고른 열만
+          아임웹 관리자 <b>고객 &gt; 고객 목록 &gt; 내보내기</b>로 받은 엑셀(.xlsx)이나 CSV를 올려 주세요. 50명씩 나눠 받은 파일은 <b>여러 개를 한 번에</b> 고르면 합쳐져요. 파일은 이 브라우저 안에서만 읽고, 아래에서 고른 열만
           서버로 보내요. <b>비밀번호는 아임웹에서 가져올 수 없어서</b>, 옮겨 온 회원은 처음 접속할 때 &lsquo;비밀번호 찾기&rsquo; 메일로 새 비밀번호를 정해요. 이미 있는
           이메일은 건너뛰니 여러 번 올려도 괜찮아요.
         </span>
@@ -130,7 +138,7 @@ export default function MemberImport() {
             )}
           </div>
           <div className="card-b">
-            <input type="file" accept=".csv,text/csv" onChange={onFile} disabled={busy} />
+            <input type="file" accept=".xlsx,.csv,text/csv" multiple onChange={onFile} disabled={busy} />
           </div>
         </div>
 

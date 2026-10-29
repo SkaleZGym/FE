@@ -354,6 +354,8 @@
       "profile": "会員情報"
     },
     "noOrders": "注文履歴はありません。",
+    "legacyTitle": "以前のショップでのご注文",
+    "legacyNote": "サイトリニューアル前のご注文です。交換・返品は1:1お問い合わせからご連絡ください。",
     "noInquiries": "お問い合わせはありません。",
     "profileTitle": "会員情報",
     "language": "表示言語",

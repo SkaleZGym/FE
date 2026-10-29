@@ -354,6 +354,8 @@
       "profile": "Account"
     },
     "noOrders": "No orders yet.",
+    "legacyTitle": "Orders from our previous store",
+    "legacyNote": "Orders placed before the site renewal. Contact us for exchanges or returns.",
     "noInquiries": "No inquiries yet.",
     "profileTitle": "Account details",
     "language": "Preferred language",

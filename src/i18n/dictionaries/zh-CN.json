@@ -354,6 +354,8 @@
       "profile": "账户信息"
     },
     "noOrders": "暂无订单。",
+    "legacyTitle": "旧商城订单",
+    "legacyNote": "网站改版前的订单。如需换货或退货，请通过一对一咨询联系我们。",
     "noInquiries": "暂无咨询。",
     "profileTitle": "账户信息",
     "language": "首选语言",
