@@ -484,7 +484,10 @@
     "hosting": "托管服务商",
     "privacyOfficer": "个人信息保护负责人",
     "notice": "公告",
-    "faq": "常见问题"
+    "faq": "常见问题",
+    "cookies": "Cookie 政策",
+    "guide": "购物指南",
+    "emailRefusal": "拒绝擅自收集邮箱"
   },
   "popup": {
     "close": "关闭",

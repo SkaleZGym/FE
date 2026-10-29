@@ -61,12 +61,12 @@
   }
 }
 
-/* ---------- 카드 그리드 ---------- */
+/* ---------- 상품 그리드: 상자 없이 사진 → 이름 → 가격 (왼쪽 정렬) ---------- */
 
 .grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: 36px 16px;
   align-content: start;
 }
 
@@ -74,19 +74,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 9px 9px 16px;
-  color: var(--iron);
-  text-align: center;
-  background: var(--bone);
-  border-radius: 6px;
-  transition:
-    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
-    box-shadow 0.35s;
-
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 18px 34px rgb(0 0 0 / 0.4);
-  }
+  color: var(--ink);
 
   &:focus-visible {
     outline: 2px solid var(--ink);
@@ -101,10 +89,9 @@
 .image {
   position: relative;
   display: block;
-  aspect-ratio: 1;
+  aspect-ratio: 3 / 4;
   overflow: hidden;
-  border-radius: 3px;
-  background: #dcdcd8;
+  background: #161616;
 
   & img {
     object-fit: cover;
@@ -124,7 +111,7 @@
   font-size: 30px;
   line-height: 1;
   color: transparent;
-  -webkit-text-stroke: 1px rgb(28 30 33 / 0.55);
+  -webkit-text-stroke: 1px rgb(28 30 33 / 0.6);
 }
 
 .tag {
@@ -163,33 +150,28 @@
 }
 
 .name {
-  margin-top: 14px;
-  font-size: 12.5px;
-  font-weight: 500;
+  margin-top: 12px;
+  font-size: 13.5px;
+  font-weight: 700;
   line-height: 1.45;
 }
 
 .badges {
   display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 6px;
+  gap: 8px;
+  margin-top: 2px;
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0.08em;
-  color: var(--concrete-muted);
-
-  & span::before {
-    content: "● ";
-    font-size: 6px;
-    vertical-align: 1px;
-  }
+  color: var(--ink-muted);
 }
 
 .price {
   margin-top: 6px;
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-family: var(--font-label);
+  font-size: 13.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
 
   &[data-sale] {
     color: var(--red);
@@ -197,7 +179,8 @@
 
   & s {
     margin-left: 6px;
-    color: #9a9a9a;
+    font-weight: 400;
+    color: var(--ink-muted);
   }
 }
 

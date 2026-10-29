@@ -118,6 +118,19 @@ function initGL(canvas: HTMLCanvasElement): GLCtx | null {
   };
 }
 
+/** el의 ancestor 안 위치·크기 (부모들의 transform은 무시하고 레이아웃 기준) */
+function rectIn(el: HTMLElement, ancestor: HTMLElement) {
+  let left = 0;
+  let top = 0;
+  let node: HTMLElement | null = el;
+  while (node && node !== ancestor) {
+    left += node.offsetLeft;
+    top += node.offsetTop;
+    node = node.offsetParent as HTMLElement | null;
+  }
+  return { left, top, width: el.offsetWidth, height: el.offsetHeight };
+}
+
 export default function SerpentIntro({ logo, labels, children }: Props) {
   const introRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
@@ -136,7 +149,9 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     const drop = dropRef.current;
     if (!intro || !pin || !canvas || !logoEl || !replay) return;
     const header = document.querySelector<HTMLElement>("[data-intro-dim]");
-    const brand = header?.querySelector<HTMLElement>("[data-intro-logo]") ?? null;
+    // 큰 로고가 내려앉는 자리: 히어로의 큰 로고. 없으면 헤더 로고
+    const brand = intro.querySelector<HTMLElement>("[data-intro-target]") ?? header?.querySelector<HTMLElement>("[data-intro-logo]") ?? null;
+    const inHero = Boolean(brand && intro.contains(brand));
     const quick = document.querySelector<HTMLElement>("[data-intro-quick]");
     const chrome = [header, quick];
     const showChrome = () => {
@@ -217,7 +232,8 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       logoEl!.style.width = `${lw}px`;
       logoEl!.style.height = `${lh}px`;
       center = { x: W / 2, y: H / 2 };
-      const br = brand?.getBoundingClientRect();
+      // 히어로 로고는 히어로가 떠오르는 효과(translate) 중에도 정확히 재도록 화면 안 고정 무대(pin) 기준 위치로 잰다
+      const br = brand ? (inHero ? rectIn(brand, pin!) : brand.getBoundingClientRect()) : null;
       dest = br && br.width > 0 ? { x: br.left + br.width / 2, y: br.top + br.height / 2 } : { x: 24 + 59, y: 34 };
       tw = br?.width || 118;
       // S자 경로: 가운데에서 아래로 크게 휘었다가, 오른쪽으로 쓸고 올라와 헤더 로고 자리로. 모바일은 화면이 좁아 옆으로 덜 나간다
@@ -235,7 +251,8 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       const sp = START + s * (1 - START); // 셰이더 진행도
       const rise = clamp((s - 0.44) / 0.12); // 로고 떠오름
       const move = clamp((s - 0.64) / 0.26); // 로고 이동
-      const handoff = clamp((s - 0.9) / 0.03); // 헤더 로고에 자리를 넘김
+      // 도착한 로고에 자리를 넘김. 히어로 로고는 히어로가 거의 다 떠오른 뒤에 넘겨야 두 로고가 겹쳐 흐려 보이지 않는다
+      const handoff = inHero ? clamp((s - 0.94) / 0.03) : clamp((s - 0.9) / 0.03);
       const u = easeInOut(move);
       const pos = move > 0 ? bezier(center, c1, c2, dest, u) : center;
       logoPos = pos;
@@ -271,7 +288,8 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       setVar(header, "--nav", nav);
       setVar(quick, "--nav", nav);
       setVar(quick, "--qv", s > 0.9 ? "visible" : "hidden");
-      setFlag(brand, "data-glow", s > 0.87 && s < 0.96);
+      setVar(pin, "--lg", inHero ? handoff : 1);
+      setFlag(brand, "data-glow", inHero ? s > 0.94 && s < 0.99 : s > 0.87 && s < 0.96);
       setFlag(header, "data-intro-done", s >= 0.98);
       setFlag(replay, "data-on", s > 0.97);
       if (s > 0.97) {

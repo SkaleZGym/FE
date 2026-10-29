@@ -484,7 +484,10 @@
     "hosting": "호스팅 제공자",
     "privacyOfficer": "개인정보보호책임자",
     "notice": "공지사항",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "cookies": "쿠키 정책",
+    "guide": "이용안내",
+    "emailRefusal": "이메일무단수집거부"
   },
   "popup": {
     "close": "닫기",

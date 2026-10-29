@@ -31,3 +31,53 @@ export function tokenCookie(accessToken: string, expiresIn: number, remember = t
     ...(remember ? { maxAge: expiresIn } : {}),
   };
 }
+
+/**
+ * 로그인 유지(리프레시 토큰) 쿠키. FE 서버 경로(/api)로만 보내지고 브라우저 스크립트는 읽을 수 없다.
+ * 값 앞에 '로그인 상태 유지' 여부(1/0)를 붙여 두어 토큰을 갱신할 때도 같은 방식으로 쿠키를 다시 만든다
+ */
+export const REFRESH_COOKIE = "skz_rt";
+
+/** BE 로그인 응답 (관리자 로그인은 refreshToken 없음) */
+export type TokenPayload = { accessToken: string; expiresIn: number; refreshToken?: string | null; refreshExpiresIn?: number | null };
+
+type CookieTarget = { cookies: { set: (cookie: ReturnType<typeof tokenCookie>) => unknown } };
+
+/** 로그인·갱신 결과를 쿠키 두 개로 (접근 토큰, 로그인 유지 토큰) */
+export function setSessionCookies(response: CookieTarget, token: TokenPayload, remember = true) {
+  response.cookies.set(tokenCookie(token.accessToken, token.expiresIn, remember));
+  if (token.refreshToken) {
+    response.cookies.set({
+      name: REFRESH_COOKIE,
+      value: `${remember ? 1 : 0}.${token.refreshToken}`,
+      httpOnly: true,
+      sameSite: "lax" as const,
+      secure: process.env.NODE_ENV === "production",
+      path: "/api",
+      ...(remember && token.refreshExpiresIn ? { maxAge: token.refreshExpiresIn } : {}),
+    });
+  }
+}
+
+/** 쿠키 값 → { 유지 여부, 토큰 } */
+export function readRefreshCookie(value: string | undefined) {
+  if (!value) return null;
+  const dot = value.indexOf(".");
+  if (dot < 0) return null;
+  return { remember: value.slice(0, dot) === "1", token: value.slice(dot + 1) };
+}
+
+/** 리프레시 토큰으로 새 한 쌍 받기. 실패(만료·폐기)면 null */
+export async function refreshSession(refreshToken: string): Promise<TokenPayload | null> {
+  try {
+    const response = await fetch(`${API_BASE}/api/auth/refresh`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+      cache: "no-store",
+    });
+    return response.ok ? ((await response.json()) as TokenPayload) : null;
+  } catch {
+    return null;
+  }
+}

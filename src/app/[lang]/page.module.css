@@ -91,6 +91,30 @@
   justify-items: start;
 }
 
+/*
+ * 히어로 큰 로고: 스크린 프린트처럼 빨간 판이 살짝 어긋나 찍힌 느낌 + 살짝 기울임.
+ * 인트로가 --lg(0→1)를 올리는 순간 나타난다 (날아온 로고와 자리를 바꾼다)
+ */
+.heroLogo {
+  width: clamp(220px, 28vw, 420px);
+  opacity: var(--lg, 1);
+  transform: rotate(-2deg);
+  transform-origin: left center;
+
+  & img {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter: invert(1) drop-shadow(5px 4px 0 var(--red));
+    transition: filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* 큰 로고가 내려앉는 순간 잠깐 빛난다 (인트로 스크립트가 data-glow를 켠다) */
+  &[data-glow] img {
+    filter: invert(1) drop-shadow(5px 4px 0 var(--red)) brightness(1.4) drop-shadow(0 0 22px rgb(237 237 237 / 0.4));
+  }
+}
+
 .heroTitle {
   font-family: var(--font-display);
   font-weight: 400;
@@ -555,6 +579,13 @@
 
   .heroLeft {
     display: contents;
+  }
+
+  .heroLogo {
+    order: 0;
+    position: relative;
+    z-index: 2;
+    width: min(62vw, 300px);
   }
 
   .heroTitle {

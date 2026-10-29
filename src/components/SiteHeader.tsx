@@ -41,7 +41,7 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
     <>
       <header className={styles.header} data-scrolled={scrolled || menuOpen || undefined} data-intro-dim={introDim || undefined}>
         <a href={`/${locale}`} className={styles.logo} aria-label="SKALEZ">
-          <Image src={logo} alt="SKALEZ" width={122} height={24} priority data-intro-logo="" />
+          <Image src={logo} alt="SKALEZ" width={140} height={28} priority data-intro-logo="" />
         </a>
 
         <nav className={styles.nav}>

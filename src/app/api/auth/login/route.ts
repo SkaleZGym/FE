@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { API_BASE, tokenCookie } from "@/lib/backend";
+import { API_BASE, setSessionCookies, type TokenPayload } from "@/lib/backend";
 
 /**
  * 로그인: BE에서 토큰을 받아 httpOnly 쿠키에 넣는다. 토큰은 응답 본문으로 돌려주지 않는다.
@@ -29,8 +29,8 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { accessToken, expiresIn } = (await response.json()) as { accessToken: string; expiresIn: number };
+  const token = (await response.json()) as TokenPayload;
   const result = new NextResponse(null, { status: 204 });
-  result.cookies.set(tokenCookie(accessToken, expiresIn, remember !== false));
+  setSessionCookies(result, token, remember !== false);
   return result;
 }

@@ -484,7 +484,10 @@
     "hosting": "Hosting",
     "privacyOfficer": "Privacy officer",
     "notice": "Notice",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "cookies": "Cookie policy",
+    "guide": "Shopping guide",
+    "emailRefusal": "Email policy"
   },
   "popup": {
     "close": "Close",

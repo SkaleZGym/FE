@@ -24,7 +24,7 @@ export default async function SiteFooter({ locale, labels }: { locale: Locale; l
   return (
     <footer className={styles.footer}>
       <div className={styles.top}>
-        <Image src={images.wordmark} alt="SKALEZ" width={110} height={22} style={{ height: "auto" }} />
+        <Image src={images.wordmark} alt="SKALEZ" width={150} height={30} style={{ height: "auto" }} />
         <span>{tagline} · © 2026 SKALEZ</span>
       </div>
       <dl className={styles.business}>
@@ -40,6 +40,9 @@ export default async function SiteFooter({ locale, labels }: { locale: Locale; l
         <a href={`/${locale}/privacy`}>
           <b>{labels.privacy}</b>
         </a>
+        <a href={`/${locale}/guide`}>{labels.guide}</a>
+        <a href={`/${locale}/cookies`}>{labels.cookies}</a>
+        <a href={`/${locale}/email-policy`}>{labels.emailRefusal}</a>
         <a href={`/${locale}/notice`}>{labels.notice}</a>
         <a href={`/${locale}/faq`}>{labels.faq}</a>
       </div>

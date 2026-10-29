@@ -484,7 +484,10 @@
     "hosting": "ホスティング",
     "privacyOfficer": "個人情報保護責任者",
     "notice": "お知らせ",
-    "faq": "FAQ"
+    "faq": "FAQ",
+    "cookies": "クッキーポリシー",
+    "guide": "ご利用ガイド",
+    "emailRefusal": "メールアドレス無断収集の拒否"
   },
   "popup": {
     "close": "閉じる",

@@ -7,6 +7,17 @@ const nextConfig: NextConfig = {
   // 같은 와이파이의 폰·다른 PC에서 개발 서버(http://<이 PC IP>:3002)를 열어 볼 때.
   // Next 16은 다른 호스트에서 오는 개발 리소스 요청을 기본으로 막아서(화면이 검게만 나옴) 허용할 주소를 적어 둔다
   allowedDevOrigins: ["192.168.45.169", "192.168.45.*", "localhost"],
+  // 보안 헤더: 다른 사이트가 iframe으로 감싸 클릭을 가로채지 못하게, 파일 형식 추측 금지, 주소 노출 최소화, 쓰지 않는 기기 권한 끄기
+  async headers() {
+    const security = [
+      { key: "X-Frame-Options", value: "SAMEORIGIN" },
+      { key: "X-Content-Type-Options", value: "nosniff" },
+      { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+      { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), interest-cohort=()" },
+      ...(process.env.NODE_ENV === "production" ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }] : []),
+    ];
+    return [{ source: "/:path*", headers: security }];
+  },
   images: {
     // 기존 아임웹 CDN의 상품 사진 (자체 이미지 저장소로 옮기기 전까지)
     remotePatterns: [

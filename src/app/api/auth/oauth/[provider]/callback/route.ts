@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { API_BASE, OAUTH_STATE_COOKIE, SITE_URL, SOCIAL_SIGNUP_COOKIE, tokenCookie } from "@/lib/backend";
+import { API_BASE, OAUTH_STATE_COOKIE, setSessionCookies, SITE_URL, SOCIAL_SIGNUP_COOKIE, type TokenPayload } from "@/lib/backend";
 
 type Pending = { state: string; provider: string; lang: string; next: string };
 
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const state = query.get("state");
   if (!pending || !code || !state || state !== pending.state || provider !== pending.provider) return back("STATE");
 
-  let data: { token?: { accessToken: string; expiresIn: number }; ticket?: string; email?: string; name?: string; code?: string } | null;
+  let data: { token?: TokenPayload; ticket?: string; email?: string; name?: string; code?: string } | null;
   let ok = false;
   try {
     const response = await fetch(`${API_BASE}/api/auth/oauth/${provider}/login`, {
@@ -48,7 +48,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
   if (data.token) {
     const result = redirect(pending.next);
-    result.cookies.set(tokenCookie(data.token.accessToken, data.token.expiresIn));
+    setSessionCookies(result, data.token);
     return result;
   }
 

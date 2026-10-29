@@ -40,7 +40,7 @@
 }
 
 .logo img {
-  width: 118px;
+  width: 140px;
   height: auto;
   filter: invert(1);
   transition: filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
@@ -192,7 +192,7 @@
   }
 
   .logo img {
-    width: 90px;
+    width: 112px;
   }
 
   .account {

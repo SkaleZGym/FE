@@ -121,6 +121,10 @@ export default async function HomePage() {
         <SerpentIntro logo={images.wordmark} labels={dict.intro}>
           <section className={styles.hero} id="hero">
             <div className={styles.heroLeft}>
+              {/* 인트로의 큰 로고가 S자로 날아와 내려앉는 자리 (data-intro-target) */}
+              <div className={styles.heroLogo} data-intro-target="">
+                <Image src={images.wordmark} alt="SKALEZ" width={420} height={83} priority />
+              </div>
               <h1 className={styles.heroTitle}>
                 Forged,
                 <br />
