@@ -9,9 +9,19 @@ export const productLink = (product: AdminProduct) => `/product/${product.id}`;
 
 /**
  * 연결할 상품 고르기: 누르면 목록이 열리고, 이름·상품 코드로 찾을 수 있다.
- * value 는 링크 주소(/product/166). 맨 위 '연결 안 함'으로 비울 수 있다
+ * value 는 링크 주소(/product/166). 맨 위 '연결 안 함'으로 비울 수 있다 (noneLabel 을 null 로 주면 비우기 없음)
  */
-export default function ProductPicker({ value, onChange }: { value: string; onChange: (link: string) => void }) {
+export default function ProductPicker({
+  value,
+  onChange,
+  placeholder = "연결 안 함 (누르면 상품을 골라요)",
+  noneLabel = "연결 안 함",
+}: {
+  value: string;
+  onChange: (link: string) => void;
+  placeholder?: string;
+  noneLabel?: string | null;
+}) {
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [open, setOpen] = useState(false);
   const [keyword, setKeyword] = useState("");
@@ -71,7 +81,7 @@ export default function ProductPicker({ value, onChange }: { value: string; onCh
         ) : value ? (
           <span className="mono">{value}</span>
         ) : (
-          <span className="muted">연결 안 함 (누르면 상품을 골라요)</span>
+          <span className="muted">{placeholder}</span>
         )}
         <i aria-hidden="true">▾</i>
       </button>
@@ -79,11 +89,13 @@ export default function ProductPicker({ value, onChange }: { value: string; onCh
         <div className="picker-panel">
           <input ref={search} className="input" placeholder="상품명·상품 코드로 찾기" value={keyword} onChange={(event) => setKeyword(event.target.value)} />
           <ul role="listbox">
-            <li>
-              <button type="button" role="option" aria-selected={!value} onClick={() => pick("")}>
-                <span className="muted">연결 안 함</span>
-              </button>
-            </li>
+            {noneLabel != null && (
+              <li>
+                <button type="button" role="option" aria-selected={!value} onClick={() => pick("")}>
+                  <span className="muted">{noneLabel}</span>
+                </button>
+              </li>
+            )}
             {list.map((product) => {
               const link = productLink(product);
               return (
