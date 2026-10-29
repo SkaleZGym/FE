@@ -7,12 +7,14 @@ import { useSearch } from "@/components/account/useMember";
 import { formatMoney, type Badge, type Currency } from "@/data/catalog";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { api, ApiError, loginHref, skuOf, type BeProduct } from "@/lib/client";
+import { api, ApiError, loginHref, type BeProduct } from "@/lib/client";
 import ProductReviews from "./ProductReviews";
 import styles from "./ProductDetail.module.css";
 
 export type DetailProduct = {
+  /** BE 상품 번호 */
   id: number;
+  sku: string;
   image: string;
   name: string;
   /** 이름 위 작은 영문 제목 */
@@ -56,15 +58,14 @@ export default function ProductDetail({ locale, product, shipping, labels }: { l
   const tabsRef = useRef<HTMLDivElement>(null);
 
   const money = (amount: number) => formatMoney(amount, product.currency, locale);
-  const sku = skuOf(product.id);
-  const wished = account.wishes.has(sku);
+  const wished = account.wishes.has(product.sku);
 
   // BE 상품(재고·후기용 번호). BE가 꺼져 있어도 화면은 그대로 보인다
   useEffect(() => {
-    api<BeProduct>(`/products/sku/${sku}`, { locale })
+    api<BeProduct>(`/products/${product.id}`, { locale })
       .then(setBe)
       .catch(() => setBe(null));
-  }, [sku, locale]);
+  }, [product.id, locale]);
 
   useEffect(() => {
     if (!be) return;
@@ -96,7 +97,7 @@ export default function ProductDetail({ locale, product, shipping, labels }: { l
     setBusy(true);
     setNotice(null);
     try {
-      const variant = (be ?? (await api<BeProduct>(`/products/sku/${sku}`, { locale }))).variants.find((item) => item.size === size);
+      const variant = (be ?? (await api<BeProduct>(`/products/${product.id}`, { locale }))).variants.find((item) => item.size === size);
       if (!variant || variant.stock < qty) {
         setNotice({ text: labels.panel.unavailable });
         return;

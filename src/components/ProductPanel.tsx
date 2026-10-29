@@ -4,14 +4,16 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import type { Badge } from "@/data/catalog";
 import type { Locale } from "@/i18n/config";
-import { api, ApiError, loginHref, skuOf, type BeProduct } from "@/lib/client";
+import { api, ApiError, loginHref, type BeProduct } from "@/lib/client";
 import { refreshCart, refreshWishes, useAccount } from "./account/accountStore";
 import { PRODUCT_EVENT } from "./productEvents";
 import styles from "./ProductPanel.module.css";
 
 /** 서버에서 언어·통화에 맞게 가공해서 넘기는 패널용 상품 정보 */
 export type PanelProduct = {
+  /** BE 상품 번호 */
   id: number;
+  sku: string;
   image: string;
   name: string;
   badges: Badge[];
@@ -57,7 +59,7 @@ type Notice = { kind: "added" } | { kind: "message"; text: string } | null;
 /**
  * 19번 시안의 상품 정보 패널. PC는 오른쪽에서 밀려 나오고, 모바일은 아래에서 올라오는 시트.
  * openProduct(id)가 보내는 신호를 받아 열리고, 바깥·닫기·Esc로 닫힌다.
- * 담기·찜은 FE 상품 번호를 BE 상품 코드(SKZ-번호)로 찾아 BE 장바구니·위시리스트에 넣는다.
+ * 담기·찜은 BE 상품(사이즈별 재고)을 한 번 더 읽어 BE 장바구니·위시리스트에 넣는다.
  */
 export default function ProductPanel({ locale, products, labels }: Props) {
   const [id, setId] = useState<number | null>(null);
@@ -107,16 +109,16 @@ export default function ProductPanel({ locale, products, labels }: Props) {
     };
   }, [open]);
 
-  const wished = product ? account.wishes.has(skuOf(product.id)) : false;
+  const wished = product ? account.wishes.has(product.sku) : false;
 
   /** 로그인 전이면 로그인 화면으로 보냈다가 지금 페이지로 돌아온다 */
   const goLogin = () => window.location.assign(loginHref(locale, window.location.pathname));
 
-  const beProductOf = async (feId: number) => {
-    const cached = beProducts.current.get(feId);
+  const beProductOf = async (productId: number) => {
+    const cached = beProducts.current.get(productId);
     if (cached) return cached;
-    const found = await api<BeProduct>(`/products/sku/${skuOf(feId)}`, { locale });
-    beProducts.current.set(feId, found);
+    const found = await api<BeProduct>(`/products/${productId}`, { locale });
+    beProducts.current.set(productId, found);
     return found;
   };
 
@@ -153,7 +155,7 @@ export default function ProductPanel({ locale, products, labels }: Props) {
     if (account.status === "guest") return goLogin();
     setBusy(true);
     try {
-      const productId = account.wishes.get(skuOf(product.id)) ?? (await beProductOf(product.id)).id;
+      const productId = product.id;
       await api(`/wishes/${productId}`, { method: wished ? "DELETE" : "PUT", locale });
       await refreshWishes(locale);
     } catch (error) {

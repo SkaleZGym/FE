@@ -105,7 +105,27 @@ export type AdminProduct = {
   prices: Partial<Record<"KRW" | "USD", { amount: number; listAmount: number | null }>>;
   variants: { id: number; size: string; stock: number }[];
   badges: BadgeCode[];
+  /** 비어 있으면 쇼핑몰이 카테고리 기본값을 쓴다 */
+  fit: string | null;
+  fabric: string | null;
   createdAt: string;
+};
+
+/** 쇼핑몰 상세의 '핏' · '소재' 칸 (코드 → 관리자 화면 이름) */
+export const FITS: Record<string, string> = {
+  oversized: "오버핏",
+  semi: "세미 오버핏",
+  muscle: "머슬핏",
+  regular: "레귤러 핏",
+  compression: "컴프레션 핏",
+  free: "프리 사이즈",
+};
+export const FABRICS: Record<string, string> = {
+  cotton: "코튼 100%",
+  cottonPoly: "코튼 · 폴리 혼방",
+  polyRayon: "폴리 · 레이온 혼방",
+  nylonSpandex: "나일론 · 스판덱스",
+  polySilicone: "폴리 · 실리콘",
 };
 
 export type Category = { id: number; code: string; parentCode: string | null; sortOrder: number; names: Partial<Record<Lang, string>> };

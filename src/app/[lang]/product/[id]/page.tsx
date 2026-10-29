@@ -2,25 +2,28 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageShell from "@/components/account/PageShell";
 import ProductDetail, { type DetailProduct } from "@/components/product/ProductDetail";
-import { currencyFor, descriptions, fabricOf, fitOf, formatMoney, products, sizesOf } from "@/data/catalog";
+import { currencyFor, formatMoney } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getShippingPolicy } from "@/lib/api";
+import { getShopProducts, pageOfProduct } from "@/lib/shop";
 
-export function generateStaticParams() {
-  return products.map((product) => ({ id: String(product.id) }));
+// 상품은 관리자가 언제든 추가해서 번호를 미리 알 수 없다 → 요청 때 그린다 (BE 응답은 몇 분 캐시)
+export const instant = false;
+
+async function find(id: string) {
+  if (!/^\d+$/.test(id)) return null;
+  const locale = await getLocale();
+  return (await getShopProducts(locale)).find((product) => product.id === Number(id)) ?? null;
 }
-
-const find = (id: string) => products.find((product) => String(product.id) === id);
 
 export async function generateMetadata({ params }: PageProps<"/[lang]/product/[id]">): Promise<Metadata> {
   const { id } = await params;
-  const product = find(id);
+  const product = await find(id);
   if (!product) return {};
-  const locale = await getLocale();
   const dict = await getDictionary();
   return {
-    title: `${product.name[locale]} | ${dict.meta.title}`,
-    description: descriptions[product.id]?.[locale] ?? dict.meta.description,
+    title: `${product.name} | ${dict.meta.title}`,
+    description: product.description ?? dict.meta.description,
     openGraph: { images: [product.image] },
   };
 }
@@ -28,29 +31,32 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/product/[i
 /** 상품 상세: 사진 + 구매 상자, 아래에 상세정보 · 사이즈 · 리뷰 탭 (라이즌푸드 상세 화면 구성) */
 export default async function ProductPage({ params }: PageProps<"/[lang]/product/[id]">) {
   const { id } = await params;
-  const product = find(id);
+  const product = await find(id);
   if (!product) notFound();
 
   const locale = await getLocale();
   const dict = await getDictionary();
   const currency = currencyFor(locale);
   const policy = await getShippingPolicy(locale);
+  // 이름 위 작은 영문 제목: 영어 상품명
+  const english = locale === "en" ? product : (await getShopProducts("en")).find((item) => item.id === product.id);
 
   const detail: DetailProduct = {
     id: product.id,
+    sku: product.sku,
     image: product.image,
-    name: product.name[locale],
-    kicker: product.name.en.toUpperCase(),
+    name: product.name,
+    kicker: (english?.name ?? product.name).toUpperCase(),
     badges: product.badges,
-    soldOut: Boolean(product.soldOut),
-    price: product.price[currency],
-    listPrice: product.listPrice?.[currency] ?? null,
+    soldOut: product.soldOut,
+    price: product.price,
+    listPrice: product.listPrice,
     currency,
-    sizes: sizesOf(product),
-    fit: dict.fit[fitOf(product)],
-    fabric: dict.fabric[fabricOf(product)],
-    description: descriptions[product.id]?.[locale] ?? null,
-    categoryHref: `/${locale}/shop/${product.category === "top" ? "tops" : product.category === "women" ? "all" : product.category}`,
+    sizes: product.sizes,
+    fit: dict.fit[product.fit],
+    fabric: dict.fabric[product.fabric],
+    description: product.description,
+    categoryHref: `/${locale}/shop/${pageOfProduct(product)}`,
   };
 
   // 배송비 안내는 BE 배송 설정 (최소 단위: 원·센트) → 화면 단위로. BE가 꺼져 있으면 사전 문구

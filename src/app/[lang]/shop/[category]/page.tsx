@@ -6,21 +6,13 @@ import QuickMenu from "@/components/QuickMenu";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { headerLabels, siteNav } from "@/components/siteNav";
-import {
-  categoryPages,
-  currencyFor,
-  descriptions,
-  fabricOf,
-  fitOf,
-  formatMoney,
-  images,
-  isCategoryPage,
-  productsOf,
-  sizeOrder,
-  sizesOf,
-} from "@/data/catalog";
+import { categoryPages, images, isCategoryPage, sizeOrder } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
+import { getShopProducts, priceText, productsOfPage } from "@/lib/shop";
 import styles from "./page.module.css";
+
+// 상품 목록은 BE에서 받아 몇 분 캐시한다 (관리자 수정이 곧 반영되게). 요청 때 그린다
+export const instant = false;
 
 export function generateStaticParams() {
   return categoryPages.map((category) => ({ category }));
@@ -40,35 +32,34 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
 
   const locale = await getLocale();
   const dict = await getDictionary();
-  const currency = currencyFor(locale);
   const page = dict.category.pages[category];
-  const products = productsOf(category);
+  const products = productsOfPage(await getShopProducts(locale), category);
 
   const items: BrowserItem[] = products.map((product) => ({
     id: product.id,
     image: product.image,
-    name: product.name[locale],
-    fit: dict.fit[fitOf(product)],
-    sizes: sizesOf(product),
-    soldOut: Boolean(product.soldOut),
+    name: product.name,
+    fit: dict.fit[product.fit],
+    sizes: product.sizes,
+    soldOut: product.soldOut,
     isNew: product.badges.includes("NEW"),
     isBest: product.badges.includes("BEST"),
-    price: formatMoney(product.price[currency], currency, locale),
-    listPrice: product.listPrice && formatMoney(product.listPrice[currency], currency, locale),
-    priceValue: product.price[currency],
+    ...priceText(product, locale),
+    priceValue: product.price,
   }));
   const panelProducts: PanelProduct[] = products.map((product, index) => ({
     id: product.id,
+    sku: product.sku,
     image: product.image,
     name: items[index].name,
     badges: product.badges,
     price: items[index].price,
     listPrice: items[index].listPrice,
     soldOut: items[index].soldOut,
-    desc: descriptions[product.id]?.[locale],
+    desc: product.description ?? undefined,
     sizes: items[index].sizes,
     fit: items[index].fit,
-    fabric: dict.fabric[fabricOf(product)],
+    fabric: dict.fabric[product.fabric],
   }));
 
   return (

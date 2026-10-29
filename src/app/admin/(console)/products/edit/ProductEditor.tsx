@@ -2,11 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
+import ImageUpload from "../../../_components/ImageUpload";
 import { Top, useQueryParam } from "../../../_components/ui";
 import {
   adminApi,
   BADGES,
   errorMessage,
+  FABRICS,
+  FITS,
   LANGS,
   toast,
   type AdminProduct,
@@ -27,6 +30,9 @@ type Draft = {
   usd: { amount: string; list: string };
   variants: { size: string; stock: string; saved: boolean }[];
   badges: BadgeCode[];
+  /** "" = 카테고리 기본값 */
+  fit: string;
+  fabric: string;
 };
 
 const empty: Draft = {
@@ -39,6 +45,8 @@ const empty: Draft = {
   usd: { amount: "", list: "" },
   variants: ["S", "M", "L", "XL"].map((size) => ({ size, stock: "0", saved: false })),
   badges: [],
+  fit: "",
+  fabric: "",
 };
 
 const centsToDollars = (cents: number | null | undefined) => (cents == null ? "" : (cents / 100).toFixed(2));
@@ -54,6 +62,8 @@ const toDraft = (product: AdminProduct): Draft => ({
   usd: { amount: centsToDollars(product.prices.USD?.amount), list: centsToDollars(product.prices.USD?.listAmount) },
   variants: product.variants.map((variant) => ({ size: variant.size, stock: String(variant.stock), saved: true })),
   badges: product.badges,
+  fit: product.fit ?? "",
+  fabric: product.fabric ?? "",
 });
 
 const whole = (value: string) => (value.trim() === "" ? null : Math.round(Number(value)));
@@ -118,6 +128,8 @@ export default function ProductEditor() {
       prices,
       variants: variants.map((variant) => ({ size: variant.size.trim().toUpperCase(), stock: Math.max(0, Number(variant.stock) || 0) })),
       badges: draft.badges,
+      fit: draft.fit || null,
+      fabric: draft.fabric || null,
     };
 
     setBusy(true);
@@ -188,11 +200,33 @@ export default function ProductEditor() {
                   ))}
                 </select>
               </label>
-              <label className="field" style={{ gridColumn: "1 / -1" }}>
-                <span>대표 이미지 주소</span>
-                <input className="input" value={draft.imageUrl} onChange={(event) => set("imageUrl", event.target.value)} maxLength={500} placeholder="https://…" />
-                <small>사진 업로드(저장소 연결)는 다음 단계에서 붙여요. 지금은 이미지 주소를 붙여 넣어 주세요.</small>
+              <label className="field">
+                <span>핏</span>
+                <select className="select" value={draft.fit} onChange={(event) => set("fit", event.target.value)}>
+                  <option value="">카테고리 기본값</option>
+                  {Object.entries(FITS).map(([code, label]) => (
+                    <option key={code} value={code}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
               </label>
+              <label className="field">
+                <span>소재</span>
+                <select className="select" value={draft.fabric} onChange={(event) => set("fabric", event.target.value)}>
+                  <option value="">카테고리 기본값</option>
+                  {Object.entries(FABRICS).map(([code, label]) => (
+                    <option key={code} value={code}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+                <small>비워 두면 타이즈는 컴프레션 · 나일론 스판, 굿즈는 프리 사이즈, 그 외는 오버핏 · 코튼으로 보여요.</small>
+              </label>
+              <div className="field" style={{ gridColumn: "1 / -1" }}>
+                <span>대표 사진</span>
+                <ImageUpload value={draft.imageUrl} onChange={(url) => set("imageUrl", url)} hint="쇼핑몰 목록·상세에 쓰는 사진이에요. 세로 3:4 비율이 잘 맞아요." />
+              </div>
             </div>
           </div>
 

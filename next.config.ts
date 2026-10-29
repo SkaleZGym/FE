@@ -9,7 +9,13 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["192.168.45.169", "192.168.45.*", "localhost"],
   images: {
     // 기존 아임웹 CDN의 상품 사진 (자체 이미지 저장소로 옮기기 전까지)
-    remotePatterns: [new URL("https://cdn.imweb.me/**")],
+    remotePatterns: [
+      new URL("https://cdn.imweb.me/**"),
+      // 관리자에서 올린 사진 (로컬 BE). 배포 때는 사진 저장소(S3) 주소를 IMAGE_HOST 환경변수로
+      new URL("http://localhost:8080/files/**"),
+      new URL("http://localhost:8090/files/**"),
+      ...(process.env.IMAGE_HOST ? [new URL(`${process.env.IMAGE_HOST}/**`)] : []),
+    ],
   },
 };
 

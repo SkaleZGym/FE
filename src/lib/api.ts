@@ -77,6 +77,31 @@ export type SiteBanner = {
   price: string | null;
 };
 
+/** BE 상품 (현재 언어의 이름·통화). 금액은 최소 단위 (KRW=원, USD=센트) */
+export type ApiProduct = {
+  id: number;
+  sku: string;
+  categoryCode: string;
+  name: string;
+  description: string | null;
+  imageUrl: string | null;
+  price: number;
+  listPrice: number | null;
+  currency: "KRW" | "USD";
+  badges: ("NEW" | "SALE" | "BEST" | "HOT")[];
+  soldOut: boolean;
+  variants: { id: number; size: string; stock: number }[];
+  fit: string | null;
+  fabric: string | null;
+  createdAt: string;
+};
+
+/** 판매 중인 상품 전체 (최신순). 쇼핑몰은 상품 수가 많지 않아 한 번에 받아서 화면에서 나눈다 */
+export async function getProducts(locale: Locale): Promise<ApiProduct[] | null> {
+  const page = await getJson<Page<ApiProduct>>("/api/products?size=500", locale);
+  return page && page.content;
+}
+
 export const getBanners = (locale: Locale, position: "MAIN_HERO" | "MAIN_SUB" | "POPUP") =>
   getJson<SiteBanner[]>(`/api/banners?position=${position}`, locale);
 

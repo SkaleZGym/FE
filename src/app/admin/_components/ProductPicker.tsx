@@ -4,11 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { adminApi, type AdminProduct, type Page } from "../_lib/admin";
 import { Thumb } from "./ui";
 
-/** 쇼핑몰 상품 상세 주소: /product/{FE 상품 번호}. 언어(/ko 등)는 고객 화면이 붙인다 */
-export const productLink = (product: AdminProduct) => {
-  const id = product.sku.match(/^SKZ-(\d+)$/)?.[1];
-  return id ? `/product/${id}` : null;
-};
+/** 쇼핑몰 상품 상세 주소: /product/{상품 번호}. 언어(/ko 등)는 고객 화면이 붙인다 */
+export const productLink = (product: AdminProduct) => `/product/${product.id}`;
 
 /**
  * 연결할 상품 고르기: 누르면 목록이 열리고, 이름·상품 코드로 찾을 수 있다.
@@ -23,7 +20,7 @@ export default function ProductPicker({ value, onChange }: { value: string; onCh
 
   useEffect(() => {
     adminApi<Page<AdminProduct>>("/products?size=500&sort=createdAt,desc")
-      .then((page) => setProducts(page.content.filter((product) => productLink(product))))
+      .then((page) => setProducts(page.content))
       .catch(() => undefined);
   }, []);
 
@@ -88,7 +85,7 @@ export default function ProductPicker({ value, onChange }: { value: string; onCh
               </button>
             </li>
             {list.map((product) => {
-              const link = productLink(product)!;
+              const link = productLink(product);
               return (
                 <li key={product.id}>
                   <button type="button" role="option" aria-selected={link === value} onClick={() => pick(link)}>

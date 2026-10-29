@@ -1,6 +1,7 @@
 import type { Locale } from "@/i18n/config";
 
-// BE 연동 전 임시 데이터. 상품 정보와 사진은 기존 skalez.com(한국어)·skalezus.imweb.me(영문)에서 가져왔다.
+// 쇼핑몰 화면은 BE 상품(lib/shop.ts)을 쓴다. 여기 상품 목록은 로컬 BE에 샘플을 넣는 원본과, 메인 화면의 기본 사진 자리(히어로·타일·트렌드)에만 쓴다.
+// 상품 정보와 사진은 기존 skalez.com(한국어)·skalezus.imweb.me(영문)에서 가져왔다.
 // 가격은 기존 사이트처럼 시장별로 따로 정한다(KRW / USD) — BE의 Money(금액 + 통화) 구조와 같은 모양.
 
 export type Currency = "KRW" | "USD";

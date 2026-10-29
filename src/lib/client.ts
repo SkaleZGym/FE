@@ -135,6 +135,3 @@ export type CouponPreview = {
   totalAmount: number;
 };
 
-/** FE 임시 카탈로그 상품 번호 ↔ BE 상품 코드 (BE 상품을 SKZ-{번호}로 등록한다) */
-export const skuOf = (feId: number) => `SKZ-${feId}`;
-export const feIdOf = (sku: string) => Number(sku.replace(/^SKZ-/, "")) || null;

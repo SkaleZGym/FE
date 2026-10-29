@@ -10,35 +10,12 @@ import ShippingInfo from "@/components/ShippingInfo";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { headerLabels, siteNav } from "@/components/siteNav";
-import {
-  bestsellerIds,
-  currencyFor,
-  descriptions,
-  fabricOf,
-  fitOf,
-  formatMoney,
-  heroShowcase,
-  images,
-  productById,
-  shopByTiles,
-  sizesOf,
-  trendImageId,
-  type Product,
-} from "@/data/catalog";
-import type { Locale } from "@/i18n/config";
+import { bestsellerIds, heroShowcase, images, productById, shopByTiles, trendImageId } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getBanners } from "@/lib/api";
 import { localHref } from "@/lib/links";
+import { bySku, getShopProducts, priceText, productsOfPage, type ShopProduct } from "@/lib/shop";
 import styles from "./page.module.css";
-
-/** 현재 언어의 통화로 가격 문자열을 만든다 */
-function priceOf(product: Product, locale: Locale) {
-  const currency = currencyFor(locale);
-  return {
-    price: formatMoney(product.price[currency], currency, locale),
-    listPrice: product.listPrice && formatMoney(product.listPrice[currency], currency, locale),
-  };
-}
 
 /** 테이프 티커: 같은 문장을 두 벌 이어 붙여 절반 지점에서 되감겨도 끊김이 없다 */
 function Tape({ text, repeat }: { text: string; repeat: number }) {
@@ -63,8 +40,13 @@ export default async function HomePage() {
   const locale = await getLocale();
   const dict = await getDictionary();
 
+  const products = await getShopProducts(locale);
+
   // 히어로 상품 슬라이드: 관리자 '메인 히어로' 배너가 켜져 있으면 그 순서대로, 없으면 기본 상품
   const heroBanners = (await getBanners(locale, "MAIN_HERO")) ?? [];
+  const heroProducts = heroShowcase
+    .map(({ id, line }) => ({ product: bySku(products, id), line }))
+    .filter((item): item is { product: ShopProduct; line: string } => Boolean(item.product));
   const showcase: ShowcaseItem[] =
     heroBanners.length > 0
       ? heroBanners.map((banner) => ({
@@ -76,22 +58,19 @@ export default async function HomePage() {
           href: banner.linkUrl ? localHref(banner.linkUrl, locale, `/${locale}`) : undefined,
           remote: true,
         }))
-      : heroShowcase.map(({ id, line }) => {
-          const product = productById(id);
-          return { id, image: product.image, name: product.name[locale], line, ...priceOf(product, locale) };
-        });
-  // 13번 시안의 세로 제목 BESTSELLER
-  const bestItems: ShelfItem[] = bestsellerIds.map((id) => {
-      const product = productById(id);
-      return {
-        id,
-        image: product.image,
-        name: product.name[locale],
-        badges: product.badges,
-        ...priceOf(product, locale),
-        soldOut: Boolean(product.soldOut),
-      };
-  });
+      : heroProducts.map(({ product, line }) => ({ id: product.id, image: product.image, name: product.name, line, ...priceText(product, locale) }));
+
+  // 13번 시안의 세로 제목 BESTSELLER: 정해 둔 순서의 상품 먼저, 나머지 BEST 상품을 뒤에 (최대 7개)
+  const picked = bestsellerIds.map((id) => bySku(products, id)).filter((product): product is ShopProduct => Boolean(product));
+  const bestProducts = [...picked, ...productsOfPage(products, "best").filter((product) => !picked.includes(product))].slice(0, 7);
+  const bestItems: ShelfItem[] = bestProducts.map((product) => ({
+    id: product.id,
+    image: product.image,
+    name: product.name,
+    badges: product.badges,
+    ...priceText(product, locale),
+    soldOut: product.soldOut,
+  }));
   const shelfLabels = {
     viewAll: dict.shelves.viewAll,
     more: dict.shelves.more,
@@ -100,31 +79,30 @@ export default async function HomePage() {
     soldOut: dict.shelves.soldOut,
     sale: dict.shelves.sale,
   };
-  // SHOP BY 카테고리 타일
+  // SHOP BY 카테고리 타일: 정해 둔 상품 사진, 없으면 그 카테고리 첫 상품, 그것도 없으면 기본 사진
   const tiles = (["tights", "tops", "hoodies"] as const).map((key) => ({
     key,
-    image: productById(shopByTiles[key]).image,
+    image: (bySku(products, shopByTiles[key]) ?? productsOfPage(products, key)[0])?.image ?? productById(shopByTiles[key]).image,
     ...dict.shopBy[key],
   }));
+  // 트렌드 배너 배경은 브랜드 사진이라 고정
   const trend = productById(trendImageId);
   const subBanner = (await getBanners(locale, "MAIN_SUB"))?.[0];
   // 상품 정보 패널에서 열 수 있는 상품: 히어로 로테이션 + BESTSELLER
-  const panelIds = [...heroShowcase.map((item) => item.id), ...bestsellerIds];
-  const panelProducts: PanelProduct[] = [...new Set(panelIds)].map((id) => {
-    const product = productById(id);
-    return {
-      id,
-      image: product.image,
-      name: product.name[locale],
-      badges: product.badges,
-      ...priceOf(product, locale),
-      soldOut: Boolean(product.soldOut),
-      desc: descriptions[id]?.[locale],
-      sizes: sizesOf(product),
-      fit: dict.fit[fitOf(product)],
-      fabric: dict.fabric[fabricOf(product)],
-    };
-  });
+  const panelSource = [...new Set([...heroProducts.map((item) => item.product), ...bestProducts])];
+  const panelProducts: PanelProduct[] = panelSource.map((product) => ({
+    id: product.id,
+    sku: product.sku,
+    image: product.image,
+    name: product.name,
+    badges: product.badges,
+    ...priceText(product, locale),
+    soldOut: product.soldOut,
+    desc: product.description ?? undefined,
+    sizes: product.sizes,
+    fit: dict.fit[product.fit],
+    fabric: dict.fabric[product.fabric],
+  }));
 
   const nav = siteNav(locale, dict.nav);
 
