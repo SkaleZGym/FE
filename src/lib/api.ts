@@ -5,26 +5,20 @@ import type { Locale } from "@/i18n/config";
 import { API_BASE } from "./backend";
 
 /**
- * GET 요청 결과를 몇 분간 캐시한다. 관리자에서 고친 내용은 늦어도 몇 분 안에 반영된다.
- * 실패는 캐시하지 않는다 (캐시 함수 안에서 던진 오류는 저장되지 않음) → BE가 잠깐 꺼졌다 켜져도 바로 회복.
- * 404는 없음이라 정상 결과(null)로 캐시한다
+ * GET 요청 결과를 몇 분간 캐시한다 ('minutes': 1분마다 새로 받아 옴). 관리자에서 고친 내용은 늦어도 몇 분 안에 반영된다.
+ * BE가 꺼져 있거나 오류면 null — 화면은 기본 문구로 그린다. 실패도 그 1분 동안만 남고 BE가 켜지면 곧 회복한다.
+ * 캐시 함수 안에서 오류를 던지면 배포 빌드(미리 그리기)가 멈추므로 여기서 받아 null로 돌린다 (Vercel 빌드에는 BE가 없다)
  */
-async function fetchCached<T>(path: string, locale: Locale): Promise<T | null> {
+async function getJson<T>(path: string, locale: Locale): Promise<T | null> {
   "use cache";
   cacheLife("minutes");
-  const response = await fetch(`${API_BASE}${path}`, {
-    headers: { "Accept-Language": locale },
-    signal: AbortSignal.timeout(3000),
-  });
-  if (response.status === 404) return null;
-  if (!response.ok) throw new Error(`BE ${response.status} ${path}`);
-  return (await response.json()) as T;
-}
-
-/** BE가 꺼져 있거나 오류면 null — 화면은 기본 문구로 그린다 (페이지가 깨지지 않게) */
-async function getJson<T>(path: string, locale: Locale): Promise<T | null> {
   try {
-    return await fetchCached<T>(path, locale);
+    const response = await fetch(`${API_BASE}${path}`, {
+      headers: { "Accept-Language": locale },
+      signal: AbortSignal.timeout(3000),
+    });
+    if (!response.ok) return null;
+    return (await response.json()) as T;
   } catch {
     return null;
   }

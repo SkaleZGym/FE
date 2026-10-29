@@ -161,7 +161,8 @@ export default async function HomePage() {
                 SCALES
               </div>
               <div className={styles.shadow} aria-hidden="true" />
-              <HeroShowcase items={showcase} labels={{ prev: dict.hero.prev, next: dict.hero.next }} />
+              {/* 상품을 못 받은 경우(BE가 꺼졌거나 배포 빌드 중)엔 슬라이드 없이 그린다 */}
+              {showcase.length > 0 && <HeroShowcase items={showcase} labels={{ prev: dict.hero.prev, next: dict.hero.next }} />}
               <div className={styles.sticker} aria-hidden="true">
                 <div className={styles.face}>
                   KAIDO
