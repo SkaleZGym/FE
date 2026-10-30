@@ -298,7 +298,7 @@
   & span {
     padding: 3px 7px;
     font-family: var(--font-mono);
-    font-size: 9px;
+    font-size: 10px;
     letter-spacing: 0.1em;
     color: #000;
     background: var(--ink);

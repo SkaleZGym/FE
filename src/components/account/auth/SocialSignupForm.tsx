@@ -13,10 +13,10 @@ type Pending = { email: string; name: string; provider: string };
  */
 export default function SocialSignupForm({ locale, labels, common }: { locale: Locale; labels: Dictionary["account"]; common: Dictionary["common"] }) {
   const [pending, setPending] = useState<Pending | null | undefined>(undefined);
-  const [agree, setAgree] = useState({ terms: false, privacy: false, marketing: false });
+  const [agree, setAgree] = useState({ terms: false, privacy: false, age: false, marketing: false });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
-  const all = agree.terms && agree.privacy && agree.marketing;
+  const all = agree.terms && agree.privacy && agree.age && agree.marketing;
 
   useEffect(() => {
     fetch("/api/auth/oauth/signup", { cache: "no-store" })
@@ -27,14 +27,14 @@ export default function SocialSignupForm({ locale, labels, common }: { locale: L
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!agree.terms || !agree.privacy) return setError(labels.agreeRequired);
+    if (!agree.terms || !agree.privacy || !agree.age) return setError(labels.agreeRequired);
     const name = String(new FormData(event.currentTarget).get("name")).trim();
     setBusy(true);
     setError("");
     const response = await fetch("/api/auth/oauth/signup", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Accept-Language": locale },
-      body: JSON.stringify({ name, agreeTerms: true, marketingConsent: agree.marketing }),
+      body: JSON.stringify({ name, agreeTerms: true, agreePrivacy: true, over14: true, marketingConsent: agree.marketing }),
     }).catch(() => null);
     const data = await response?.json().catch(() => null);
     if (response?.ok) {
@@ -73,7 +73,11 @@ export default function SocialSignupForm({ locale, labels, common }: { locale: L
       </label>
       <div className={styles.agree}>
         <label className={styles.check} data-all="">
-          <input type="checkbox" checked={all} onChange={(event) => setAgree({ terms: event.target.checked, privacy: event.target.checked, marketing: event.target.checked })} />
+          <input
+            type="checkbox"
+            checked={all}
+            onChange={(event) => setAgree({ terms: event.target.checked, privacy: event.target.checked, age: event.target.checked, marketing: event.target.checked })}
+          />
           {labels.agreeAll}
         </label>
         <label className={styles.check}>
@@ -89,6 +93,11 @@ export default function SocialSignupForm({ locale, labels, common }: { locale: L
           <a className={styles.view} href={`/${locale}/privacy`} target="_blank" rel="noreferrer">
             {labels.viewTerms}
           </a>
+        </label>
+        <p className={styles.summary}>{labels.privacySummary}</p>
+        <label className={styles.check}>
+          <input type="checkbox" checked={agree.age} onChange={(event) => setAgree({ ...agree, age: event.target.checked })} />
+          {labels.agreeAge}
         </label>
         <label className={styles.check}>
           <input type="checkbox" checked={agree.marketing} onChange={(event) => setAgree({ ...agree, marketing: event.target.checked })} />

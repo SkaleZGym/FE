@@ -515,7 +515,7 @@
 
   & i {
     font-style: normal;
-    color: rgb(255 255 255 / 0.2);
+    color: rgb(255 255 255 / 0.35);
   }
 
   &[data-size="large"] {
@@ -552,7 +552,7 @@
   & button {
     padding: 0 2px;
     font-size: 28px;
-    color: rgb(255 255 255 / 0.2);
+    color: rgb(255 255 255 / 0.35);
     background: none;
     border: 0;
     cursor: pointer;

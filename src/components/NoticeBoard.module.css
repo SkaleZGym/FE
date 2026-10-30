@@ -73,7 +73,7 @@
 
 .tag {
   font-family: var(--font-label);
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: var(--label-tracking);
   color: var(--ink-muted);
 

@@ -62,6 +62,21 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const countryName = useMemo(() => new Intl.DisplayNames([locale], { type: "region" }), [locale]);
+  // 배송지(국가·우편번호)를 넣으면 제주·도서산간 추가비까지 넣은 배송비를 미리 계산해 결제 금액에 반영한다 (숨은 요금 없이)
+  const [destination, setDestination] = useState({ countryCode: defaultCountry[locale], postalCode: "" });
+  const [quote, setQuote] = useState<{ fee: number; remoteArea: string | null } | null>(null);
+  const itemsAmount = (coupon ?? cart)?.itemsAmount ?? 0;
+  const postalReady = destination.countryCode !== "KR" || destination.postalCode.replace(/\D/g, "").length >= 5;
+  useEffect(() => {
+    if (!cart || !postalReady) return;
+    const timer = setTimeout(() => {
+      const params = new URLSearchParams({ itemsAmount: String(itemsAmount), countryCode: destination.countryCode, postalCode: destination.postalCode });
+      api<{ fee: number; remoteArea: string | null }>(`/shipping/quote?${params}`, { locale })
+        .then(setQuote)
+        .catch(() => setQuote(null));
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [cart, destination, itemsAmount, locale, postalReady]);
 
   useEffect(() => {
     if (account.status !== "member") return;
@@ -149,7 +164,11 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
     return error ? <p className={styles.error}>{error}</p> : <p className={styles.muted}>{common.loading}</p>;
   }
 
-  const amounts = coupon ?? { ...cart, discountAmount: 0 };
+  const base = coupon ?? { ...cart, discountAmount: 0 };
+  // 미리 계산한 배송비가 있으면 그걸로 바꿔 보여 준다 (주문 때 서버가 같은 식으로 다시 계산)
+  const activeQuote = postalReady ? quote : null; // 우편번호를 다시 지우면 이전 계산값은 버린다
+  const shippingFee = activeQuote ? activeQuote.fee : base.shippingFee;
+  const amounts = { ...base, shippingFee, totalAmount: base.totalAmount - base.shippingFee + shippingFee };
   const show = (amount: number) => money(amount, cart.currency, locale);
   const devMode = !(NICE_CLIENT_ID && NICE_RETURN_URL);
 
@@ -171,7 +190,12 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
           <div className={styles.row}>
             <label className={styles.field}>
               <span>{labels.country}</span>
-              <select className={styles.input} name="countryCode" defaultValue={defaultCountry[locale]}>
+              <select
+                className={styles.input}
+                name="countryCode"
+                defaultValue={defaultCountry[locale]}
+                onChange={(event) => setDestination((current) => ({ ...current, countryCode: event.target.value }))}
+              >
                 {countries.map((code) => (
                   <option key={code} value={code}>
                     {countryName.of(code)}
@@ -181,7 +205,14 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
             </label>
             <label className={styles.field}>
               <span>{labels.postalCode}</span>
-              <input className={styles.input} name="postalCode" autoComplete="postal-code" maxLength={20} required />
+              <input
+                className={styles.input}
+                name="postalCode"
+                autoComplete="postal-code"
+                maxLength={20}
+                required
+                onChange={(event) => setDestination((current) => ({ ...current, postalCode: event.target.value }))}
+              />
             </label>
           </div>
           <label className={styles.field}>
@@ -227,6 +258,9 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
           <div>
             <dt>{cartLabels.shipping}</dt>
             <dd>{amounts.shippingFee === 0 ? cartLabels.free : show(amounts.shippingFee)}</dd>
+          </div>
+          <div className={styles.muted} style={{ display: "block", fontSize: 12 }}>
+            {activeQuote?.remoteArea ? labels.shippingRemote : activeQuote ? null : labels.shippingPostal}
           </div>
           <div data-total="">
             <dt>{cartLabels.total}</dt>

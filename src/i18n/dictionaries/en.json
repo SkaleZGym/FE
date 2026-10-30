@@ -284,7 +284,9 @@
       }
     },
     "agreeAll": "Agree to all (including optional)",
-    "viewTerms": "View"
+    "viewTerms": "View",
+    "agreeAge": "[Required] I am 14 or older",
+    "privacySummary": "Collected: email, password, name / Purpose: account, orders and shipping / Kept until you delete your account (except records we must keep by law) / You can't sign up without consent."
   },
   "cart": {
     "title": "CART",
@@ -320,7 +322,9 @@
     "paying": "Processing payment…",
     "agree": "I have reviewed my order and agree to the payment.",
     "devNote": "Local development: a test payment is used instead of the payment window.",
-    "finalNote": "Shipping and discounts are recalculated by the server when you order."
+    "finalNote": "Shipping and discounts are recalculated by the server when you order.",
+    "shippingRemote": "Includes the remote-area surcharge (Jeju / islands).",
+    "shippingPostal": "Enter your postal code to include any remote-area surcharge."
   },
   "order": {
     "successTitle": "ORDER COMPLETE",
@@ -365,7 +369,12 @@
     "newPassword": "New password",
     "changePassword": "Change password",
     "passwordChanged": "Your password has been changed.",
-    "marketing": "Receive event & discount news"
+    "marketing": "Receive event & discount news",
+    "withdrawTitle": "Delete account",
+    "withdrawText": "Deleting removes your email, name and other personal data right away. Order and payment records are kept for 5 years in anonymised form as Korean e-commerce law requires. Please wait for any open orders to finish first.",
+    "withdrawPassword": "Current password (leave blank if you only use social login)",
+    "withdrawButton": "Delete my account",
+    "withdrawConfirm": "Delete your account? This cannot be undone."
   },
   "inquiry": {
     "write": "Ask a question",
@@ -555,5 +564,10 @@
     "memo": "Note",
     "refund": "Refunded",
     "resend": "Track exchange"
+  },
+  "cookieNotice": {
+    "text": "We only use cookies that are essential for login and cart. No ads or analytics cookies.",
+    "policy": "Cookie policy",
+    "accept": "OK"
   }
 }

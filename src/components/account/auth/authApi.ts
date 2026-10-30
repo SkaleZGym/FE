@@ -15,8 +15,11 @@ export async function login(locale: Locale, email: string, password: string, rem
   }
 }
 
-/** 회원가입 API 응답은 쓰지 않는다 — 가입 직후 같은 정보로 로그인한다. agreeTerms 는 필수 약관 동의 */
-export const signup = (locale: Locale, body: { email: string; password: string; name: string; agreeTerms: true; marketingConsent: boolean }) =>
+/** 회원가입 API 응답은 쓰지 않는다 — 가입 직후 같은 정보로 로그인한다. agreeTerms·agreePrivacy·over14 는 필수 동의 (BE 가 각각 확인) */
+export const signup = (
+  locale: Locale,
+  body: { email: string; password: string; name: string; agreeTerms: true; agreePrivacy: true; over14: true; marketingConsent: boolean },
+) =>
   api("/auth/signup", { method: "POST", body, locale });
 
 /** 카카오·네이버 로그인 시작 주소 (FE 서버가 위조 방지 값을 만들고 로그인 창으로 보낸다) */

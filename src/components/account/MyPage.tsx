@@ -430,6 +430,20 @@ function Profile({ locale, labels, me }: { locale: Locale; labels: Labels; me: M
     window.location.assign(`/${locale}`);
   };
 
+  // 회원 탈퇴(개인정보 삭제 요청): BE 가 개인정보를 바로 지우고 주문 기록만 비식별 상태로 남긴다
+  const [withdrawMessage, setWithdrawMessage] = useState<string | null>(null);
+  const withdraw = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const password = String(new FormData(event.currentTarget).get("password") ?? "");
+    if (!window.confirm(text.withdrawConfirm)) return;
+    try {
+      await api("/members/me/withdraw", { method: "POST", locale, body: { password: password || null } });
+      await signOut();
+    } catch (caught) {
+      setWithdrawMessage(errorText(caught, common));
+    }
+  };
+
   return (
     <div className={styles.split}>
       <form className={styles.form} onSubmit={saveProfile}>
@@ -484,6 +498,21 @@ function Profile({ locale, labels, me }: { locale: Locale; labels: Labels; me: M
         {passwordMessage && <p className={passwordMessage.ok ? styles.success : styles.error}>{passwordMessage.text}</p>}
         <button className={styles.button} data-variant="ghost" type="submit">
           {text.changePassword}
+        </button>
+      </form>
+
+      <form className={styles.form} onSubmit={withdraw}>
+        <h2 className={styles.muted} style={{ fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+          {text.withdrawTitle}
+        </h2>
+        <p className={styles.muted}>{text.withdrawText}</p>
+        <label className={styles.field}>
+          <span>{text.withdrawPassword}</span>
+          <input className={styles.input} type="password" name="password" autoComplete="current-password" maxLength={64} />
+        </label>
+        {withdrawMessage && <p className={styles.error}>{withdrawMessage}</p>}
+        <button className={styles.button} data-variant="ghost" data-size="small" type="submit">
+          {text.withdrawButton}
         </button>
       </form>
     </div>

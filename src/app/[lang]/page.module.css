@@ -134,7 +134,7 @@
 
   & text {
     font-family: var(--font-mono);
-    font-size: 9.5px;
+    font-size: 10px;
     letter-spacing: 2.4px;
     fill: var(--ink);
   }

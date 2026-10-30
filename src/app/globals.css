@@ -116,6 +116,12 @@ html {
   transform: none;
 }
 
+/* 키보드로 다닐 때 지금 어디에 있는지 보이게 (마우스 클릭에는 안 뜬다). 각 모듈의 더 구체적인 스타일이 있으면 그게 우선 */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+
 /* 움직임 줄이기 설정을 켠 사용자에게는 애니메이션 없이 바로 보여준다 */
 @media (prefers-reduced-motion: reduce) {
   html {

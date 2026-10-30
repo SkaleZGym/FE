@@ -284,7 +284,9 @@
       }
     },
     "agreeAll": "全部同意（含可选项）",
-    "viewTerms": "查看"
+    "viewTerms": "查看",
+    "agreeAge": "[必选] 本人已年满14周岁",
+    "privacySummary": "收集项目：邮箱、密码、姓名 / 目的：会员管理、订单与配送 / 保存至注销为止（法定留存记录除外）/ 不同意则无法注册。"
   },
   "cart": {
     "title": "CART",
@@ -320,7 +322,9 @@
     "paying": "正在支付…",
     "agree": "我已确认订单内容并同意付款。",
     "devNote": "本地开发模式：使用测试付款代替支付窗口。",
-    "finalNote": "运费和优惠将在下单时由服务器重新计算。"
+    "finalNote": "运费和优惠将在下单时由服务器重新计算。",
+    "shippingRemote": "已包含济州/偏远地区附加运费。",
+    "shippingPostal": "输入邮编后会计算附加运费。"
   },
   "order": {
     "successTitle": "ORDER COMPLETE",
@@ -365,7 +369,12 @@
     "newPassword": "新密码",
     "changePassword": "修改密码",
     "passwordChanged": "密码已修改。",
-    "marketing": "接收活动和优惠信息"
+    "marketing": "接收活动和优惠信息",
+    "withdrawTitle": "注销账号",
+    "withdrawText": "注销后将立即删除邮箱、姓名等个人信息。订单与支付记录依据韩国电子商务法以匿名形式保存5年。如有进行中的订单，请在完成后再注销。",
+    "withdrawPassword": "当前密码（仅使用社交登录的账号请留空）",
+    "withdrawButton": "注销账号",
+    "withdrawConfirm": "确定注销吗？此操作无法撤销。"
   },
   "inquiry": {
     "write": "我要咨询",
@@ -555,5 +564,10 @@
     "memo": "说明",
     "refund": "退款金额",
     "resend": "查询换货物流"
+  },
+  "cookieNotice": {
+    "text": "本站仅使用登录、购物车等必要的Cookie，不使用广告或分析Cookie。",
+    "policy": "Cookie政策",
+    "accept": "确定"
   }
 }

@@ -35,6 +35,13 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
 
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
+    if (!menuOpen) return;
+    // 키보드: Esc 로 메뉴를 닫는다
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMenuOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
   }, [menuOpen]);
 
   return (

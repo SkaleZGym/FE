@@ -22,14 +22,27 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const pending = read(request);
   if (!pending) return NextResponse.json({ code: "SOCIAL_SIGNUP_EXPIRED", message: "" }, { status: 400 });
-  const body = (await request.json().catch(() => ({}))) as { name?: string; agreeTerms?: boolean; marketingConsent?: boolean };
+  const body = (await request.json().catch(() => ({}))) as {
+    name?: string;
+    agreeTerms?: boolean;
+    agreePrivacy?: boolean;
+    over14?: boolean;
+    marketingConsent?: boolean;
+  };
 
   let response: Response;
   try {
     response = await fetch(`${API_BASE}/api/auth/oauth/signup`, {
       method: "POST",
       headers: { "content-type": "application/json", "accept-language": request.headers.get("accept-language") ?? "ko" },
-      body: JSON.stringify({ ticket: pending.ticket, name: body.name, agreeTerms: body.agreeTerms, marketingConsent: body.marketingConsent }),
+      body: JSON.stringify({
+        ticket: pending.ticket,
+        name: body.name,
+        agreeTerms: body.agreeTerms,
+        agreePrivacy: body.agreePrivacy,
+        over14: body.over14,
+        marketingConsent: body.marketingConsent,
+      }),
       cache: "no-store",
     });
   } catch {

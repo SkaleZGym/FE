@@ -44,7 +44,7 @@ function PasswordField({ name, placeholder, autoComplete, labels, minLength }: {
   const [shown, setShown] = useState(false);
   return (
     <Field icon="lock">
-      <input type={shown ? "text" : "password"} name={name} placeholder={placeholder} autoComplete={autoComplete} minLength={minLength} maxLength={64} required />
+      <input type={shown ? "text" : "password"} name={name} placeholder={placeholder} aria-label={placeholder} autoComplete={autoComplete} minLength={minLength} maxLength={64} required />
       <button type="button" className={styles.eye} aria-label={shown ? labels.hidePassword : labels.showPassword} aria-pressed={shown} onClick={() => setShown((value) => !value)}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
@@ -166,7 +166,7 @@ function LoginPanel({ locale, next, labels, common, socialError }: { locale: Loc
     <form className={styles.form} onSubmit={onSubmit}>
       <h1>{labels.loginTitle}</h1>
       <Field icon="mail">
-        <input type="email" name="email" placeholder={labels.email} autoComplete="email" required />
+        <input type="email" name="email" placeholder={labels.email} aria-label={labels.email} autoComplete="email" required />
       </Field>
       <PasswordField name="password" placeholder={labels.password} autoComplete="current-password" labels={labels.auth} />
       <div className={styles.row}>
@@ -200,20 +200,28 @@ function SignupPanel({ locale, next, labels, common }: { locale: Locale; next: s
   const [error, setError] = useState("");
   const [taken, setTaken] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [agree, setAgree] = useState({ terms: false, privacy: false, marketing: false });
-  const all = agree.terms && agree.privacy && agree.marketing;
+  const [agree, setAgree] = useState({ terms: false, privacy: false, age: false, marketing: false });
+  const all = agree.terms && agree.privacy && agree.age && agree.marketing;
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email")).trim();
     const password = String(form.get("password"));
-    if (!agree.terms || !agree.privacy) return setError(labels.agreeRequired);
+    if (!agree.terms || !agree.privacy || !agree.age) return setError(labels.agreeRequired);
     setBusy(true);
     setError("");
     setTaken(false);
     try {
-      await signup(locale, { email, password, name: String(form.get("name")).trim(), agreeTerms: true, marketingConsent: agree.marketing });
+      await signup(locale, {
+        email,
+        password,
+        name: String(form.get("name")).trim(),
+        agreeTerms: true,
+        agreePrivacy: true,
+        over14: true,
+        marketingConsent: agree.marketing,
+      });
       await login(locale, email, password);
       window.location.assign(safeNext(locale));
     } catch (caught) {
@@ -229,15 +237,19 @@ function SignupPanel({ locale, next, labels, common }: { locale: Locale; next: s
     <form className={styles.form} onSubmit={onSubmit}>
       <h1>{labels.signupTitle}</h1>
       <Field icon="mail">
-        <input type="email" name="email" placeholder={labels.email} autoComplete="email" maxLength={100} required />
+        <input type="email" name="email" placeholder={labels.email} aria-label={labels.email} autoComplete="email" maxLength={100} required />
       </Field>
       <Field icon="user">
-        <input name="name" placeholder={labels.name} autoComplete="name" maxLength={50} required />
+        <input name="name" placeholder={labels.name} aria-label={labels.name} autoComplete="name" maxLength={50} required />
       </Field>
       <PasswordField name="password" placeholder={`${labels.password} (${labels.passwordRule})`} autoComplete="new-password" labels={labels.auth} minLength={8} />
       <div className={styles.agree}>
         <label className={styles.check} data-all="">
-          <input type="checkbox" checked={all} onChange={(event) => setAgree({ terms: event.target.checked, privacy: event.target.checked, marketing: event.target.checked })} />
+          <input
+            type="checkbox"
+            checked={all}
+            onChange={(event) => setAgree({ terms: event.target.checked, privacy: event.target.checked, age: event.target.checked, marketing: event.target.checked })}
+          />
           {labels.agreeAll}
         </label>
         <label className={styles.check}>
@@ -253,6 +265,12 @@ function SignupPanel({ locale, next, labels, common }: { locale: Locale; next: s
           <a className={styles.view} href={`/${locale}/privacy`} target="_blank" rel="noreferrer">
             {labels.viewTerms}
           </a>
+        </label>
+        {/* 개인정보 동의는 수집 항목·목적·보유 기간·거부권을 동의 칸 옆에서 바로 알려야 한다 (개인정보 보호법 제15조) */}
+        <p className={styles.summary}>{labels.privacySummary}</p>
+        <label className={styles.check}>
+          <input type="checkbox" checked={agree.age} onChange={(event) => setAgree({ ...agree, age: event.target.checked })} />
+          {labels.agreeAge}
         </label>
         <label className={styles.check}>
           <input type="checkbox" checked={agree.marketing} onChange={(event) => setAgree({ ...agree, marketing: event.target.checked })} />

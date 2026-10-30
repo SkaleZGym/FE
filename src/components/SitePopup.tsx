@@ -59,6 +59,18 @@ export default function SitePopup({ locale, banners, labels }: Props) {
   const banner = banners.find(
     (item) => (item.target === "ALL_PAGES" || isMain) && !closed.includes(item.id) && !(hidden ?? []).includes(item.id),
   );
+  const bannerId = banner?.id;
+
+  // 키보드: Esc 로 닫는다
+  useEffect(() => {
+    if (bannerId == null) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setClosed((current) => [...current, bannerId]);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [bannerId]);
+
   if (!ready || hidden === null || !banner) return null;
 
   const hideToday = () => {

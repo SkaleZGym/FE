@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Anton, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_KR, Noto_Sans_SC } from "next/font/google";
 import { locales } from "@/i18n/config";
+import CookieNotice from "@/components/CookieNotice";
 import SitePopup from "@/components/SitePopup";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getBanners } from "@/lib/api";
@@ -41,6 +42,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
       <body>
         {children}
         <SitePopup locale={locale} banners={popups} labels={dict.popup} />
+        <CookieNotice locale={locale} labels={dict.cookieNotice} />
       </body>
     </html>
   );
