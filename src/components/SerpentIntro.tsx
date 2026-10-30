@@ -8,10 +8,13 @@ import styles from "./SerpentIntro.module.css";
  * 서펜트 비늘 인트로 (SKALEZ = scales). 히어로를 감싸고 연출 진행도 s(0~1)에 따라 보여 준다.
  * 스크롤 진행도 p(0~1)는 s = .4 + .6p 로 옮긴다: 비늘이 덮어 오는 앞부분(s .00~.40)은 잘라서,
  * 처음부터 화면 가득 비늘이 일렁이고 곧바로 로고가 떠오른다 (인트로 스크롤 1.4화면, 모바일 1.2화면).
- *   s .40      화면 전체를 덮은 비늘이 일렁인다 (시작 화면)
- *   s .44~.56  화면 가운데에 로고가 떠오르고, 비늘이 로고를 중심으로 소용돌이치며 모인다
- *   s .64~.90  로고가 S자 경로(아래로 크게 휘었다가 오른쪽으로 쓸고 올라와)로 헤더 로고 자리에 내려앉는다. 소용돌이도 따라간다
- *   s .86~.98  비늘이 걷히고 히어로·헤더·퀵메뉴가 나타난다
+ *   s .40      검은 화면 (시작 화면)
+ *   s .40~.56  비늘 띠(서펜트)가 PATH(왼쪽 위 → 오른쪽으로 돌아 → 가운데)를 따라 스르륵 미끄러져 들어온다. 띠 안의 비늘 일부만 반짝인다
+ *              로고도 같은 경로로 서서히 나타나며 따라와 가운데에 선다
+ *   s .56~.60  가운데에 닿은 비늘이 화면으로 번져 비늘 밭이 된다
+ *   s .58~.67  로고 둘레로 비늘이 위아래 턱처럼 벌어졌다가 .67에 팍 닫힌다 (BITE, 번쩍). 그 직후 비늘은 사라져 검은 화면
+ *   s .67~.90  무는 순간 튀어나간 로고가 S자 경로(아래로 크게 휘었다가 오른쪽으로 쓸고 올라와)로 헤더 로고 자리에 내려앉는다
+ *   s .86~.98  히어로·헤더·퀵메뉴가 나타난다
  *   그 뒤 한 화면(홀드)만큼은 진행도 1로 고정: 히어로가 붙어 있다가 계속 굴려야 본문으로 넘어간다. 위로 굴리면 거꾸로 재생된다.
  * 가볍게 가는 법: 캔버스 해상도 상한(프레임이 느리면 스스로 더 낮춤), CSS 변수는 값이 바뀔 때만 쓰고 :root에는 쓰지 않는다,
  * 안 보이는 히어로·헤더·퀵메뉴는 visibility: hidden, 인트로가 화면 밖이거나 비늘이 사라진 뒤에는 그리지 않는다.
@@ -24,13 +27,41 @@ type Props = { logo: string; labels: IntroLabels; children: ReactNode };
 type Pt = { x: number; y: number };
 type GLCtx = {
   gl: WebGLRenderingContext;
-  U: Record<"resolution" | "time" | "progress" | "scrollVelocity" | "mouse" | "logoPos", WebGLUniformLocation | null>;
+  U: Record<"resolution" | "time" | "progress" | "scrollVelocity" | "mouse" | "logoPos" | "path", WebGLUniformLocation | null>;
 };
 
 const RATIO = 590 / 3000; // 로고 PNG 가로세로 비율
 const START = 0.14; // 서펜트 장면 1(가는 빛줄기)은 거의 생략하고 비늘 점령부터
 const P0 = 0.4; // 연출 진행도 0~.4(비늘이 덮어 오는 구간)는 건너뛴다. 대표님 피드백: 인트로 스크롤 50% 단축 (2026-10-25)
 const SEEN_KEY = "skz.intro";
+/** 서펜트와 로고가 들어오는 경로 (대표님 스케치, 2026-10-30). 화면 비율 좌표(0~1, y는 아래로), 끝은 화면 가운데 */
+const PATH: Pt[] = [
+  { x: 0.1, y: 0.2 },
+  { x: 0.11, y: 0.32 },
+  { x: 0.25, y: 0.4 },
+  { x: 0.45, y: 0.37 },
+  { x: 0.62, y: 0.36 },
+  { x: 0.78, y: 0.4 },
+  { x: 0.82, y: 0.52 },
+  { x: 0.7, y: 0.6 },
+  { x: 0.56, y: 0.58 },
+  { x: 0.5, y: 0.5 },
+];
+const PATH_SAMPLES = 16; // 셰이더 u_path 길이
+/** Catmull-Rom 스플라인 위 t(0~1)의 점 (경로를 부드럽게 잇는다) */
+function pathAt(t: number): Pt {
+  const n = PATH.length - 1;
+  const f = clamp(t) * n;
+  const i = Math.min(n - 1, Math.floor(f));
+  const k = f - i;
+  const p0 = PATH[Math.max(0, i - 1)];
+  const p1 = PATH[i];
+  const p2 = PATH[i + 1];
+  const p3 = PATH[Math.min(n, i + 2)];
+  const cr = (a: number, b: number, c: number, d: number) =>
+    0.5 * (2 * b + (-a + c) * k + (2 * a - 5 * b + 4 * c - d) * k * k + (-a + 3 * b - 3 * c + d) * k * k * k);
+  return { x: cr(p0.x, p1.x, p2.x, p3.x), y: cr(p0.y, p1.y, p2.y, p3.y) };
+}
 
 const clamp = (v: number) => Math.min(1, Math.max(0, v));
 const ease = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -114,7 +145,7 @@ function initGL(canvas: HTMLCanvasElement): GLCtx | null {
   gl.uniform1f(u("specularStrength"), 1.05);
   return {
     gl,
-    U: { resolution: u("resolution"), time: u("time"), progress: u("progress"), scrollVelocity: u("scrollVelocity"), mouse: u("mouse"), logoPos: u("logoPos") },
+    U: { resolution: u("resolution"), time: u("time"), progress: u("progress"), scrollVelocity: u("scrollVelocity"), mouse: u("mouse"), logoPos: u("logoPos"), path: u("path[0]") },
   };
 }
 
@@ -196,6 +227,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     let dest: Pt = { x: 0, y: 0 }; // 헤더 로고 중심 (화면 좌표 = pin 좌표. pin은 인트로 동안 항상 화면 맨 위에 붙어 있다)
     let c1: Pt = { x: 0, y: 0 };
     let c2: Pt = { x: 0, y: 0 };
+    let pathUniform = new Float32Array(PATH_SAMPLES * 2); // 셰이더 좌표계(x는 비율 보정, y는 위로)의 경로 점들
     let budget = 0.6e6; // 캔버스 픽셀 상한. 비늘은 부드러운 무늬라 낮춰도 티가 안 난다
     let slowFrames = 0;
     let lastSize = { w: 0, h: 0 };
@@ -219,7 +251,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       H = pin!.clientHeight;
       const introVh = mobile() ? 1.2 : 1.4; // 인트로가 차지하는 스크롤 (화면 높이 배수). 처음 2.4 / 2.8에서 절반으로
       const holdVh = mobile() ? 0.9 : 1.0;
-      trackPx = Math.round(H * introVh);
+      trackPx = Math.max(1, Math.round(H * introVh)); // 숨겨진 탭에서 높이가 0으로 재지면 0으로 나눠 진행도가 NaN으로 굳는다
       holdPx = Math.round(H * holdVh);
       intro!.style.height = `${H + trackPx + holdPx}px`;
       // #drop 앵커(메뉴 COLLAB)는 히어로가 다 보이는 자리. html의 scroll-padding-top만큼 아래에 둬야 정확히 그 위치에 멈춘다
@@ -239,6 +271,13 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       // S자 경로: 가운데에서 아래로 크게 휘었다가, 오른쪽으로 쓸고 올라와 헤더 로고 자리로. 모바일은 화면이 좁아 옆으로 덜 나간다
       c1 = mobile() ? { x: center.x - W * 0.28, y: center.y + H * 0.3 } : { x: center.x - W * 0.22, y: center.y + H * 0.36 };
       c2 = mobile() ? { x: dest.x + W * 0.85, y: dest.y + H * 0.2 } : { x: dest.x + W * 0.6, y: dest.y + H * 0.14 };
+      const aspect = W / Math.max(1, H);
+      pathUniform = new Float32Array(PATH_SAMPLES * 2);
+      for (let i = 0; i < PATH_SAMPLES; i++) {
+        const pt = pathAt(i / (PATH_SAMPLES - 1));
+        pathUniform[i * 2] = (pt.x - 0.5) * aspect;
+        pathUniform[i * 2 + 1] = 0.5 - pt.y;
+      }
       sizeCanvas();
     }
 
@@ -249,20 +288,33 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       // p = 스크롤 진행도(0~1), s = 연출 진행도. 앞부분(비늘이 덮어 오는 장면)을 잘라 비늘이 화면을 다 덮은 상태, 로고가 떠오르기 직전부터 시작한다
       const s = P0 + p * (1 - P0);
       const sp = START + s * (1 - START); // 셰이더 진행도
-      const rise = clamp((s - 0.44) / 0.12); // 로고 떠오름
-      const move = clamp((s - 0.64) / 0.26); // 로고 이동
+      // 로고는 서펜트와 같은 경로로 스르륵 들어와 가운데에 선다 (셰이더의 travel과 같은 구간: sp .484~.62 = s .40~.56)
+      const travel = easeInOut(clamp((s - 0.4) / 0.16));
+      const rise = clamp((s - 0.42) / 0.12); // 로고가 서서히 보인다
+      // 로고 이동: 서펜트가 팍 무는 순간(s .668 = 셰이더 .715)에 튀어나가 헤더로 날아간다. 처음이 빠르고 도착하며 느려진다
+      const move = clamp((s - 0.668) / 0.232);
       // 도착한 로고에 자리를 넘김. 히어로 로고는 히어로가 거의 다 떠오른 뒤에 넘겨야 두 로고가 겹쳐 흐려 보이지 않는다
       const handoff = inHero ? clamp((s - 0.94) / 0.03) : clamp((s - 0.9) / 0.03);
-      const u = easeInOut(move);
-      const pos = move > 0 ? bezier(center, c1, c2, dest, u) : center;
+      const u = ease(move);
+      const onPath = (t: number): Pt => {
+        const pt = pathAt(t);
+        return { x: pt.x * W, y: pt.y * H };
+      };
+      const pos = move > 0 ? bezier(center, c1, c2, dest, u) : travel < 1 ? onPath(travel) : center;
       logoPos = pos;
-      const scale = (0.72 + 0.28 * back(rise)) * (1 + (tw / lw - 1) * u);
+      // 경로를 따라오는 동안은 작게(화면 가장자리를 지나도 잘리지 않게), 가운데에 닿으며 제 크기로
+      const grow = easeInOut(clamp((travel - 0.65) / 0.35));
+      const scale = (0.3 + 0.7 * grow) * (1 + (tw / lw - 1) * u);
       // 진행 방향 쪽으로 살짝 기울었다가 도착할 때는 똑바로 선다
       let rot = 0;
       if (move > 0 && move < 1) {
         const ahead = bezier(center, c1, c2, dest, Math.min(1, u + 0.01));
         const ang = (Math.atan2(ahead.y - pos.y, ahead.x - pos.x) * 180) / Math.PI;
         rot = Math.max(-16, Math.min(16, ang * 0.12)) * (1 - u * u);
+      } else if (travel < 1) {
+        const ahead = onPath(Math.min(1, travel + 0.01));
+        const ang = (Math.atan2(ahead.y - pos.y, ahead.x - pos.x) * 180) / Math.PI;
+        rot = Math.max(-14, Math.min(14, ang * 0.1)) * (1 - travel * travel);
       }
       const opacity = rise * (1 - handoff);
       const next = `${(pos.x - lw / 2).toFixed(1)},${(pos.y - lh / 2).toFixed(1)},${rot.toFixed(2)},${scale.toFixed(4)},${opacity.toFixed(3)}`;
@@ -273,7 +325,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       }
       // 히어로·캔버스
       const c = ease(clamp((s - 0.86) / 0.11));
-      const cv = 1 - clamp((s - 0.9) / 0.08);
+      const cv = 1 - clamp((s - 0.68) / 0.035); // 문 직후 비늘이 사라진다 (그 뒤로는 그리지도 않는다)
       setVar(pin, "--c", c);
       setVar(pin, "--cv", cv);
       setVar(pin, "--p", p); // 진행 막대는 실제 스크롤 진행도
@@ -356,6 +408,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       gl.uniform1f(U.scrollVelocity, vel);
       gl.uniform2f(U.mouse, pointer.x, pointer.y);
       gl.uniform2f(U.logoPos, Math.min(0.96, Math.max(0.04, logoPos.x / W)), Math.min(0.96, Math.max(0.04, 1 - logoPos.y / H)));
+      gl.uniform2fv(U.path, pathUniform);
       gl.drawArrays(gl.TRIANGLES, 0, 6);
     }
     function tick(now: number) {
