@@ -48,6 +48,16 @@ float fangShape(vec2 d, float sx, float px, float base, float len, float wid, ou
   shade = clamp((d.x - cx) * sx / max(1e-4, halfW), -1.0, 1.0);
   return inside;
 }
+/** 작은 뾰족니 줄. spacing 간격으로 반복, 길이는 이빨마다 조금씩 다르고, lean 쪽(목구멍 쪽)으로 휜다 */
+float toothRow(vec2 d, float spacing, float len, float wid, float lean, float row, out float shade) {
+  float cell = floor(d.x / spacing + 0.5); float lx = d.x - cell * spacing;
+  float l = len * (0.65 + 0.6 * hash21(vec2(cell, row)));
+  float t = d.y / max(1e-4, l);
+  float cx = lean * 0.35 * l * t * t;
+  float halfW = wid * pow(max(0.0, 1.0 - t), 0.7);
+  shade = clamp((lx - cx) / max(1e-4, halfW), -1.0, 1.0);
+  return step(0.0, t) * step(t, 1.0) * smoothstep(halfW + 0.003, halfW - 0.003, abs(lx - cx));
+}
 void main() {
   vec2 uv = v_uv; float aspect = u_resolution.x / max(1.0, u_resolution.y);
   vec2 p = vec2((uv.x - 0.5) * aspect, uv.y - 0.5); vec2 logoP = vec2((u_logoPos.x - 0.5) * aspect, u_logoPos.y - 0.5); vec2 mouseP = vec2((u_mouse.x - 0.5) * aspect, u_mouse.y - 0.5);
@@ -110,7 +120,11 @@ void main() {
   fU = fangShape(vec2(dxJ, -dyJ + jawGap + 0.03), 1.0, fangPx, 0.0, 0.2 * open, 0.03, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
   fU = fangShape(vec2(dxJ, dyJ + jawGap + 0.03), -1.0, fangPx * 0.75, 0.0, 0.12 * open, 0.022, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
   fU = fangShape(vec2(dxJ, dyJ + jawGap + 0.03), 1.0, fangPx * 0.75, 0.0, 0.12 * open, 0.022, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
-  fang *= profile * (1.0 - smoothstep(0.75, 1.0, snap));
+  // 작은 뾰족니: 송곳니 사이사이로 위턱·아래턱 가장자리를 따라 촘촘히 (뱀 입처럼 안쪽으로 휜 가는 이빨)
+  float lean = -sign(dxJ + 0.0001);
+  fU = toothRow(vec2(dxJ, -dyJ + jawGap + 0.02), 0.085, 0.075 * open, 0.011, lean, 1.0, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
+  fU = toothRow(vec2(dxJ + 0.04, dyJ + jawGap + 0.02), 0.08, 0.055 * open, 0.009, lean, 2.0, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
+  fang *= smoothstep(0.08, 0.3, profile) * smoothstep(0.02, 0.12, open) * (1.0 - smoothstep(0.75, 1.0, snap)); // 입 벌리기 전엔 길이 0인 이빨이 선으로 남지 않게
   vec3 fangColor = mix(vec3(0.42, 0.41, 0.36), vec3(0.95, 0.94, 0.88), 0.5 + 0.5 * fangShade); // 뼈빛. 바깥 가장자리는 어둡게
   vec2 displacedP = p - flowOffset + toLogo * bodyRipple; displacedP.y -= sign(dyJ) * jawGap;
   vec2 scaleId; vec4 scaleData = evaluateSerpentScales(displacedP, activeSlither, prog, scaleId);
