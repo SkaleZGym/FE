@@ -162,26 +162,13 @@
   }
 }
 
+/* 사이트 공통 송곳니 버튼(빨강), 폼 너비에 맞춰 가운데 정렬 */
 .primary {
+  composes: fang from "../../fangButton.module.css";
+  composes: red from "../../fangButton.module.css";
+  justify-content: center;
   height: 54px;
-  font: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  color: #fff;
-  background: var(--red);
-  border: 0;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: filter 0.2s;
-
-  &:hover:not(:disabled) {
-    filter: brightness(1.1);
-  }
-
-  &:disabled {
-    opacity: 0.55;
-    cursor: default;
-  }
+  font-size: 13px;
 }
 
 .or {

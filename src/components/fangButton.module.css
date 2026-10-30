@@ -1,0 +1,139 @@
+/* 송곳니 버튼: 사이트 공통 버튼 (관리자 제외). 오른쪽 위 모서리를 로고 S 끝처럼 비스듬히 잘라낸다.
+   호버하면 비늘 무늬가 왼쪽에서 오른쪽으로 한 번 쓸고 지나가고, 화살표(마지막 span)가 밀리며 짧은 빨간 자국을 남긴다.
+   쓰는 법: 각 모듈에서 `composes: fang from "../fangButton.module.css";` (+ red / ghost / small). 변형은 data-variant·data-size 속성으로도 된다.
+   - 기본: 흰 바탕(ink)에 검은 글자   - red: 빨간 바탕에 흰 글자   - ghost: 투명 바탕에 테두리, 호버하면 빨간 밑줄이 그어진다 */
+
+.fang {
+  --cut: 14px;
+  --fang-border: var(--ink);
+  --fang-pattern: rgb(0 0 0 / 0.14);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 22px;
+  height: 52px;
+  padding: 0 24px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: var(--label-tracking);
+  text-transform: uppercase;
+  color: #000;
+  background: var(--ink);
+  border: 0;
+  border-radius: 0;
+  clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease;
+
+  /* 테두리: clip-path가 border를 잘라 먹어서 안쪽에 같은 모양으로 선을 긋는다 */
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--fang-border);
+    clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
+    pointer-events: none;
+  }
+
+  /* 비늘 무늬: 평소엔 왼쪽 밖에 숨어 있다가 호버하면 쓸고 지나간다 */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    background:
+      radial-gradient(circle at 50% 110%, transparent 55%, var(--fang-pattern) 57%, var(--fang-pattern) 61%, transparent 63%) 0 0 / 14px 10px,
+      radial-gradient(circle at 50% 110%, transparent 55%, var(--fang-pattern) 57%, var(--fang-pattern) 61%, transparent 63%) 7px 5px / 14px 10px;
+    clip-path: polygon(-30% 0, -10% 0, -40% 100%, -60% 100%);
+    transition: clip-path 0.55s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.2s;
+  }
+
+  &:hover:not(:disabled)::before {
+    opacity: 1;
+    clip-path: polygon(0 0, 130% 0, 100% 100%, -30% 100%);
+    transition: clip-path 0.55s cubic-bezier(0.7, 0, 0.2, 1), opacity 0.1s;
+  }
+
+  &:hover:not(:disabled) {
+    background: #fff;
+  }
+
+  /* 화살표(마지막 span): 밀리면서 지나간 자리에 짧은 빨간 선이 남는다 */
+  & > span:last-child {
+    position: relative;
+    display: inline-block;
+    transition: transform 0.3s ease;
+
+    &::after {
+      content: "";
+      position: absolute;
+      right: calc(100% + 4px);
+      top: 58%;
+      width: 0;
+      height: 1px;
+      background: var(--red);
+      transition: width 0.3s ease 0.1s;
+    }
+  }
+
+  &:hover:not(:disabled) > span:last-child {
+    transform: translateX(6px);
+
+    &::after {
+      width: 12px;
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--red);
+    outline-offset: -3px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+.red,
+.fang[data-variant="red"] {
+  --fang-border: var(--red);
+  --fang-pattern: rgb(0 0 0 / 0.22);
+  color: #fff;
+  background: var(--red);
+
+  &:hover:not(:disabled) {
+    background: #f02c20;
+  }
+
+  & > span:last-child::after {
+    background: #fff;
+  }
+}
+
+.ghost,
+.fang[data-variant="ghost"] {
+  --fang-border: currentColor;
+  --fang-pattern: rgb(255 255 255 / 0.28);
+  color: var(--ink);
+  background: linear-gradient(var(--red), var(--red)) left bottom / 0 2px no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.7, 0, 0.2, 1), color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    color: #fff;
+    background: linear-gradient(var(--red), var(--red)) left bottom / 100% 2px no-repeat;
+  }
+}
+
+.small,
+.fang[data-size="small"] {
+  --cut: 10px;
+  gap: 14px;
+  height: 40px;
+  padding: 0 16px;
+  font-size: 11px;
+}

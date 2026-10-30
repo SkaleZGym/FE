@@ -184,28 +184,16 @@
   gap: 8px;
 }
 
+/* 사이트 공통 송곳니 버튼(테두리형). 화살표 밀림·비늘 쓸림은 거기서 온다 */
 .add {
+  composes: fang from "./fangButton.module.css";
+  composes: ghost from "./fangButton.module.css";
   flex: 1;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 18px 20px;
-  font-family: var(--font-label);
+  height: 56px;
+  padding: 0 20px;
   font-size: 13px;
-  letter-spacing: var(--label-tracking);
-  text-transform: uppercase;
-  color: var(--bone);
-  background: var(--iron);
-  border: 0;
-  border-radius: 6px;
-
-  & span:last-child {
-    transition: transform 0.3s ease;
-  }
-
-  &:hover span:last-child {
-    transform: translateX(6px);
-  }
 
   &:disabled {
     opacity: 0.6;

@@ -126,48 +126,11 @@ select.input {
 
 /* ---------- 버튼 ---------- */
 
+/* 사이트 공통 송곳니 버튼. 변형은 data-variant="ghost" | "red", data-size="small" 그대로 */
 .button {
-  display: inline-flex;
+  composes: fang from "../fangButton.module.css";
   justify-content: center;
-  align-items: center;
   gap: 10px;
-  padding: 16px 20px;
-  font-family: var(--font-label);
-  font-size: 13px;
-  letter-spacing: var(--label-tracking);
-  text-transform: uppercase;
-  color: #000;
-  background: var(--ink);
-  border: 1px solid var(--ink);
-  border-radius: 6px;
-  cursor: pointer;
-  transition: opacity 0.2s;
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: default;
-  }
-
-  &[data-variant="ghost"] {
-    color: var(--ink);
-    background: transparent;
-    border-color: var(--line);
-
-    &:hover:not(:disabled) {
-      border-color: rgb(255 255 255 / 0.5);
-    }
-  }
-
-  &[data-variant="red"] {
-    color: #fff;
-    background: var(--red);
-    border-color: var(--red);
-  }
-
-  &[data-size="small"] {
-    padding: 8px 12px;
-    font-size: 11px;
-  }
 }
 
 .link {

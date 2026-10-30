@@ -7,43 +7,18 @@
   color: var(--red);
 }
 
+/* 버튼은 사이트 공통 송곳니 버튼(fangButton.module.css) */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 22px;
-  height: 52px;
-  padding: 0 24px;
-  font-family: var(--font-label);
-  font-size: 12px;
-  letter-spacing: var(--label-tracking);
-  text-transform: uppercase;
-  color: inherit;
-  background: none;
-  border: 1px solid currentColor;
-  border-radius: 2px;
-  transition: background 0.2s ease, color 0.2s ease;
-
-  & span {
-    transition: transform 0.3s ease;
-  }
-
-  &:hover span {
-    transform: translateX(6px);
-  }
+  composes: fang from "../../components/fangButton.module.css";
 }
 
 .btnWhite {
-  color: #000;
-  background: var(--ink);
-  border-color: var(--ink);
-
-  &:hover {
-    background: #fff;
-  }
+  composes: btn;
 }
 
 .btnGhost {
-  color: var(--ink);
+  composes: btn;
+  composes: ghost from "../../components/fangButton.module.css";
 }
 
 /* ---------- 1. 히어로 ---------- */

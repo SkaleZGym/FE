@@ -292,8 +292,27 @@
   gap: 8px;
 }
 
-.primary,
-.secondary,
+/* 구매·담기 버튼은 사이트 공통 송곳니 버튼 (조금 크게) */
+.primary {
+  composes: fang from "../fangButton.module.css";
+  composes: red from "../fangButton.module.css";
+  justify-content: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
+.secondary {
+  composes: fang from "../fangButton.module.css";
+  composes: ghost from "../fangButton.module.css";
+  justify-content: center;
+  gap: 8px;
+  height: 54px;
+  padding: 0 20px;
+  font-size: 13px;
+}
+
 .wish {
   display: inline-flex;
   justify-content: center;
@@ -302,9 +321,7 @@
   height: 54px;
   padding: 0 20px;
   font: inherit;
-  font-size: 15px;
-  font-weight: 600;
-  border-radius: 6px;
+  border-radius: 0; /* 옆의 송곳니 버튼과 모서리를 맞춘다 */
   cursor: pointer;
   text-decoration: none;
 
@@ -312,18 +329,6 @@
     opacity: 0.5;
     cursor: default;
   }
-}
-
-.primary {
-  color: #fff;
-  background: var(--red);
-  border: 1px solid var(--red);
-}
-
-.secondary {
-  color: var(--ink);
-  background: transparent;
-  border: 1px solid rgb(255 255 255 / 0.35);
 }
 
 .wish {
