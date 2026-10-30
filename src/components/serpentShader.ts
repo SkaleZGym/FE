@@ -39,6 +39,15 @@ vec4 evaluateSerpentScales(vec2 uv, float bodyWave, float phaseShift, out vec2 s
   scaleId = bestId; float keelIntensity = exp(-abs(bestLocal.x) * 10.0) * smoothstep(0.9, 0.1, length(bestLocal));
   return vec4(max(0.0, bestHeight), keelIntensity, bestLocal);
 }
+/** 송곳니 하나. d = (턱 가운데 기준 x, 턱선에서 입 안쪽으로 잰 깊이). base에서 시작해 len만큼 뻗으며 뾰족해지고 안쪽으로 살짝 휜다. shade는 -1(바깥 가장자리)~1 */
+float fangShape(vec2 d, float sx, float px, float base, float len, float wid, out float shade) {
+  float t = (d.y - base) / max(1e-4, len);
+  float cx = sx * (px - 0.3 * len * t * t);
+  float halfW = wid * pow(max(0.0, 1.0 - t), 0.8);
+  float inside = step(0.0, t) * step(t, 1.0) * smoothstep(halfW + 0.004, halfW - 0.004, abs(d.x - cx));
+  shade = clamp((d.x - cx) * sx / max(1e-4, halfW), -1.0, 1.0);
+  return inside;
+}
 void main() {
   vec2 uv = v_uv; float aspect = u_resolution.x / max(1.0, u_resolution.y);
   vec2 p = vec2((uv.x - 0.5) * aspect, uv.y - 0.5); vec2 logoP = vec2((u_logoPos.x - 0.5) * aspect, u_logoPos.y - 0.5); vec2 mouseP = vec2((u_mouse.x - 0.5) * aspect, u_mouse.y - 0.5);
@@ -94,6 +103,15 @@ void main() {
   float lip = exp(-pow((abs(dyJ) - jawEdge) * 40.0, 2.0)) * openAmt * profile;
   float biteFlash = exp(-pow((prog - 0.715) * 110.0, 2.0)) * exp(-abs(dyJ) * 12.0) * profile;
   float afterBite = 1.0 - smoothstep(0.72, 0.75, prog);
+  // 송곳니: 위턱에 긴 것 둘, 아래턱에 짧은 것 둘. 턱선(jawGap) 조금 안쪽에서 시작해 입 안으로 뻗는다. 닫히면서 같이 줄어든다
+  float fangPx = 0.3 * aspect; float fang = 0.0; float fangShade = 0.0; float sh;
+  // 길이는 입이 벌어질 때 자라고(open), 닫힐 때는 그대로 둔 채 턱과 함께 내려와 물고 나서 사라진다
+  float fU = fangShape(vec2(dxJ, -dyJ + jawGap + 0.03), -1.0, fangPx, 0.0, 0.2 * open, 0.03, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
+  fU = fangShape(vec2(dxJ, -dyJ + jawGap + 0.03), 1.0, fangPx, 0.0, 0.2 * open, 0.03, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
+  fU = fangShape(vec2(dxJ, dyJ + jawGap + 0.03), -1.0, fangPx * 0.75, 0.0, 0.12 * open, 0.022, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
+  fU = fangShape(vec2(dxJ, dyJ + jawGap + 0.03), 1.0, fangPx * 0.75, 0.0, 0.12 * open, 0.022, sh); fangShade = mix(fangShade, sh, fU); fang = max(fang, fU);
+  fang *= profile * (1.0 - smoothstep(0.75, 1.0, snap));
+  vec3 fangColor = mix(vec3(0.42, 0.41, 0.36), vec3(0.95, 0.94, 0.88), 0.5 + 0.5 * fangShade); // 뼈빛. 바깥 가장자리는 어둡게
   vec2 displacedP = p - flowOffset + toLogo * bodyRipple; displacedP.y -= sign(dyJ) * jawGap;
   vec2 scaleId; vec4 scaleData = evaluateSerpentScales(displacedP, activeSlither, prog, scaleId);
   float h = scaleData.x; float keel = scaleData.y; vec2 localUV = scaleData.zw;
@@ -121,6 +139,7 @@ void main() {
   vec3 crestHighlight = silverHighlight * dramaticCrest * (0.35 + 0.95 * h + anisoSpec * 0.6) * afterBite;
   vec3 deepVoidBg = vec3(0.012, 0.013, 0.016) + noise(p * 3.5 + u_time * 0.05) * 0.018 * startDim * afterBite;
   vec3 finalColor = mix(deepVoidBg, scaleColor, clamp(scaleVisibility, 0.0, 1.0)); finalColor += crestHighlight * creviceAO;
+  finalColor = mix(finalColor, fangColor, fang * afterBite);
   finalColor += silverHighlight * biteFlash * 1.4;
   finalColor *= mix(0.55, 1.0, smoothstep(1.35, 0.25, length(uv - 0.5)));
   gl_FragColor = vec4(finalColor, 1.0);
