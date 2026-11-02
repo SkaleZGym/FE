@@ -324,7 +324,14 @@
     "devNote": "Local development: a test payment is used instead of the payment window.",
     "finalNote": "Shipping and discounts are recalculated by the server when you order.",
     "shippingRemote": "Includes the remote-area surcharge (Jeju / islands).",
-    "shippingPostal": "Enter your postal code to include any remote-area surcharge."
+    "shippingPostal": "Enter your postal code to include any remote-area surcharge.",
+    "pointsTitle": "Points",
+    "pointsBalance": "Points to use (you have {amount})",
+    "pointsAll": "Use all",
+    "pointsUsed": "Points",
+    "pointsRule": "Use {min} or more, and pay at least {pay}.",
+    "pointsMin": "You can use {amount} or more.",
+    "pointsMax": "You can use up to {amount} on this order."
   },
   "order": {
     "successTitle": "ORDER COMPLETE",
@@ -371,7 +378,7 @@
     "passwordChanged": "Your password has been changed.",
     "marketing": "Receive event & discount news",
     "withdrawTitle": "Delete account",
-    "withdrawText": "Deleting removes your email, name and other personal data right away. Order and payment records are kept for 5 years in anonymised form as Korean e-commerce law requires. Please wait for any open orders to finish first.",
+    "withdrawText": "Deleting removes your email, name and other personal data, and any remaining points, right away. Order and payment records are kept for 5 years in anonymised form as Korean e-commerce law requires. Please wait for any open orders to finish first.",
     "withdrawPassword": "Current password (leave blank if you only use social login)",
     "withdrawButton": "Delete my account",
     "withdrawConfirm": "Delete your account? This cannot be undone."
@@ -569,5 +576,20 @@
     "text": "We only use cookies that are essential for login and cart. No ads or analytics cookies.",
     "policy": "Cookie policy",
     "accept": "OK"
+  },
+  "points": {
+    "tab": "Points",
+    "balance": "Available points",
+    "rules": "Earn {rate}% of the paid item amount on delivery · use from {min} · pay at least {pay}",
+    "empty": "No point history yet.",
+    "after": "Balance {amount}",
+    "types": {
+      "EARN": "Earned",
+      "USE": "Used",
+      "USE_CANCEL": "Use cancelled",
+      "EARN_CANCEL": "Earned reversed",
+      "ADMIN": "Adjusted",
+      "MIGRATION": "From previous store"
+    }
   }
 }

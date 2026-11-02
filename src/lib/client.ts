@@ -40,7 +40,19 @@ export const loginHref = (locale: Locale, next?: string) =>
 
 // ---------- BE 응답 모양 ----------
 
-export type Me = { id: number; email: string; name: string; role: string; language: string; marketingConsent: boolean };
+export type Me = { id: number; email: string; name: string; role: string; language: string; marketingConsent: boolean; pointBalance: number };
+
+/** 적립금 잔액·규칙·내역 (GET /members/me/points). 금액은 원 */
+export type MyPoints = {
+  balance: number;
+  earnRatePercent: number;
+  minUse: number;
+  minPayment: number;
+  histories: {
+    content: { id: number; type: "EARN" | "USE" | "USE_CANCEL" | "EARN_CANCEL" | "ADMIN" | "MIGRATION"; amount: number; balanceAfter: number; orderNumber: string | null; memo: string | null; createdAt: string }[];
+    totalElements: number;
+  };
+};
 
 export type BeProduct = {
   id: number;
@@ -80,6 +92,8 @@ export type Order = {
   itemsAmount: number;
   discountAmount: number;
   shippingFee: number;
+  pointsUsed: number;
+  pointsEarned: number;
   totalAmount: number;
   couponCode: string | null;
   courier: string | null;

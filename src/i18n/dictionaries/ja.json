@@ -324,7 +324,14 @@
     "devNote": "ローカル開発モード：決済画面の代わりにテスト決済で進みます。",
     "finalNote": "送料・割引は注文時にサーバーで再計算されます。",
     "shippingRemote": "離島などの追加送料を含みます。",
-    "shippingPostal": "郵便番号を入力すると追加送料まで計算されます。"
+    "shippingPostal": "郵便番号を入力すると追加送料まで計算されます。",
+    "pointsTitle": "ポイント",
+    "pointsBalance": "使用するポイント（保有 {amount}）",
+    "pointsAll": "すべて使う",
+    "pointsUsed": "ポイント利用",
+    "pointsRule": "{min}以上から使え、最低{pay}はお支払いが必要です。",
+    "pointsMin": "{amount}以上から使えます。",
+    "pointsMax": "この注文では最大{amount}まで使えます。"
   },
   "order": {
     "successTitle": "ORDER COMPLETE",
@@ -371,7 +378,7 @@
     "passwordChanged": "パスワードを変更しました。",
     "marketing": "イベント・割引のお知らせを受け取る",
     "withdrawTitle": "退会",
-    "withdrawText": "退会するとメール・氏名などの個人情報をすぐに削除します。注文・決済記録は韓国電子商取引法により5年間、本人を特定できない形でのみ保管します。進行中の注文がある場合は完了後に退会してください。",
+    "withdrawText": "退会するとメール・氏名などの個人情報と残りのポイントがすぐに削除されます。注文・決済記録は韓国電子商取引法により5年間、本人を特定できない形でのみ保管します。進行中の注文がある場合は完了後に退会してください。",
     "withdrawPassword": "現在のパスワード（SNSログインのみの場合は空欄）",
     "withdrawButton": "退会する",
     "withdrawConfirm": "本当に退会しますか？元に戻せません。"
@@ -569,5 +576,20 @@
     "text": "このサイトはログイン・カートなど必要なクッキーのみ使用します。広告・分析クッキーは使用しません。",
     "policy": "クッキーポリシー",
     "accept": "OK"
+  },
+  "points": {
+    "tab": "ポイント",
+    "balance": "利用可能なポイント",
+    "rules": "配送完了時に商品お支払い額の{rate}%を付与 · {min}以上から利用 · 最低{pay}はお支払い",
+    "empty": "ポイント履歴はありません。",
+    "after": "残高 {amount}",
+    "types": {
+      "EARN": "獲得",
+      "USE": "使用",
+      "USE_CANCEL": "使用取消",
+      "EARN_CANCEL": "獲得取消",
+      "ADMIN": "管理者調整",
+      "MIGRATION": "旧ストアのポイント"
+    }
   }
 }

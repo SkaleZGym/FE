@@ -324,7 +324,14 @@
     "devNote": "로컬 개발 모드: 실제 결제창 대신 테스트 결제로 진행돼요.",
     "finalNote": "배송비·할인은 주문할 때 서버에서 다시 계산해요.",
     "shippingRemote": "제주·도서산간 추가 배송비가 포함됐어요.",
-    "shippingPostal": "우편번호를 넣으면 추가 배송비까지 계산돼요."
+    "shippingPostal": "우편번호를 넣으면 추가 배송비까지 계산돼요.",
+    "pointsTitle": "적립금",
+    "pointsBalance": "사용할 적립금 (보유 {amount})",
+    "pointsAll": "모두 쓰기",
+    "pointsUsed": "적립금 사용",
+    "pointsRule": "{min} 이상부터 쓸 수 있고, 최소 {pay}은 결제해야 해요.",
+    "pointsMin": "{amount} 이상부터 쓸 수 있어요.",
+    "pointsMax": "이 주문에는 최대 {amount}까지 쓸 수 있어요."
   },
   "order": {
     "successTitle": "ORDER COMPLETE",
@@ -371,7 +378,7 @@
     "passwordChanged": "비밀번호를 바꿨어요.",
     "marketing": "이벤트·할인 소식 받기",
     "withdrawTitle": "회원 탈퇴",
-    "withdrawText": "탈퇴하면 이메일·이름 등 개인정보를 바로 지워요. 주문·결제 기록은 전자상거래법에 따라 5년 동안 누구인지 알 수 없는 상태로만 보관돼요. 진행 중인 주문이 있으면 끝난 뒤에 탈퇴해 주세요.",
+    "withdrawText": "탈퇴하면 이메일·이름 등 개인정보와 남은 적립금이 바로 사라져요. 주문·결제 기록은 전자상거래법에 따라 5년 동안 누구인지 알 수 없는 상태로만 보관돼요. 진행 중인 주문이 있으면 끝난 뒤에 탈퇴해 주세요.",
     "withdrawPassword": "현재 비밀번호 (간편가입만 한 계정은 비워 두세요)",
     "withdrawButton": "탈퇴하기",
     "withdrawConfirm": "정말 탈퇴할까요? 되돌릴 수 없어요."
@@ -569,5 +576,20 @@
     "text": "이 사이트는 로그인·장바구니 등 꼭 필요한 쿠키만 써요. 광고·분석 쿠키는 쓰지 않아요.",
     "policy": "쿠키 정책",
     "accept": "확인"
+  },
+  "points": {
+    "tab": "적립금",
+    "balance": "사용 가능한 적립금",
+    "rules": "배송 완료 시 결제 상품 금액의 {rate}% 적립 · {min} 이상부터 사용 · 최소 {pay}은 결제",
+    "empty": "적립금 내역이 없어요.",
+    "after": "잔액 {amount}",
+    "types": {
+      "EARN": "적립",
+      "USE": "사용",
+      "USE_CANCEL": "사용 취소",
+      "EARN_CANCEL": "적립 회수",
+      "ADMIN": "관리자 조정",
+      "MIGRATION": "이전 쇼핑몰 적립금"
+    }
   }
 }

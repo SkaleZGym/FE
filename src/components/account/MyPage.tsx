@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { localeLabels, locales, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { api, money, type Claim, type Inquiry, type Me, type Order } from "@/lib/client";
+import { api, money, type Claim, type Inquiry, type Me, type MyPoints, type Order } from "@/lib/client";
 import styles from "./account.module.css";
 import { logout, setMe } from "./accountStore";
 import { canClaim, ClaimForm, ClaimList } from "./Claims";
@@ -15,12 +15,13 @@ type Labels = {
   order: Dictionary["order"];
   inquiry: Dictionary["inquiry"];
   claim: Dictionary["claim"];
+  points: Dictionary["points"];
   account: Dictionary["account"];
   common: Dictionary["common"];
 };
 
-type Tab = "orders" | "claims" | "inquiries" | "profile";
-const tabs: Tab[] = ["orders", "claims", "inquiries", "profile"];
+type Tab = "orders" | "claims" | "points" | "inquiries" | "profile";
+const tabs: Tab[] = ["orders", "claims", "points", "inquiries", "profile"];
 
 const dateOf = (iso: string, locale: Locale) => new Date(iso).toLocaleDateString(locale, { year: "numeric", month: "2-digit", day: "2-digit" });
 
@@ -60,7 +61,7 @@ export default function MyPage({ locale, labels }: { locale: Locale; labels: Lab
       <div className={styles.tabs} role="tablist">
         {tabs.map((key) => (
           <button key={key} type="button" role="tab" aria-selected={tab === key} onClick={() => pick(key)}>
-            {key === "claims" ? labels.claim.tab : labels.mypage.tabs[key]}
+            {key === "claims" ? labels.claim.tab : key === "points" ? labels.points.tab : labels.mypage.tabs[key]}
           </button>
         ))}
       </div>
@@ -80,6 +81,7 @@ export default function MyPage({ locale, labels }: { locale: Locale; labels: Lab
       )}
       {tab === "orders" && <LegacyOrders locale={locale} labels={labels} />}
       {tab === "claims" && <ClaimList locale={locale} claims={claims} labels={labels} />}
+      {tab === "points" && <Points locale={locale} labels={labels} />}
       {tab === "inquiries" && <Inquiries locale={locale} labels={labels} orders={orders ?? []} />}
       {tab === "profile" && <Profile locale={locale} labels={labels} me={account.me} />}
     </>
@@ -233,6 +235,61 @@ function LegacyOrders({ locale, labels }: { locale: Locale; labels: Labels }) {
           )}
         </article>
       ))}
+    </section>
+  );
+}
+
+// ---------- 적립금 ----------
+
+function Points({ locale, labels }: { locale: Locale; labels: Labels }) {
+  const [points, setPoints] = useState<MyPoints | null>(null);
+  const [error, setError] = useState("");
+  const text = labels.points;
+
+  useEffect(() => {
+    api<MyPoints>("/members/me/points?size=50", { locale })
+      .then(setPoints)
+      .catch((caught) => setError(errorText(caught, labels.common)));
+  }, [locale, labels.common]);
+
+  if (error) return <p className={styles.error}>{error}</p>;
+  if (!points) return <p className={styles.muted}>{labels.common.loading}</p>;
+  const won = (amount: number) => money(amount, "KRW", locale);
+
+  return (
+    <section className={styles.cards}>
+      <article className={styles.box}>
+        <div className={styles.boxHead}>
+          <span>{text.balance}</span>
+          <b>{won(points.balance)}</b>
+        </div>
+        <div className={styles.boxBody}>
+          <span className={styles.muted}>
+            {fill(text.rules, { rate: String(points.earnRatePercent), min: won(points.minUse), pay: won(points.minPayment) })}
+          </span>
+        </div>
+      </article>
+      {points.histories.content.length === 0 ? (
+        <p className={styles.muted}>{text.empty}</p>
+      ) : (
+        points.histories.content.map((history) => (
+          <article className={styles.box} key={history.id}>
+            <div className={styles.boxHead}>
+              <span>
+                <b>{text.types[history.type]}</b> · {dateOf(history.createdAt, locale)}
+              </span>
+              <b style={{ color: history.amount < 0 ? "var(--ink-muted)" : "var(--ink)" }}>
+                {history.amount > 0 ? "+" : "−"}
+                {won(Math.abs(history.amount))}
+              </b>
+            </div>
+            <div className={styles.boxFoot}>
+              <span className={styles.muted}>{[history.orderNumber, history.memo].filter(Boolean).join(" · ")}</span>
+              <span className={styles.muted}>{fill(text.after, { amount: won(history.balanceAfter) })}</span>
+            </div>
+          </article>
+        ))
+      )}
     </section>
   );
 }

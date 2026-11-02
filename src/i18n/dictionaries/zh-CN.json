@@ -324,7 +324,14 @@
     "devNote": "本地开发模式：使用测试付款代替支付窗口。",
     "finalNote": "运费和优惠将在下单时由服务器重新计算。",
     "shippingRemote": "已包含济州/偏远地区附加运费。",
-    "shippingPostal": "输入邮编后会计算附加运费。"
+    "shippingPostal": "输入邮编后会计算附加运费。",
+    "pointsTitle": "积分",
+    "pointsBalance": "使用积分（持有 {amount}）",
+    "pointsAll": "全部使用",
+    "pointsUsed": "积分抵扣",
+    "pointsRule": "{min}起可用，且至少需支付{pay}。",
+    "pointsMin": "{amount}起可用。",
+    "pointsMax": "本订单最多可用{amount}。"
   },
   "order": {
     "successTitle": "ORDER COMPLETE",
@@ -371,7 +378,7 @@
     "passwordChanged": "密码已修改。",
     "marketing": "接收活动和优惠信息",
     "withdrawTitle": "注销账号",
-    "withdrawText": "注销后将立即删除邮箱、姓名等个人信息。订单与支付记录依据韩国电子商务法以匿名形式保存5年。如有进行中的订单，请在完成后再注销。",
+    "withdrawText": "注销后将立即删除邮箱、姓名等个人信息及剩余积分。订单与支付记录依据韩国电子商务法以匿名形式保存5年。如有进行中的订单，请在完成后再注销。",
     "withdrawPassword": "当前密码（仅使用社交登录的账号请留空）",
     "withdrawButton": "注销账号",
     "withdrawConfirm": "确定注销吗？此操作无法撤销。"
@@ -569,5 +576,20 @@
     "text": "本站仅使用登录、购物车等必要的Cookie，不使用广告或分析Cookie。",
     "policy": "Cookie政策",
     "accept": "确定"
+  },
+  "points": {
+    "tab": "积分",
+    "balance": "可用积分",
+    "rules": "配送完成后按商品实付金额的{rate}%发放 · {min}起可用 · 至少支付{pay}",
+    "empty": "暂无积分记录。",
+    "after": "余额 {amount}",
+    "types": {
+      "EARN": "获得",
+      "USE": "使用",
+      "USE_CANCEL": "取消使用",
+      "EARN_CANCEL": "收回",
+      "ADMIN": "管理员调整",
+      "MIGRATION": "旧商城积分"
+    }
   }
 }

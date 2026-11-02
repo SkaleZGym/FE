@@ -54,6 +54,9 @@ function loadNicePay(): Promise<NicePay> {
 
 const countries = ["KR", "US", "JP", "CN", "TW", "HK", "SG", "CA", "AU", "GB", "DE", "FR"];
 const defaultCountry: Record<Locale, string> = { ko: "KR", en: "US", ja: "JP", "zh-CN": "CN" };
+/** 적립금 규칙 (BE PointService.MIN_USE · MIN_PAYMENT 와 같게) */
+const MIN_USE_POINTS = 1000;
+const MIN_PAYMENT = 1000;
 
 export default function CheckoutView({ locale, labels, cartLabels, common, more }: Props) {
   const account = useMember(locale);
@@ -66,6 +69,8 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
   const [destination, setDestination] = useState({ countryCode: defaultCountry[locale], postalCode: "" });
   const [quote, setQuote] = useState<{ fee: number; remoteArea: string | null } | null>(null);
   const itemsAmount = (coupon ?? cart)?.itemsAmount ?? 0;
+  // 쓸 적립금 (원). 규칙은 BE PointService 와 같다: 원화 주문만, 1,000원 이상, 최소 1,000원은 결제
+  const [pointsInput, setPointsInput] = useState("");
   const postalReady = destination.countryCode !== "KR" || destination.postalCode.replace(/\D/g, "").length >= 5;
   useEffect(() => {
     if (!cart || !postalReady) return;
@@ -88,6 +93,17 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
       if (code) setCoupon(await api<CouponPreview>("/coupons/preview", { method: "POST", body: { code }, locale }).catch(() => null));
     })().catch((caught) => setError(errorText(caught, common)));
   }, [account.status, locale, common]);
+
+  // 결제 금액 계산: 상품 - 할인 + 배송비(우편번호로 미리 계산한 값이 있으면 그것) - 적립금
+  const base = cart ? (coupon ?? { ...cart, discountAmount: 0 }) : null;
+  const activeQuote = postalReady ? quote : null; // 우편번호를 다시 지우면 이전 계산값은 버린다
+  const shippingFee = base ? (activeQuote ? activeQuote.fee : base.shippingFee) : 0;
+  const payable = base ? base.totalAmount - base.shippingFee + shippingFee : 0;
+  const balance = account.me?.pointBalance ?? 0;
+  const pointsAllowed = cart?.currency === "KRW" && balance >= MIN_USE_POINTS;
+  const maxPoints = pointsAllowed ? Math.max(0, Math.min(balance, payable - MIN_PAYMENT)) : 0;
+  const typedPoints = Math.floor(Number(pointsInput.replace(/\D/g, "")) || 0);
+  const pointsToUse = typedPoints >= MIN_USE_POINTS ? Math.min(typedPoints, maxPoints) : 0;
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -112,6 +128,7 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
             address2: text("address2") || null,
           },
           couponCode: coupon?.code ?? null,
+          points: pointsToUse,
         },
       });
     } catch (caught) {
@@ -164,11 +181,8 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
     return error ? <p className={styles.error}>{error}</p> : <p className={styles.muted}>{common.loading}</p>;
   }
 
-  const base = coupon ?? { ...cart, discountAmount: 0 };
-  // 미리 계산한 배송비가 있으면 그걸로 바꿔 보여 준다 (주문 때 서버가 같은 식으로 다시 계산)
-  const activeQuote = postalReady ? quote : null; // 우편번호를 다시 지우면 이전 계산값은 버린다
-  const shippingFee = activeQuote ? activeQuote.fee : base.shippingFee;
-  const amounts = { ...base, shippingFee, totalAmount: base.totalAmount - base.shippingFee + shippingFee };
+  // 주문 때 서버가 같은 식으로 다시 계산한다
+  const amounts = { ...(base ?? cart), discountAmount: base?.discountAmount ?? 0, shippingFee, totalAmount: payable - pointsToUse };
   const show = (amount: number) => money(amount, cart.currency, locale);
   const devMode = !(NICE_CLIENT_ID && NICE_RETURN_URL);
 
@@ -225,6 +239,44 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
           </label>
         </section>
 
+        {cart.currency === "KRW" && (
+          <section className={styles.section}>
+            <h2>{labels.pointsTitle}</h2>
+            <div className={styles.row}>
+              <label className={styles.field}>
+                <span>{fill(labels.pointsBalance, { amount: show(balance) })}</span>
+                <input
+                  className={styles.input}
+                  inputMode="numeric"
+                  placeholder="0"
+                  value={pointsInput}
+                  disabled={!pointsAllowed || maxPoints < MIN_USE_POINTS}
+                  onChange={(event) => setPointsInput(event.target.value.replace(/\D/g, ""))}
+                />
+              </label>
+              <div className={styles.field} style={{ alignSelf: "end" }}>
+                <button
+                  className={styles.button}
+                  data-variant="ghost"
+                  data-size="small"
+                  type="button"
+                  disabled={!pointsAllowed || maxPoints < MIN_USE_POINTS}
+                  onClick={() => setPointsInput(String(maxPoints))}
+                >
+                  {labels.pointsAll}
+                </button>
+              </div>
+            </div>
+            <p className={styles.muted} style={{ fontSize: 12 }}>
+              {typedPoints > 0 && typedPoints < MIN_USE_POINTS
+                ? fill(labels.pointsMin, { amount: show(MIN_USE_POINTS) })
+                : typedPoints > maxPoints
+                  ? fill(labels.pointsMax, { amount: show(maxPoints) })
+                  : fill(labels.pointsRule, { min: show(MIN_USE_POINTS), pay: show(MIN_PAYMENT) })}
+            </p>
+          </section>
+        )}
+
         <section className={styles.section}>
           <h2>{labels.summary}</h2>
           <ul className={styles.lines} style={{ listStyle: "none", margin: 0, padding: 0 }}>
@@ -262,6 +314,12 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
           <div className={styles.muted} style={{ display: "block", fontSize: 12 }}>
             {activeQuote?.remoteArea ? labels.shippingRemote : activeQuote ? null : labels.shippingPostal}
           </div>
+          {pointsToUse > 0 && (
+            <div data-discount="">
+              <dt>{labels.pointsUsed}</dt>
+              <dd>−{show(pointsToUse)}</dd>
+            </div>
+          )}
           <div data-total="">
             <dt>{cartLabels.total}</dt>
             <dd>{show(amounts.totalAmount)}</dd>

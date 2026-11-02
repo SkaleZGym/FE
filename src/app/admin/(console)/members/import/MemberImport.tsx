@@ -7,7 +7,7 @@ import { adminApi, errorMessage, toast } from "../../../_lib/admin";
 import { readSheets } from "../../../_lib/sheet";
 import { FIELDS, guessMapping, isYes, maskEmail, maskName, maskPhone, toIsoKst, type Field } from "./csv";
 
-type Row = { email: string; name: string; phone: string; joinedAt: string | null; marketingConsent: boolean; legacyId: string };
+type Row = { email: string; name: string; phone: string; joinedAt: string | null; marketingConsent: boolean; legacyId: string; points: number };
 type ImportResult = { created: number; skipped: number; failures: { index: number; email: string; reason: string }[] };
 
 const BATCH = 1000;
@@ -63,6 +63,7 @@ export default function MemberImport() {
     joinedAt: toIsoKst(cell(record, "joinedAt")),
     marketingConsent: mapping?.marketing !== undefined && mapping.marketing >= 0 ? isYes(cell(record, "marketing")) : false,
     legacyId: cell(record, "legacyId"),
+    points: Math.max(0, Math.floor(Number(cell(record, "points").replace(/[^\d.]/g, "")) || 0)),
   });
 
   const start = async () => {
@@ -85,6 +86,7 @@ export default function MemberImport() {
               joinedAt: row.joinedAt,
               marketingConsent: row.marketingConsent,
               legacyId: row.legacyId || null,
+              points: row.points,
             })),
           },
         });
@@ -190,6 +192,7 @@ export default function MemberImport() {
                     <th>가입일</th>
                     <th>마케팅</th>
                     <th>회원 번호</th>
+                    <th>적립금</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -201,6 +204,7 @@ export default function MemberImport() {
                       <td className="mono muted">{row.joinedAt ? new Date(row.joinedAt).toLocaleDateString("ko-KR") : "-"}</td>
                       <td>{row.marketingConsent ? <span className="badge green">동의</span> : <span className="muted">-</span>}</td>
                       <td className="mono muted">{row.legacyId || "-"}</td>
+                      <td className="mono">{row.points ? row.points.toLocaleString() : "-"}</td>
                     </tr>
                   ))}
                 </tbody>
