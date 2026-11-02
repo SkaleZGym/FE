@@ -1,4 +1,4 @@
-// 관리자 '가져오기' 공통: CSV·엑셀(.xlsx) 파일을 브라우저에서 표(행 배열)로 읽는다. 파일은 서버로 올리지 않는다.
+// 관리자 '가져오기' 공통: CSV·엑셀(.xlsx, 속이 xlsx 인 .xls 포함) 파일을 브라우저에서 표(행 배열)로 읽는다. 파일은 서버로 올리지 않는다.
 // .xlsx는 XML 파일 묶음(zip)이라, 브라우저 기본 기능(DecompressionStream)으로 풀어서 첫 번째 시트만 읽는다
 import { decodeCsv, parseCsv } from "../(console)/members/import/csv";
 
@@ -9,7 +9,7 @@ export async function readSheets(files: File[]): Promise<Sheet> {
   let headers: string[] = [];
   const rows: string[][] = [];
   for (const file of files) {
-    const table = /\.xlsx$/i.test(file.name) ? await readXlsx(file) : parseCsv(decodeCsv(await file.arrayBuffer()));
+    const table = (await kindOf(file)) === "xlsx" ? await readXlsx(file) : parseCsv(decodeCsv(await file.arrayBuffer()));
     if (table.length === 0) continue;
     const [head, ...body] = table;
     const names = head.map((cell) => cell.trim());
@@ -18,6 +18,19 @@ export async function readSheets(files: File[]): Promise<Sheet> {
     for (const row of body) rows.push(order.map((index) => (index >= 0 ? (row[index] ?? "").trim() : "")));
   }
   return { headers, rows };
+}
+
+/**
+ * 확장자가 아니라 파일 앞부분으로 형식을 본다. 아임웹 고객 내보내기는 이름이 .xls 인데 속은 .xlsx(zip, 'PK'로 시작)다.
+ * 진짜 옛 .xls(이진 형식, D0 CF 11 E0)는 브라우저에서 못 읽어서 엑셀에서 .xlsx 로 다시 저장해 달라고 알린다
+ */
+async function kindOf(file: File): Promise<"xlsx" | "csv"> {
+  const head = new Uint8Array(await file.slice(0, 4).arrayBuffer());
+  if (head[0] === 0x50 && head[1] === 0x4b) return "xlsx";
+  if (head[0] === 0xd0 && head[1] === 0xcf && head[2] === 0x11 && head[3] === 0xe0) {
+    throw new Error(`${file.name}: 예전 엑셀(.xls) 형식이라 읽을 수 없어요. 엑셀에서 '다른 이름으로 저장' → .xlsx 로 저장해서 다시 올려 주세요.`);
+  }
+  return "csv";
 }
 
 /** 머리글 이름 후보로 열 번호 짐작 (못 찾으면 -1) */

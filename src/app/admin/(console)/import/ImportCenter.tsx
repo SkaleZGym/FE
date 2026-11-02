@@ -17,7 +17,8 @@ const FIELDS: Record<Kind, FieldDef[]> = {
     { key: "price", label: "판매가", required: true, hints: ["판매가", "판매 가격", "가격", "price"] },
     { key: "listPrice", label: "정가(소비자가)", hints: ["소비자가", "정가", "시중가", "할인 전"] },
     { key: "option", label: "옵션(사이즈)", hints: ["옵션값", "옵션 값", "옵션", "사이즈", "option"] },
-    { key: "stock", label: "재고", hints: ["재고", "재고수량", "수량", "stock"] },
+    // 아임웹은 '재고사용'(Y/N) 열이 앞에 있어서, 실제 수량 열 이름을 먼저 찾는다
+    { key: "stock", label: "재고", hints: ["필수옵션재고수량합계", "현재 재고수량", "재고수량", "재고 수량", "stock", "재고"] },
     { key: "image", label: "대표 이미지", hints: ["대표이미지", "대표 이미지", "이미지", "image"] },
     { key: "description", label: "설명", hints: ["간단설명", "요약", "설명", "description"] },
     { key: "category", label: "카테고리", hints: ["카테고리", "분류", "category"] },
@@ -33,12 +34,13 @@ const FIELDS: Record<Kind, FieldDef[]> = {
     { key: "total", label: "결제 금액", hints: ["총 결제금액", "총결제금액", "실결제금액", "결제금액", "결제 금액", "주문금액"] },
   ],
   reviews: [
-    { key: "product", label: "상품 (이름 또는 번호)", required: true, hints: ["상품명", "상품번호", "상품", "product"] },
+    // 상품번호가 있으면 그걸로 찾는다 (이름은 같은 상품명이 여러 개일 수 있다)
+    { key: "product", label: "상품 (번호 또는 이름)", required: true, hints: ["상품번호", "상품 번호", "상품명", "상품", "product"] },
     { key: "author", label: "작성자", hints: ["작성자", "이름", "닉네임", "글쓴이"] },
-    { key: "email", label: "작성자 이메일", hints: ["이메일", "아이디", "email"] },
+    { key: "email", label: "작성자 이메일", hints: ["주문자 e-mail", "e-mail", "이메일", "email", "아이디"] },
     { key: "rating", label: "별점", required: true, hints: ["평점", "별점", "점수", "rating"] },
     { key: "content", label: "내용", required: true, hints: ["내용", "구매평", "후기", "본문", "content"] },
-    { key: "createdAt", label: "작성일", hints: ["작성일시", "작성일", "등록일", "날짜", "date"] },
+    { key: "createdAt", label: "작성일", hints: ["작성일시", "작성시각", "작성일", "등록일", "날짜", "date"] },
   ],
 };
 
@@ -148,11 +150,16 @@ export default function ImportCenter() {
         category: cell(row, "category"),
         sizes: new Map<string, number>(),
       };
-      // 옵션 한 줄 = 사이즈 하나. 옵션 칸에 'S,M,L'처럼 여러 개가 있으면 각각
+      // 옵션 한 줄 = 사이즈 하나. 아임웹처럼 한 칸에 'S,M,L'이 다 있고 재고는 합계만 있으면, 합계를 사이즈 수로 나눈다
+      // (사이즈마다 합계를 그대로 넣으면 실제보다 많이 팔릴 수 있어서 나눈다. 정확한 사이즈별 재고는 관리자에서 고친다)
       const options = cell(row, "option");
       const stock = Math.max(0, Math.round(toNumber(cell(row, "stock")) ?? 0));
-      const found = options.split(/[,\n]/).map(sizeOf).filter((size): size is string => Boolean(size));
-      for (const size of found.length > 0 ? found : ["FREE"]) group.sizes.set(size, (group.sizes.get(size) ?? 0) + stock);
+      const found = [...new Set(options.split(/[,\n]/).map(sizeOf).filter((size): size is string => Boolean(size)))];
+      const sizes = found.length > 0 ? found : ["FREE"];
+      sizes.forEach((size, index) => {
+        const share = Math.floor(stock / sizes.length) + (index < stock % sizes.length ? 1 : 0);
+        group.sizes.set(size, (group.sizes.get(size) ?? 0) + share);
+      });
       groups.set(key, group);
     }
     const rate = Number(usdRate) || 1400;
@@ -363,7 +370,7 @@ export default function ImportCenter() {
             )}
           </div>
           <div className="card-b">
-            <input type="file" accept=".xlsx,.csv,text/csv" multiple onChange={onFile} disabled={busy} />
+            <input type="file" accept=".xlsx,.xls,.csv,text/csv" multiple onChange={onFile} disabled={busy} />
           </div>
         </div>
 

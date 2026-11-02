@@ -138,7 +138,7 @@ export default function MemberImport() {
             )}
           </div>
           <div className="card-b">
-            <input type="file" accept=".xlsx,.csv,text/csv" multiple onChange={onFile} disabled={busy} />
+            <input type="file" accept=".xlsx,.xls,.csv,text/csv" multiple onChange={onFile} disabled={busy} />
           </div>
         </div>
 
