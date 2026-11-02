@@ -46,7 +46,7 @@ export function parseCsv(text: string): string[][] {
   return rows;
 }
 
-export type Field = "email" | "name" | "phone" | "joinedAt" | "marketing" | "legacyId" | "points";
+export type Field = "email" | "name" | "phone" | "joinedAt" | "marketing" | "legacyId" | "points" | "language";
 
 export const FIELDS: { key: Field; label: string; required?: boolean; hints: string[] }[] = [
   { key: "email", label: "이메일", required: true, hints: ["이메일", "email", "e-mail", "메일"] },
@@ -57,6 +57,8 @@ export const FIELDS: { key: Field; label: string; required?: boolean; hints: str
   { key: "legacyId", label: "아임웹 회원 번호", hints: ["회원번호", "회원 번호", "고유", "member code", "code", "번호", "no"] },
   // 아임웹은 "가입 포인트"·"적립 포인트"·"사용 포인트"·"보유 포인트"가 다 있어서 남은 잔액(보유)만 집는다
   { key: "points", label: "보유 적립금", hints: ["보유 포인트", "보유포인트", "보유 적립금", "보유적립금", "잔여 적립금"] },
+  // 아임웹 첫 열 언어(KR·EN). 영어 사이트 회원은 영어 화면으로 시작하게
+  { key: "language", label: "언어", hints: ["언어", "language", "lang"] },
 ];
 
 /** 머리글 이름으로 어느 열이 무엇인지 미리 짐작한다 (관리자가 바꿀 수 있다) */

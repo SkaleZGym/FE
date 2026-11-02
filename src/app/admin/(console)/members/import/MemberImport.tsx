@@ -7,7 +7,7 @@ import { adminApi, errorMessage, toast } from "../../../_lib/admin";
 import { readSheets } from "../../../_lib/sheet";
 import { FIELDS, guessMapping, isYes, maskEmail, maskName, maskPhone, toIsoKst, type Field } from "./csv";
 
-type Row = { email: string; name: string; phone: string; joinedAt: string | null; marketingConsent: boolean; legacyId: string; points: number };
+type Row = { email: string; name: string; phone: string; joinedAt: string | null; marketingConsent: boolean; legacyId: string; points: number; language: string };
 type ImportResult = { created: number; skipped: number; failures: { index: number; email: string; reason: string }[] };
 
 const BATCH = 1000;
@@ -64,6 +64,7 @@ export default function MemberImport() {
     marketingConsent: mapping?.marketing !== undefined && mapping.marketing >= 0 ? isYes(cell(record, "marketing")) : false,
     legacyId: cell(record, "legacyId"),
     points: Math.max(0, Math.floor(Number(cell(record, "points").replace(/[^\d.]/g, "")) || 0)),
+    language: cell(record, "language"),
   });
 
   const start = async () => {
@@ -87,6 +88,7 @@ export default function MemberImport() {
               marketingConsent: row.marketingConsent,
               legacyId: row.legacyId || null,
               points: row.points,
+              language: row.language || null,
             })),
           },
         });
