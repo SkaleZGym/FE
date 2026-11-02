@@ -193,6 +193,8 @@ export type AdminMember = {
   legacySource: string | null;
   /** false = 옮겨 온 뒤 아직 새 비밀번호를 정하지 않음 */
   passwordSet: boolean;
+  /** 적립금 잔액 (원) */
+  pointBalance: number;
   role: "USER" | "ADMIN";
   status: "ACTIVE" | "SUSPENDED";
   language: string;
