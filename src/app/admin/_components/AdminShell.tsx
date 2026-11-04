@@ -24,6 +24,7 @@ const icons = {
   board: "M4 4h16v16H4zM8 8h8M8 12h8M8 16h5",
   texts: "M4 7V4h16v3M9 20h6M12 4v16",
   import: "M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2",
+  accessLogs: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10ZM9 12l2 2 4-4",
   shop: "M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6",
 };
 
@@ -100,6 +101,10 @@ export default function AdminShell({ children }: { children: ReactNode }) {
         { href: "/admin/board", label: "공지·FAQ", icon: "board" },
         { href: "/admin/texts", label: "사이트 문구", icon: "texts" },
       ],
+    },
+    {
+      title: "SECURITY",
+      items: [{ href: "/admin/access-logs", label: "접속기록", icon: "accessLogs" }],
     },
   ];
   const isCurrent = (href: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));

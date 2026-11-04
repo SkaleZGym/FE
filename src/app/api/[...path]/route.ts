@@ -3,6 +3,8 @@ import {
   ADMIN_COOKIE_PATH,
   ADMIN_TOKEN_COOKIE,
   API_BASE,
+  CLIENT_IP_HEADER,
+  clientIpOf,
   readRefreshCookie,
   REFRESH_COOKIE,
   refreshSession,
@@ -28,6 +30,9 @@ async function forward(request: NextRequest, { params }: { params: Promise<{ pat
     const value = request.headers.get(name);
     if (value) headers.set(name, value);
   }
+  // BE 에는 FE 서버 주소만 보이므로 실제 접속자 주소를 따로 알려 준다 (관리자 접속기록용)
+  const clientIp = clientIpOf(request);
+  if (clientIp) headers.set(CLIENT_IP_HEADER, clientIp);
   const admin = path[0] === "admin";
   const cookieName = admin ? ADMIN_TOKEN_COOKIE : TOKEN_COOKIE;
   let token = request.cookies.get(cookieName)?.value;

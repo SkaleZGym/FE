@@ -183,6 +183,23 @@ export const INQUIRY_CATEGORY: Record<AdminInquiry["category"], string> = {
   ETC: "기타",
 };
 
+/** 관리자 접속기록 한 줄 (BE AdminAccessLogService.Row) */
+export type AdminAccessLog = {
+  id: number;
+  /** 요청한 회원 번호. 로그인 시도처럼 토큰이 없으면 null */
+  memberId: number | null;
+  memberEmail: string | null;
+  method: string;
+  path: string;
+  query: string | null;
+  status: number;
+  /** 서버에 직접 붙은 주소 (FE 서버를 거치면 그 주소) */
+  ip: string;
+  /** FE 서버가 알려 준 실제 접속자 주소 */
+  clientIp: string | null;
+  accessedAt: string;
+};
+
 export type AdminMember = {
   id: number;
   email: string;
