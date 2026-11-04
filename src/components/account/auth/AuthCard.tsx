@@ -5,6 +5,7 @@ import { useState, type FormEvent, type ReactNode } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { ApiError } from "@/lib/client";
+import { safePath } from "@/lib/links";
 import { errorText, safeNext, useSearch } from "../useMember";
 import { login, signup, socialStartHref } from "./authApi";
 import styles from "./auth.module.css";
@@ -83,10 +84,7 @@ export default function AuthCard({ locale, initialMode, image, labels, common }:
   const [mode, setMode] = useState<Mode>(initialMode);
   const search = useSearch();
   const query = new URLSearchParams(search);
-  const next = (() => {
-    const value = query.get("next");
-    return value && value.startsWith("/") && !value.startsWith("//") ? value : `/${locale}`;
-  })();
+  const next = safePath(query.get("next"), `/${locale}`);
   const socialError = query.get("social");
   const auth = labels.auth;
 

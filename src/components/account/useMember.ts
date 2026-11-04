@@ -4,6 +4,7 @@ import { useEffect, useSyncExternalStore } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { ApiError, loginHref } from "@/lib/client";
+import { safePath } from "@/lib/links";
 import { useAccount } from "./accountStore";
 
 /** 회원 전용 화면: 로그인 전이면 로그인 화면으로 보냈다가 이 주소로 돌아온다 */
@@ -19,8 +20,7 @@ export function useMember(locale: Locale) {
 
 /** 로그인 뒤 돌아갈 주소. 다른 사이트로 튕기지 않게 우리 사이트 안 경로만 받는다 */
 export function safeNext(locale: Locale) {
-  const next = new URLSearchParams(window.location.search).get("next");
-  return next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/\\") ? next : `/${locale}`;
+  return safePath(new URLSearchParams(window.location.search).get("next"), `/${locale}`);
 }
 
 /** BE가 언어에 맞춰 준 오류 문구 → 없으면 공통 문구 */

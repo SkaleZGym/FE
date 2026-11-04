@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { API_BASE, setSessionCookies, SOCIAL_SIGNUP_COOKIE, type TokenPayload } from "@/lib/backend";
+import { safePath } from "@/lib/links";
 
 type Pending = { ticket: string; email: string; name: string; provider: string; next: string };
 
@@ -52,7 +53,7 @@ export async function POST(request: NextRequest) {
     return new NextResponse(response.body, { status: response.status, headers: { "content-type": "application/json" } });
   }
   const token = (await response.json()) as TokenPayload;
-  const result = NextResponse.json({ next: pending.next });
+  const result = NextResponse.json({ next: safePath(pending.next, "/") });
   setSessionCookies(result, token);
   result.cookies.delete(SOCIAL_SIGNUP_COOKIE);
   return result;

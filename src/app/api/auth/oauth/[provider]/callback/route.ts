@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { API_BASE, OAUTH_STATE_COOKIE, setSessionCookies, SITE_URL, SOCIAL_SIGNUP_COOKIE, type TokenPayload } from "@/lib/backend";
+import { safePath } from "@/lib/links";
 
 type Pending = { state: string; provider: string; lang: string; next: string };
 
@@ -47,7 +48,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   if (!ok || !data) return back(data?.code ?? "SOCIAL_LOGIN_FAILED");
 
   if (data.token) {
-    const result = redirect(pending.next);
+    const result = redirect(safePath(pending.next, `/${lang}`));
     setSessionCookies(result, data.token);
     return result;
   }

@@ -2,12 +2,9 @@ import { randomBytes } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 import { hasLocale } from "@/i18n/config";
 import { API_BASE, OAUTH_STATE_COOKIE, SITE_URL } from "@/lib/backend";
+import { safePath } from "@/lib/links";
 
 const PROVIDERS = new Set(["kakao", "naver"]);
-
-/** 돌아갈 곳은 우리 사이트 안 경로만 (다른 사이트로 튕기지 않게) */
-const safePath = (value: string | null, fallback: string) =>
-  value && value.startsWith("/") && !value.startsWith("//") && !value.startsWith("/\\") ? value : fallback;
 
 /**
  * 간편 로그인 시작: 위조 방지 값(state)을 만들어 쿠키에 넣고, 카카오·네이버 로그인 창으로 보낸다.
