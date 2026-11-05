@@ -25,9 +25,24 @@ export const SOCIAL_SIGNUP_COOKIE = "skz_social";
  */
 export const CLIENT_IP_HEADER = "x-client-ip";
 
+/**
+ * FE 서버만 아는 공유 비밀값 (환경변수 BFF_SECRET, BE 와 같은 값). BE 는 이 값이 맞을 때만 x-client-ip 를 믿고
+ * 요청 횟수 제한을 접속자별로 센다. 없으면 BE 는 FE 서버 주소로 세서 손님 전체가 한 사람처럼 묶인다
+ */
+export const BFF_SECRET_HEADER = "x-bff-secret";
+
 /** Vercel 이 넣어 주는 접속자 주소 (x-real-ip, 없으면 x-forwarded-for 의 첫 번째) */
 export function clientIpOf(request: Request) {
   return request.headers.get("x-real-ip") ?? request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? null;
+}
+
+/** BE 로 넘길 접속자 헤더 (실제 주소 + 공유 비밀값) */
+export function clientHeaders(request: Request): Record<string, string> {
+  const headers: Record<string, string> = {};
+  const ip = clientIpOf(request);
+  if (ip) headers[CLIENT_IP_HEADER] = ip;
+  if (process.env.BFF_SECRET) headers[BFF_SECRET_HEADER] = process.env.BFF_SECRET;
+  return headers;
 }
 
 /** 로그인 토큰 쿠키. remember=false 면 브라우저를 닫을 때 지워지는 쿠키 */

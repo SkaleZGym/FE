@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { ADMIN_COOKIE_PATH, ADMIN_TOKEN_COOKIE, API_BASE, CLIENT_IP_HEADER, clientIpOf } from "@/lib/backend";
+import { ADMIN_COOKIE_PATH, ADMIN_TOKEN_COOKIE, API_BASE, clientHeaders } from "@/lib/backend";
 
 /** 관리자 로그인: BE 관리자 로그인으로 토큰을 받아 /api/admin 전용 httpOnly 쿠키에 넣는다 */
 export async function POST(request: NextRequest) {
@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     response = await fetch(`${API_BASE}/api/admin/auth/login`, {
       method: "POST",
-      headers: { "content-type": "application/json", "accept-language": "ko", [CLIENT_IP_HEADER]: clientIpOf(request) ?? "" },
+      headers: { "content-type": "application/json", "accept-language": "ko", ...clientHeaders(request) },
       body: await request.text(),
       cache: "no-store",
     });

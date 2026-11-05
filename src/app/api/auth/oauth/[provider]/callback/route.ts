@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { API_BASE, OAUTH_STATE_COOKIE, setSessionCookies, SITE_URL, SOCIAL_SIGNUP_COOKIE, type TokenPayload } from "@/lib/backend";
+import { API_BASE, clientHeaders, OAUTH_STATE_COOKIE, setSessionCookies, SITE_URL, SOCIAL_SIGNUP_COOKIE, type TokenPayload } from "@/lib/backend";
 import { safePath } from "@/lib/links";
 
 type Pending = { state: string; provider: string; lang: string; next: string };
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const response = await fetch(`${API_BASE}/api/auth/oauth/${provider}/login`, {
       method: "POST",
-      headers: { "content-type": "application/json", "accept-language": lang },
+      headers: { "content-type": "application/json", "accept-language": lang, ...clientHeaders(request) },
       body: JSON.stringify({ code, state, redirectUri: `${SITE_URL}/api/auth/oauth/${provider}/callback` }),
       cache: "no-store",
     });

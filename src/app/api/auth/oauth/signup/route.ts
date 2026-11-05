@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { API_BASE, setSessionCookies, SOCIAL_SIGNUP_COOKIE, type TokenPayload } from "@/lib/backend";
+import { API_BASE, clientHeaders, setSessionCookies, SOCIAL_SIGNUP_COOKIE, type TokenPayload } from "@/lib/backend";
 import { safePath } from "@/lib/links";
 
 type Pending = { ticket: string; email: string; name: string; provider: string; next: string };
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
   try {
     response = await fetch(`${API_BASE}/api/auth/oauth/signup`, {
       method: "POST",
-      headers: { "content-type": "application/json", "accept-language": request.headers.get("accept-language") ?? "ko" },
+      headers: { "content-type": "application/json", "accept-language": request.headers.get("accept-language") ?? "ko", ...clientHeaders(request) },
       body: JSON.stringify({
         ticket: pending.ticket,
         name: body.name,
