@@ -216,6 +216,8 @@ export type AdminMember = {
   status: "ACTIVE" | "SUSPENDED";
   language: string;
   createdAt: string;
+  /** 관리자 2단계 인증(OTP 앱)이 켜져 있는지 */
+  otpEnabled: boolean;
 };
 
 export type ReviewStatus = "VISIBLE" | "HIDDEN";

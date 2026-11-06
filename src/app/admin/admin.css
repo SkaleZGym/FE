@@ -117,6 +117,49 @@ textarea {
   font-size: 12px;
   color: var(--red);
 }
+/* 2단계 인증 (OTP 앱) */
+.login .otp-help,
+.login .otp-steps {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted, #666);
+}
+.login .otp-steps {
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+.login .otp-steps a {
+  color: inherit;
+  text-decoration: underline;
+}
+.login .otp-qr {
+  width: 180px;
+  height: 180px;
+  justify-self: center;
+  border: 1px solid var(--line, #ddd);
+  border-radius: 8px;
+  background: #fff;
+  image-rendering: pixelated;
+}
+.login .otp-key {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--muted, #666);
+}
+.login .otp-key code {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--ink, inherit);
+  word-break: break-all;
+  user-select: all;
+}
+.login .otp-code {
+  font-size: 20px;
+  letter-spacing: 0.3em;
+  text-align: center;
+}
 
 /* ---------- 레이아웃 ---------- */
 .app {

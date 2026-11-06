@@ -49,6 +49,18 @@ export default function MemberManager() {
     }
   };
 
+  /** 다른 관리자의 2단계 인증 초기화 (자기 자신은 BE 가 막는다) */
+  const resetOtp = async (member: AdminMember) => {
+    if (!window.confirm(`${member.email} 관리자의 2단계 인증을 초기화할까요? 다음 로그인 때 OTP 앱을 다시 등록해야 해요.`)) return;
+    try {
+      const updated = await adminApi<AdminMember>(`/members/${member.id}/otp`, { method: "DELETE" });
+      setData((current) => current && { ...current, content: current.content.map((item) => (item.id === updated.id ? updated : item)) });
+      toast("2단계 인증을 초기화했어요.");
+    } catch (caught) {
+      toast(errorMessage(caught), true);
+    }
+  };
+
   return (
     <>
       <Top
@@ -122,7 +134,18 @@ export default function MemberManager() {
                         {money(member.pointBalance, "KRW")}
                       </button>
                     </td>
-                    <td>{member.role === "ADMIN" ? <span className="badge violet">관리자</span> : <span className="muted">회원</span>}</td>
+                    <td>
+                      {member.role === "ADMIN" ? (
+                        <>
+                          <span className="badge violet">관리자</span>
+                          <span className={`badge ${member.otpEnabled ? "green" : "amber"}`} style={{ marginLeft: 4 }} title="관리자 2단계 인증 (OTP 앱)">
+                            {member.otpEnabled ? "OTP 사용" : "OTP 미등록"}
+                          </span>
+                        </>
+                      ) : (
+                        <span className="muted">회원</span>
+                      )}
+                    </td>
                     <td>
                       <span className={`badge ${member.status === "ACTIVE" ? "green" : "red"}`}>{member.status === "ACTIVE" ? "정상" : "정지"}</span>
                       {member.legacySource && (
@@ -136,6 +159,11 @@ export default function MemberManager() {
                       {member.role !== "ADMIN" && (
                         <button className={`btn sm${member.status === "ACTIVE" ? " danger" : ""}`} type="button" onClick={() => toggle(member)}>
                           {member.status === "ACTIVE" ? "정지" : "정지 해제"}
+                        </button>
+                      )}
+                      {member.role === "ADMIN" && member.otpEnabled && (
+                        <button className="btn sm" type="button" onClick={() => resetOtp(member)} title="휴대폰 분실·잠김 때. 다음 로그인 때 OTP 앱을 다시 등록해요">
+                          OTP 초기화
                         </button>
                       )}
                     </td>
