@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // AWS Lightsail 서버에서 node server.js 하나로 돌리는 빌드 (.next/standalone). 배포 절차서 09단계
+  output: "standalone",
   cacheComponents: true,
   partialPrefetching: true,
   // 같은 와이파이의 폰·다른 PC에서 개발 서버(http://<이 PC IP>:3002)를 열어 볼 때.

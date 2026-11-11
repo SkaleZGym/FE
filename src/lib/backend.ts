@@ -21,7 +21,7 @@ export const SOCIAL_SIGNUP_COOKIE = "skz_social";
 
 /**
  * 실제 접속자 주소를 BE 에 알려 주는 헤더 (BE 관리자 접속기록 AdminAccessLogFilter 와 같은 이름).
- * BE 는 FE 서버(Vercel)를 거친 요청만 받으므로 그대로 두면 Vercel 주소만 남는다
+ * BE 는 FE 서버(Next.js)를 거친 요청만 받으므로 그대로 두면 FE 서버 주소만 남는다
  */
 export const CLIENT_IP_HEADER = "x-client-ip";
 
@@ -31,7 +31,10 @@ export const CLIENT_IP_HEADER = "x-client-ip";
  */
 export const BFF_SECRET_HEADER = "x-bff-secret";
 
-/** Vercel 이 넣어 주는 접속자 주소 (x-real-ip, 없으면 x-forwarded-for 의 첫 번째) */
+/**
+ * 앞단 프록시가 넣어 주는 접속자 주소 (x-real-ip, 없으면 x-forwarded-for 의 첫 번째).
+ * 서버의 Caddy 가 손님이 보낸 값을 덮어써야 믿을 수 있다 (Caddyfile 의 header_up X-Real-IP {remote_host})
+ */
 export function clientIpOf(request: Request) {
   return request.headers.get("x-real-ip") ?? request.headers.get("x-forwarded-for")?.split(",")[0].trim() ?? null;
 }
