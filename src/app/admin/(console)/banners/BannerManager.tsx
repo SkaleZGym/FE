@@ -79,7 +79,7 @@ export default function BannerManager() {
 
   const save = async () => {
     if (!draft) return;
-    if (!draft.imageUrl) return toast("사진을 올려 주세요.", true);
+    if (!draft.imageUrl) return toast("사진을 올리거나 등록된 상품 사진을 골라 주세요.", true);
     const clean = (value: string) => value.trim() || null;
     const texts = Object.fromEntries(
       LANGS.filter(([code]) => code === "ko" || filled(draft.texts[code])).map(([code]) => [
@@ -235,6 +235,22 @@ export default function BannerManager() {
                     : "PC·모바일 모두 이 사진을 써요. 가로로 긴 사진(16:9 정도)이 잘 맞아요."
                 }
               />
+              {/* 새로 올리지 않고, 이미 등록된 상품의 대표 사진을 그대로 쓴다 */}
+              <div className="photo-from">
+                <small className="muted">또는 등록된 상품 사진 쓰기</small>
+                <ProductPicker
+                  value=""
+                  placeholder="상품을 고르면 그 상품의 대표 사진이 들어가요"
+                  noneLabel={null}
+                  onChange={() => undefined}
+                  onSelectProduct={(product) => {
+                    if (!product) return;
+                    if (!product.imageUrl) return toast("이 상품은 대표 사진이 없어요. 다른 상품을 고르거나 사진을 올려 주세요.", true);
+                    set("imageUrl", product.imageUrl);
+                    toast(`'${product.translations.ko?.name ?? product.sku}' 사진을 넣었어요.`);
+                  }}
+                />
+              </div>
             </div>
 
             <div className="grid2">

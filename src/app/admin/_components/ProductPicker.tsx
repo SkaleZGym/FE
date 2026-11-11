@@ -16,11 +16,14 @@ export default function ProductPicker({
   onChange,
   placeholder = "연결 안 함 (누르면 상품을 골라요)",
   noneLabel = "연결 안 함",
+  onSelectProduct,
 }: {
   value: string;
   onChange: (link: string) => void;
   placeholder?: string;
   noneLabel?: string | null;
+  /** 고른 상품 자체가 필요할 때 (예: 배너 사진을 그 상품 대표 사진으로) */
+  onSelectProduct?: (product: AdminProduct | null) => void;
 }) {
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [open, setOpen] = useState(false);
@@ -61,8 +64,9 @@ export default function ProductPicker({
     [products, word],
   );
 
-  const pick = (link: string) => {
+  const pick = (link: string, product: AdminProduct | null = null) => {
     onChange(link);
+    onSelectProduct?.(product);
     setOpen(false);
     setKeyword("");
   };
@@ -100,7 +104,7 @@ export default function ProductPicker({
               const link = productLink(product);
               return (
                 <li key={product.id}>
-                  <button type="button" role="option" aria-selected={link === value} onClick={() => pick(link)}>
+                  <button type="button" role="option" aria-selected={link === value} onClick={() => pick(link, product)}>
                     <Thumb src={product.imageUrl} />
                     <span>
                       <b>{product.translations.ko?.name ?? product.sku}</b>

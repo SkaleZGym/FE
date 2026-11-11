@@ -68,6 +68,18 @@ function ratingOf(value: string): number | null {
 
 const normalize = (text: string) => text.replace(/\s+/g, "").toLowerCase();
 
+/**
+ * 아임웹 엑셀의 카테고리 칸은 'CATE3,CATE13' 같은 번호뿐이라 이름으로는 못 맞춘다 → 상품명으로 분류.
+ * 위에서부터 먼저 맞는 것 (굿즈 → 레깅스·브라탑 → 타이즈 → 후드). 아무것도 아니면 기본 카테고리
+ */
+const NAME_CATEGORY: [string, RegExp][] = [
+  ["GOODS", /쉐이커|헤어밴드|케이스|키링|스마트톡|아크릴톡|말풍선 톡|패키지|각인/],
+  ["WOMEN_LEGGINGS", /레깅스|브라탑|우먼/],
+  ["MEN_TIGHTS", /타이즈/],
+  ["MEN_HOODIE", /후드/],
+];
+const categoryByName = (name: string) => NAME_CATEGORY.find(([, pattern]) => pattern.test(name))?.[0] ?? null;
+
 export default function ImportCenter() {
   const [kind, setKind] = useState<Kind>("products");
   const [fileLabel, setFileLabel] = useState("");
@@ -164,8 +176,10 @@ export default function ImportCenter() {
     }
     const rate = Number(usdRate) || 1400;
     return [...groups.values()].map((group) => {
+      const byName = categoryByName(group.name);
       const category =
-        categories.find((item) => group.category && (item.code === group.category.toUpperCase() || item.names.ko === group.category))?.code ?? categoryCode;
+        categories.find((item) => group.category && (item.code === group.category.toUpperCase() || item.names.ko === group.category))?.code ??
+        (byName && categories.some((item) => item.code === byName) ? byName : categoryCode);
       const sizes = [...group.sizes.entries()].sort((a, b) => SIZES.indexOf(a[0]) - SIZES.indexOf(b[0]));
       return {
         sku: group.no ? `SKZ-${group.no}` : `IMW-${shortHash(group.name).slice(0, 10)}`,
@@ -290,6 +304,11 @@ export default function ImportCenter() {
 
   /** 상품은 기존 상품 등록 API로 하나씩. 같은 상품 코드가 이미 있으면 건너뛴다 (영어 이름·핏 등 손본 내용을 덮지 않게) */
   const importProducts = async (total: ImportResult) => {
+    // 새 서버처럼 카테고리가 하나도 없으면 상품마다 'Invalid input' 으로 거절되니 미리 막는다
+    if (categories.length === 0) {
+      toast("카테고리가 없어요. 왼쪽 메뉴 '카테고리'에서 먼저 만들어 주세요.", true);
+      return;
+    }
     const existing = new Set(products.map((product) => product.sku));
     for (let i = 0; i < productDrafts.length; i++) {
       const draft = productDrafts[i];
