@@ -322,6 +322,8 @@
     "paying": "Processing payment…",
     "agree": "I have reviewed my order and agree to the payment.",
     "devNote": "Local development: a test payment is used instead of the payment window.",
+    "payClosed": "Payments coming soon",
+    "payClosedNote": "Payments are not open yet. You will be able to order soon.",
     "finalNote": "Shipping and discounts are recalculated by the server when you order.",
     "shippingRemote": "Includes the remote-area surcharge (Jeju / islands).",
     "shippingPostal": "Enter your postal code to include any remote-area surcharge.",

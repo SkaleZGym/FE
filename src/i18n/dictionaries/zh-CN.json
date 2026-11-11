@@ -322,6 +322,8 @@
     "paying": "正在支付…",
     "agree": "我已确认订单内容并同意付款。",
     "devNote": "本地开发模式：使用测试付款代替支付窗口。",
+    "payClosed": "支付准备中",
+    "payClosedNote": "支付功能尚未开放，即将可以下单。",
     "finalNote": "运费和优惠将在下单时由服务器重新计算。",
     "shippingRemote": "已包含济州/偏远地区附加运费。",
     "shippingPostal": "输入邮编后会计算附加运费。",

@@ -22,6 +22,11 @@ type Props = {
 const NICE_CLIENT_ID = process.env.NEXT_PUBLIC_NICEPAY_CLIENT_ID ?? "";
 /** 결제창이 끝나면 돌아올 BE 주소: https://api.skalez.com/api/payments/nice/return */
 const NICE_RETURN_URL = process.env.NEXT_PUBLIC_NICEPAY_RETURN_URL ?? "";
+/**
+ * 서버(운영 빌드)인데 나이스페이 키가 없으면 결제 준비 중 — BE PAYMENT_PROVIDER=none 과 짝.
+ * 주문서까지는 보이되 주문을 만들지 않는다 (결제 못 할 주문이 쌓이지 않게)
+ */
+const PAYMENTS_CLOSED = process.env.NODE_ENV === "production" && !(NICE_CLIENT_ID && NICE_RETURN_URL);
 const NICE_SDK = "https://pay.nicepay.co.kr/v1/js/";
 
 type NicePay = {
@@ -107,7 +112,7 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!cart) return;
+    if (!cart || PAYMENTS_CLOSED) return;
     const form = new FormData(event.currentTarget);
     const text = (key: string) => String(form.get(key) ?? "").trim();
     setBusy(true);
@@ -334,11 +339,11 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
             {error}
           </p>
         )}
-        <button className={styles.button} data-variant="red" type="submit" disabled={busy}>
-          {busy ? labels.paying : fill(labels.pay, { amount: show(amounts.totalAmount) })}
+        <button className={styles.button} data-variant="red" type="submit" disabled={busy || PAYMENTS_CLOSED}>
+          {PAYMENTS_CLOSED ? labels.payClosed : busy ? labels.paying : fill(labels.pay, { amount: show(amounts.totalAmount) })}
         </button>
         <p className={styles.muted}>{labels.finalNote}</p>
-        {devMode && <p className={styles.muted}>{labels.devNote}</p>}
+        {PAYMENTS_CLOSED ? <p className={styles.muted}>{labels.payClosedNote}</p> : devMode && <p className={styles.muted}>{labels.devNote}</p>}
       </aside>
     </form>
   );
