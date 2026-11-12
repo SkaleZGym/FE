@@ -1273,6 +1273,14 @@ th.num {
   gap: 6px;
   margin-left: auto;
 }
+/* 배너 사진: 배경 지우기 · 되돌리기 */
+.cutout-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
 /* 배너 사진: 올리기 아래 '등록된 상품 사진 쓰기' */
 .photo-from {
   display: grid;

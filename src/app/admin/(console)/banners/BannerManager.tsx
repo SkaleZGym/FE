@@ -59,6 +59,9 @@ export default function BannerManager() {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState<Lang>("ko");
   const [busy, setBusy] = useState(false);
+  /** 배경 지우기 전 사진 (되돌리기용) */
+  const [beforeCutout, setBeforeCutout] = useState<string | null>(null);
+  const [cutting, setCutting] = useState(false);
 
   const load = useCallback(() => {
     adminApi<AdminBanner[]>("/banners")
@@ -70,7 +73,31 @@ export default function BannerManager() {
   const edit = (next: Draft) => {
     setDraft(next);
     setLang("ko");
+    setBeforeCutout(null);
     setOpen(true);
+  };
+
+  /** 히어로는 '누끼' 사진이 어울려서, 상품 사진의 단색 배경을 서버에서 지운 투명 PNG 로 바꾼다 (원본은 그대로 남는다) */
+  const removeBackground = async () => {
+    if (!draft?.imageUrl) return;
+    setCutting(true);
+    try {
+      const result = await adminApi<{ url: string; alreadyTransparent: boolean }>("/uploads/remove-background", {
+        method: "POST",
+        body: { imageUrl: draft.imageUrl },
+      });
+      if (result.alreadyTransparent) {
+        toast("이미 배경이 투명한 사진이에요.");
+        return;
+      }
+      setBeforeCutout(draft.imageUrl);
+      set("imageUrl", result.url);
+      toast("배경을 지웠어요. 미리보기가 이상하면 '되돌리기'를 눌러 주세요.");
+    } catch (caught) {
+      toast(errorMessage(caught), true);
+    } finally {
+      setCutting(false);
+    }
   };
   const close = useCallback(() => setOpen(false), []);
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) => setDraft((current) => current && { ...current, [key]: value });
@@ -235,6 +262,19 @@ export default function BannerManager() {
                     : "PC·모바일 모두 이 사진을 써요. 가로로 긴 사진(16:9 정도)이 잘 맞아요."
                 }
               />
+              {draft.imageUrl && (
+                <div className="cutout-row">
+                  <button className="btn sm" type="button" onClick={removeBackground} disabled={cutting}>
+                    {cutting ? "배경 지우는 중…" : "배경 지우기"}
+                  </button>
+                  {beforeCutout && beforeCutout !== draft.imageUrl && (
+                    <button className="btn sm" type="button" onClick={() => (set("imageUrl", beforeCutout), setBeforeCutout(null))}>
+                      되돌리기
+                    </button>
+                  )}
+                  <small className="muted">단색 배경의 상품 사진에 잘 맞아요. 모델 사진은 옷 일부가 지워질 수 있어요.</small>
+                </div>
+              )}
               {/* 새로 올리지 않고, 이미 등록된 상품의 대표 사진을 그대로 쓴다 */}
               <div className="photo-from">
                 <small className="muted">또는 등록된 상품 사진 쓰기</small>
