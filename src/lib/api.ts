@@ -7,7 +7,7 @@ import { API_BASE } from "./backend";
 /**
  * GET 요청 결과를 몇 분간 캐시한다 ('minutes': 1분마다 새로 받아 옴). 관리자에서 고친 내용은 늦어도 몇 분 안에 반영된다.
  * BE가 꺼져 있거나 오류면 null — 화면은 기본 문구로 그린다. 실패도 그 1분 동안만 남고 BE가 켜지면 곧 회복한다.
- * 캐시 함수 안에서 오류를 던지면 배포 빌드(미리 그리기)가 멈추므로 여기서 받아 null로 돌린다 (Vercel 빌드에는 BE가 없다)
+ * 캐시 함수 안에서 오류를 던지면 배포 빌드(미리 그리기)가 멈추므로 여기서 받아 null로 돌린다 (빌드할 때 BE가 꺼져 있거나 재시작 중일 수 있다)
  */
 async function getJson<T>(path: string, locale: Locale): Promise<T | null> {
   "use cache";
