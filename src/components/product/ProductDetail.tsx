@@ -44,7 +44,18 @@ export type DetailLabels = Dictionary["product"] & {
 type Tab = "detail" | "size" | "reviews";
 const fill = (text: string, values: Record<string, string | number>) => text.replace(/\{(\w+)\}/g, (_, key: string) => String(values[key] ?? ""));
 
-export default function ProductDetail({ locale, product, shipping, labels }: { locale: Locale; product: DetailProduct; shipping: Shipping; labels: DetailLabels }) {
+type Props = {
+  locale: Locale;
+  product: DetailProduct;
+  shipping: Shipping;
+  /** 상품정보제공고시 표 (서버에서 만든 항목·값) */
+  legalNotice: { label: string; value: string }[];
+  /** 모델 착용 정보. 관리자 '사이트 문구'에 넣었을 때만 */
+  model: string | null;
+  labels: DetailLabels;
+};
+
+export default function ProductDetail({ locale, product, shipping, legalNotice, model, labels }: Props) {
   const account = useAccount(locale);
   const tabParam = new URLSearchParams(useSearch()).get("tab");
   const [picked, setPicked] = useState<Tab | null>(null);
@@ -176,10 +187,12 @@ export default function ProductDetail({ locale, product, shipping, labels }: { l
                 {shipping.extra && <small>{shipping.extra}</small>}
               </dd>
             </div>
-            <div>
-              <dt>{labels.panel.model}</dt>
-              <dd>{labels.panel.modelValue}</dd>
-            </div>
+            {model && (
+              <div>
+                <dt>{labels.panel.model}</dt>
+                <dd>{model}</dd>
+              </div>
+            )}
           </dl>
 
           <div className={styles.block}>
@@ -281,14 +294,25 @@ export default function ProductDetail({ locale, product, shipping, labels }: { l
                 <dt>{labels.panel.fabric}</dt>
                 <dd>{product.fabric}</dd>
               </div>
-              <div>
-                <dt>{labels.panel.model}</dt>
-                <dd>{labels.panel.modelValue}</dd>
-              </div>
+              {model && (
+                <div>
+                  <dt>{labels.panel.model}</dt>
+                  <dd>{model}</dd>
+                </div>
+              )}
               <div>
                 <dt>{labels.panel.shipping}</dt>
                 <dd>{shipping.text}</dd>
               </div>
+            </dl>
+            <h3 className={styles.noticeTitle}>{labels.noticeTitle}</h3>
+            <dl className={styles.specs}>
+              {legalNotice.map((row) => (
+                <div key={row.label}>
+                  <dt>{row.label}</dt>
+                  <dd>{row.value}</dd>
+                </div>
+              ))}
             </dl>
           </div>
         )}
@@ -305,10 +329,12 @@ export default function ProductDetail({ locale, product, shipping, labels }: { l
                 <dt>{labels.panel.fit}</dt>
                 <dd>{product.fit}</dd>
               </div>
-              <div>
-                <dt>{labels.panel.model}</dt>
-                <dd>{labels.panel.modelValue}</dd>
-              </div>
+              {model && (
+                <div>
+                  <dt>{labels.panel.model}</dt>
+                  <dd>{model}</dd>
+                </div>
+              )}
             </dl>
             <p className={styles.muted}>{labels.sizeNote}</p>
           </div>

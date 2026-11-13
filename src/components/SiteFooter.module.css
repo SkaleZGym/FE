@@ -44,6 +44,12 @@
   }
 }
 
+.bizInfo {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .links {
   display: flex;
   flex-wrap: wrap;

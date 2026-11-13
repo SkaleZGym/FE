@@ -20,6 +20,7 @@ export default async function SiteFooter({ locale, labels }: { locale: Locale; l
     [labels.privacyOfficer, business.ceo],
     [labels.hosting, business.hosting],
   ];
+  const bizInfoUrl = `https://www.ftc.go.kr/bizCommPop.do?wrkr_no=${business.businessNumber.replaceAll("-", "")}`;
 
   return (
     <footer className={styles.footer}>
@@ -31,7 +32,18 @@ export default async function SiteFooter({ locale, labels }: { locale: Locale; l
         {rows.map(([term, value]) => (
           <div key={term}>
             <dt>{term}</dt>
-            <dd>{value}</dd>
+            <dd>
+              {value}
+              {/* 통신판매업자는 공정위 사업자정보 공개 페이지로 연결해야 한다 (전자상거래법 제10조, 공정위 고시) */}
+              {term === labels.businessNumber && (
+                <>
+                  {" "}
+                  <a className={styles.bizInfo} href={bizInfoUrl} target="_blank" rel="noreferrer">
+                    [{labels.bizInfo}]
+                  </a>
+                </>
+              )}
+            </dd>
           </div>
         ))}
       </dl>

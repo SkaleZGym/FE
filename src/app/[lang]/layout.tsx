@@ -5,6 +5,7 @@ import CookieNotice from "@/components/CookieNotice";
 import SitePopup from "@/components/SitePopup";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getBanners } from "@/lib/api";
+import { SITE_URL } from "@/lib/backend";
 import "../globals.css";
 
 // 헤드라인용 영문 장체. 한·중·일 글자는 없어서 아래 본문 폰트로 자동 대체된다.
@@ -20,11 +21,22 @@ export function generateStaticParams() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
+  const locale = await getLocale();
   return {
+    // 공유 미리보기·hreflang 주소를 절대 주소로 만든다 (SITE_URL = 지금 서비스 중인 주소)
+    metadataBase: new URL(SITE_URL),
     title: dict.meta.title,
     description: dict.meta.description,
     alternates: {
-      languages: Object.fromEntries(locales.map((locale) => [locale, `/${locale}`])),
+      languages: Object.fromEntries(locales.map((code) => [code, `/${code}`])),
+    },
+    // 카카오톡·인스타 등에 링크를 붙였을 때 보이는 카드. 상품 상세는 상품 사진으로 덮어쓴다
+    openGraph: {
+      type: "website",
+      siteName: "SKALEZ",
+      title: dict.meta.title,
+      description: dict.meta.description,
+      locale: locale.replace("-", "_"),
     },
   };
 }

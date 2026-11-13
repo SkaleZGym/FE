@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import { formatMoney } from "@/data/catalog";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -23,7 +24,8 @@ export default async function ShippingInfo({ locale, labels }: Props) {
   // BE 금액은 최소 단위라 달러는 100으로 나눠 표시한다
   const money = (amount: number) => formatMoney(currency === "USD" ? amount / 100 : amount, currency, locale);
 
-  const stats = [
+  // value 를 여러 개로 주면 ' / ' 사이에서만 줄이 바뀐다 (₩ 와 숫자가 갈라지지 않게)
+  const stats: { label: string; value: string | string[] }[] = [
     { label: labels.base, value: money(policy.baseFee) },
     {
       label: labels.free,
@@ -34,7 +36,7 @@ export default async function ShippingInfo({ locale, labels }: Props) {
   if (policy.jejuExtraFee > 0 || policy.islandExtraFee > 0) {
     stats.push({
       label: labels.remote,
-      value: `+${money(policy.jejuExtraFee)} / +${money(policy.islandExtraFee)}`,
+      value: [`+${money(policy.jejuExtraFee)}`, `+${money(policy.islandExtraFee)}`],
     });
   }
 
@@ -48,7 +50,14 @@ export default async function ShippingInfo({ locale, labels }: Props) {
           <Reveal key={stat.label} delay={index * 80}>
             <div className={styles.stat}>
               <dt>{stat.label}</dt>
-              <dd>{stat.value}</dd>
+              <dd>
+                {(Array.isArray(stat.value) ? stat.value : [stat.value]).map((part, partIndex) => (
+                  <Fragment key={part + partIndex}>
+                    {partIndex > 0 && " / "}
+                    <span className={styles.part}>{part}</span>
+                  </Fragment>
+                ))}
+              </dd>
               {stat.label === labels.remote && <small>{labels.remoteNote}</small>}
             </div>
           </Reveal>

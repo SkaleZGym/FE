@@ -439,6 +439,11 @@
   }
 }
 
+.noticeTitle {
+  margin: 16px 0 0;
+  font-size: 15px;
+}
+
 .specs {
   display: grid;
   margin: 0;
@@ -655,7 +660,8 @@
     grid-template-columns: 52px 1fr 1.3fr;
     gap: 8px;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    background: rgb(0 0 0 / 0.94);
+    /* 반투명이면 테두리만 있는 '장바구니 담기' 버튼 안으로 뒤의 글자가 비친다 → 꽉 채운 검정 */
+    background: #000;
     border-top: 1px solid var(--line);
 
     & button {

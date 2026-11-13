@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageShell from "@/components/account/PageShell";
 import ProductDetail, { type DetailProduct } from "@/components/product/ProductDetail";
-import { currencyFor, formatMoney } from "@/data/catalog";
+import { business, currencyFor, formatMoney } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { getShippingPolicy } from "@/lib/api";
+import { getShippingPolicy, getSiteTexts } from "@/lib/api";
 import { getShopProducts, pageOfProduct } from "@/lib/shop";
 
 // 상품은 관리자가 언제든 추가해서 번호를 미리 알 수 없다 → 요청 때 그린다 (BE 응답은 몇 분 캐시)
@@ -24,7 +24,14 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/product/[i
   return {
     title: `${product.name} | ${dict.meta.title}`,
     description: product.description ?? dict.meta.description,
-    openGraph: { images: [product.image] },
+    // openGraph 는 레이아웃 값을 통째로 덮어쓰므로 사이트 이름까지 다시 적는다
+    openGraph: {
+      type: "website",
+      siteName: "SKALEZ",
+      title: product.name,
+      description: product.description ?? dict.meta.description,
+      images: [product.image],
+    },
   };
 }
 
@@ -77,12 +84,39 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/product
       }
     : { fee: 0, freeThreshold: null, text: dict.panel.shippingValue, extra: null };
 
+  // 상품정보제공고시 (전자상거래법 고시: 의류 / 굿즈는 기타 재화). 공통 항목은 관리자 '사이트 문구'에서 바꾼다
+  const texts = (await getSiteTexts(locale)) ?? {};
+  const rows = dict.product.noticeRows;
+  const text = (key: string, fallback: string) => texts[`product.notice.${key}`]?.trim() || fallback;
+  const common = [
+    { label: rows.maker, value: text("maker", business.company) },
+    { label: rows.origin, value: text("origin", dict.product.noticeSeeLabel) },
+    { label: rows.warranty, value: text("warranty", dict.product.noticeWarranty) },
+    { label: rows.as, value: text("as", `${business.company} ${business.contact}`) },
+  ];
+  const legalNotice =
+    product.categoryCode === "GOODS"
+      ? [{ label: rows.item, value: product.name }, ...common]
+      : [
+          { label: rows.material, value: detail.fabric },
+          { label: rows.color, value: dict.product.noticeColor },
+          { label: rows.size, value: product.sizes.join(" / ") },
+          ...common.slice(0, 2),
+          { label: rows.care, value: text("care", dict.product.noticeSeeLabel) },
+          { label: rows.madeAt, value: text("madeAt", dict.product.noticeSeeLabel) },
+          ...common.slice(2),
+        ];
+  // 모델 착용 정보: 상품마다 다를 수 있어 관리자가 문구를 넣었을 때만 보인다
+  const model = texts["product.model"]?.trim() || null;
+
   return (
     <PageShell>
       <ProductDetail
         locale={locale}
         product={detail}
         shipping={shipping}
+        legalNotice={legalNotice}
+        model={model}
         labels={{ ...dict.product, panel: dict.panel, common: dict.common, soldOutTag: dict.shelves.soldOut, sale: dict.shelves.sale }}
       />
     </PageShell>

@@ -7,6 +7,14 @@ import { adminApi, dateTime, errorMessage, LANGS, toast, type Lang, type SiteTex
 /** 쇼핑몰 화면이 실제로 읽는 문구 자리. 여기 없는 키도 추가할 수 있지만 화면에 연결해야 보인다 */
 const KNOWN_TEXTS: { key: string; label: string; hint: string }[] = [
   { key: "footer.tagline", label: "푸터 슬로건", hint: "모든 페이지 맨 아래 로고 옆 문구. 비우면 기본값 BUILT FOR LEG DAY." },
+  { key: "product.model", label: "상품 상세: 모델 착용 정보", hint: "예: 모델 178cm / 85kg · XL 착용. 비우면 MODEL 줄을 숨겨요 (모든 상품에 똑같이 보여요)." },
+  // 상품정보제공고시 (전자상거래법 필수). 모든 상품 상세의 '상세정보' 탭 아래 표에 공통으로 들어간다
+  { key: "product.notice.maker", label: "상품정보고시: 제조자(수입자)", hint: "비우면 상호(스케일즈(SKALEZ))가 보여요. 공장이 따로 있으면 그 이름." },
+  { key: "product.notice.origin", label: "상품정보고시: 제조국", hint: "예: 대한민국. 비우면 '제품 라벨 참조'." },
+  { key: "product.notice.care", label: "상품정보고시: 세탁방법·주의사항", hint: "예: 찬물 단독 손세탁, 건조기·표백제 사용 금지. 비우면 '제품 라벨 참조'." },
+  { key: "product.notice.madeAt", label: "상품정보고시: 제조연월", hint: "예: 2026년 이후 제조 (입고 시기에 따라 다름). 비우면 '제품 라벨 참조'." },
+  { key: "product.notice.warranty", label: "상품정보고시: 품질보증기준", hint: "비우면 '공정거래위원회 고시 소비자분쟁해결기준에 따름'." },
+  { key: "product.notice.as", label: "상품정보고시: A/S 책임자·전화", hint: "비우면 상호 + 대표 전화번호." },
 ];
 
 type Draft = { key: string; isNew: boolean; description: string; values: Record<Lang, string> };

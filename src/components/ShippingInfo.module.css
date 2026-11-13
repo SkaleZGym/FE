@@ -54,6 +54,10 @@
     font-size: clamp(18px, 2vw, 24px);
   }
 
+  & .part {
+    white-space: nowrap;
+  }
+
   & small {
     font-size: 11px;
     line-height: 1.6;

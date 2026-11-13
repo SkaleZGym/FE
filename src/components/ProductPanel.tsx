@@ -45,9 +45,7 @@ export type PanelLabels = {
   unwish: string;
   fit: string;
   fabric: string;
-  model: string;
   shipping: string;
-  modelValue: string;
   shippingValue: string;
 };
 
@@ -262,10 +260,6 @@ export default function ProductPanel({ locale, products, labels }: Props) {
                 <div>
                   <dt>{labels.fabric}</dt>
                   <dd>{product.fabric}</dd>
-                </div>
-                <div>
-                  <dt>{labels.model}</dt>
-                  <dd>{labels.modelValue}</dd>
                 </div>
                 <div>
                   <dt>{labels.shipping}</dt>

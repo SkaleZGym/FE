@@ -66,11 +66,6 @@ function pathAt(t: number): Pt {
 const clamp = (v: number) => Math.min(1, Math.max(0, v));
 const ease = (t: number) => 1 - Math.pow(1 - t, 3);
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-const back = (t: number) => {
-  const c = 1.7;
-  const x = t - 1;
-  return 1 + (c + 1) * x * x * x + c * x * x;
-};
 const bezier = (a: Pt, b: Pt, c: Pt, d: Pt, t: number): Pt => {
   const u = 1 - t;
   const w0 = u * u * u;
