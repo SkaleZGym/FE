@@ -34,6 +34,11 @@ const RATIO = 590 / 3000; // 로고 PNG 가로세로 비율
 const START = 0.14; // 서펜트 장면 1(가는 빛줄기)은 거의 생략하고 비늘 점령부터
 const P0 = 0.4; // 연출 진행도 0~.4(비늘이 덮어 오는 구간)는 건너뛴다. 대표님 피드백: 인트로 스크롤 50% 단축 (2026-10-25)
 const SEEN_KEY = "skz.intro";
+/** 최소 재생 시간(초): 아무리 빨리 굴려도 인트로 전체(진행도 0→1)가 이보다 빨리 지나가지 않는다. 스크롤 길이는 그대로 */
+const MIN_PLAY = 1.6;
+/** 서펜트가 팍 문 직후(s .672, 번쩍이는 순간)의 스크롤 진행도와, 거기서 멈춰 있는 시간(ms) */
+const BITE_P = (0.672 - P0) / (1 - P0);
+const BITE_HOLD = 150;
 /** 서펜트와 로고가 들어오는 경로 (대표님 스케치, 2026-10-30). 화면 비율 좌표(0~1, y는 아래로), 끝은 화면 가운데 */
 const PATH: Pt[] = [
   { x: 0.1, y: 0.2 },
@@ -357,6 +362,8 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
     let snapping = false;
     let snapped = false;
     let navUntil = 0; // 메뉴(#앵커) 클릭으로 이동하는 동안은 히어로 스냅이 끼어들지 않는다
+    let rush = false; // 건너뛰기를 누른 동안은 최소 재생 시간을 지키지 않고 바로 넘긴다
+    let biteUntil = 0; // 무는 순간에 잠깐 멈춰 있는 시각 (ms)
     const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
     const endY = () => intro!.offsetTop + trackPx; // 진행도 1 = 히어로가 다 보이는 자리. 여기서부터 홀드 구간
     const readTarget = () => {
@@ -382,9 +389,12 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       const step = (now: number) => {
         const k = Math.min(1, (now - t0) / dur);
         scrollTo({ top: from + (to - from) * ease(k), behavior: "instant" });
-        if (k < 1) requestAnimationFrame(step);
+        // 빨리 굴려서 연출이 아직 따라오는 중이면, 히어로가 다 나올 때까지만 조금 더 붙잡는다 (길어도 최소 재생 시간 + 0.4초)
+        const catchingUp = !rush && cur < 0.985 && now - t0 < (MIN_PLAY + 0.4) * 1000;
+        if (k < 1 || catchingUp) requestAnimationFrame(step);
         else {
           snapping = false;
+          rush = false;
           removeEventListener("wheel", block);
           removeEventListener("touchmove", block);
         }
@@ -417,13 +427,25 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       if (ts < 0.85) snapped = false; // 위로 되돌아가면 다음에 또 맞춰 준다
       lastTarget = target;
       const prev = cur;
-      cur += (target - cur) * (1 - Math.exp(-dt / 0.12));
+      const visible = inView();
+      let next = cur + (target - cur) * (1 - Math.exp(-dt / 0.12));
+      // 최소 재생 시간: 앞으로 넘어갈 때는 진행 속도에 상한을 둬서, 아무리 빨리 굴려도 연출이 휙 지나가지 않는다.
+      // 천천히 굴리면 상한에 닿지 않아 그대로다. 건너뛰기·메뉴 이동·인트로가 화면 밖일 때는 바로 따라간다
+      if (next > cur && visible && !rush && now > navUntil) {
+        next = Math.min(next, cur + dt / MIN_PLAY);
+        // 무는 순간(번쩍)에 잠깐 멈춰 장면이 눈에 남게 한다. 그 지점에 서 있으려는 게 아니라 지나가는 중일 때만
+        if (cur < BITE_P && next >= BITE_P && target > BITE_P + 0.02) {
+          next = BITE_P;
+          biteUntil = now + BITE_HOLD;
+        } else if (now < biteUntil) next = cur;
+      }
+      cur = next;
       if (Math.abs(target - cur) < 0.0005) cur = target;
       vel += (Math.abs(cur - prev) / Math.max(0.001, dt) - vel) * 0.15;
       pointer.x += (pointer.tx - pointer.x) * 0.08;
       pointer.y += (pointer.ty - pointer.y) * 0.08;
       const { sp, cv } = choreography(cur);
-      const drawing = cv > 0 && !canvas!.hidden && inView() && !document.hidden;
+      const drawing = cv > 0 && !canvas!.hidden && visible && !document.hidden;
       if (drawing) {
         // 프레임이 계속 느리면(26ms 넘는 프레임이 쌓이면) 해상도를 30%씩 더 낮춘다
         if (dt > 0.026) slowFrames += dt > 0.05 ? 3 : 1;
@@ -459,7 +481,10 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       pointer.ty = 1 - e.clientY / innerHeight;
     };
     api.current = {
-      skip: landHero,
+      skip: () => {
+        rush = true;
+        landHero();
+      },
       replay: () => {
         try {
           sessionStorage.removeItem(SEEN_KEY);
