@@ -149,7 +149,7 @@
   aspect-ratio: 3 / 4;
   margin-bottom: 8px;
   overflow: hidden;
-  background: #161616;
+  background: var(--tile);
 
   & img {
     object-fit: cover;

@@ -131,7 +131,7 @@ export default function CategoryBrowser({ locale, items, sizeOrder, labels }: Pr
   };
 
   return (
-    <div className={styles.browser}>
+    <div className={styles.browser} data-zone="light">
       {/* 툴바: [보기 방식 | (모바일) 필터 버튼 … | 정렬] */}
       <div className={styles.toolbar}>
         <div className={styles.toolbarInner}>

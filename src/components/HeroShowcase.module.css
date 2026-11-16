@@ -125,7 +125,7 @@
 
   & s {
     margin-left: 6px;
-    color: #6f6f6f;
+    color: var(--ink-faint);
   }
 }
 

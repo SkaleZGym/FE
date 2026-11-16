@@ -1,4 +1,4 @@
-/* 13번 시안: 세로 제목 + 본색 카드 그리드 (어두운 바탕) */
+/* 13번 시안: 세로 제목 + 상품 카드 그리드. 밝은 구역(data-zone="light")이라 바탕·글자색은 globals.css 의 밝은 값을 받는다 */
 
 .shelf {
   display: grid;
@@ -6,7 +6,6 @@
   gap: clamp(16px, 2.6vw, 36px);
   padding: 84px var(--gutter) 90px;
   color: var(--ink);
-  background: var(--iron);
 
   & + & {
     padding-top: 24px;
@@ -57,7 +56,7 @@
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.16em;
-    border-left: 1px solid rgb(255 255 255 / 0.5);
+    border-left: 1px solid var(--edge);
   }
 }
 
@@ -91,7 +90,7 @@
   display: block;
   aspect-ratio: 3 / 4;
   overflow: hidden;
-  background: #161616;
+  background: var(--tile);
 
   & img {
     object-fit: cover;
@@ -121,7 +120,7 @@
   padding: 3px 6px;
   font-family: var(--font-mono);
   font-size: 9px;
-  color: var(--ink);
+  color: var(--bone);
   background: var(--iron);
 
   &[data-tone="red"] {
@@ -139,7 +138,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.12em;
-  color: var(--ink);
+  color: var(--bone);
   background: rgb(28 30 33 / 0.9);
   transform: translateY(100%);
   transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -197,7 +196,7 @@
   min-height: 160px;
   font-size: 13px;
   color: var(--ink);
-  border: 1px solid rgb(255 255 255 / 0.35);
+  border: 1px solid var(--edge);
   border-radius: 6px;
   transition:
     background 0.3s,
@@ -215,7 +214,7 @@
   }
 
   &:hover {
-    color: #000;
+    color: var(--on-ink);
     background: var(--ink);
 
     & i {
@@ -267,7 +266,7 @@
       margin-bottom: 8px;
       padding: 0 0 3px;
       border-left: 0;
-      border-bottom: 1px solid rgb(255 255 255 / 0.5);
+      border-bottom: 1px solid var(--edge);
     }
   }
 

@@ -3,7 +3,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.08em;
-  color: #6f6f6f;
+  color: var(--ink-faint);
   border-top: 1px solid var(--line);
 }
 

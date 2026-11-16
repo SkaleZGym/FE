@@ -382,7 +382,7 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin-top: 64px;
-  background: #000;
+  background: var(--bg);
   border-bottom: 1px solid var(--line);
   scroll-margin-top: 68px;
 
@@ -543,7 +543,7 @@
     font-size: 14px;
     line-height: 1.6;
     color: var(--ink);
-    background: #000;
+    background: var(--bg);
     border: 1px solid var(--line);
     border-radius: 6px;
     resize: vertical;
@@ -661,7 +661,7 @@
     gap: 8px;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
     /* 반투명이면 테두리만 있는 '장바구니 담기' 버튼 안으로 뒤의 글자가 비친다 → 꽉 채운 검정 */
-    background: #000;
+    background: var(--bg);
     border-top: 1px solid var(--line);
 
     & button {

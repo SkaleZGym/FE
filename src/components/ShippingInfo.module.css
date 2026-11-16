@@ -7,7 +7,7 @@
   align-items: end;
   padding: 80px var(--gutter) 56px;
   color: var(--ink);
-  background: #000;
+  background: var(--bg);
   border-top: 1px solid var(--line);
 }
 

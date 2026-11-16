@@ -67,7 +67,7 @@ export default function ProductShelf({ id, title, flip, ranked, items, moreHref,
   }, []);
 
   return (
-    <section ref={sectionRef} className={styles.shelf} data-flip={flip || undefined} id={id}>
+    <section ref={sectionRef} className={styles.shelf} data-zone="light" data-flip={flip || undefined} id={id}>
       <div className={styles.titleCol}>
         <h2 ref={titleRef}>{title}</h2>
         <a href={moreHref}>{labels.viewAll} →</a>

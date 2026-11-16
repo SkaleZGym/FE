@@ -40,7 +40,7 @@
   position: absolute;
   inset: 0;
   z-index: -2;
-  background: radial-gradient(60% 70% at 72% 50%, #2a2a2a 0%, #0b0b0b 55%, #000 80%);
+  background: radial-gradient(60% 70% at 72% 50%, #34373b 0%, #191b1e 55%, var(--bg) 80%);
 }
 
 .hero::after {
@@ -187,123 +187,19 @@
   filter: blur(4px);
 }
 
+/* 스티커 자리. 생김새(배지·문구 상자)는 components/home/homeDeco.module.css, 문구·색·켜기는 관리자 '메인 꾸미기' */
 .sticker {
   position: absolute;
   z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: 10px;
   right: 6%;
   bottom: 14%;
 }
 
-.face {
-  width: 76px;
-  height: 76px;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 15px;
-  line-height: 1;
-  text-align: center;
-  color: #000;
-  background: var(--red);
-  border-radius: 50%;
-  transform: rotate(-12deg);
-  animation: wob 4s ease-in-out infinite;
-}
-
-@keyframes wob {
-  50% {
-    transform: rotate(8deg) scale(1.05);
-  }
-}
-
-.tag {
-  display: grid;
-  transform: rotate(-4deg);
-
-  & b {
-    padding: 4px 12px;
-    font-family: var(--font-display);
-    font-weight: 400;
-    font-size: 26px;
-    line-height: 1.1;
-  }
-
-  & b:first-child {
-    color: var(--ink);
-    background: #000;
-    border: 2px solid var(--ink);
-  }
-
-  & b:last-child {
-    margin-left: 18px;
-    color: #000;
-    background: var(--ink);
-  }
-}
-
-/* ---------- 2. 테이프 티커 (히어로와 BESTSELLER 사이에 비스듬히 겹친다) ---------- */
+/* ---------- 2. 테이프 티커 (히어로와 BESTSELLER 사이에 비스듬히 겹친다). 생김새는 homeDeco.module.css ---------- */
 
 .tape {
-  position: relative;
   z-index: 5;
-  height: 120px;
   margin: -48px 0 -56px;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.tapeLine {
-  position: absolute;
-  left: -5%;
-  right: -5%;
-  padding: 12px 0;
-  overflow: hidden;
-
-  & p {
-    display: flex;
-    width: max-content;
-    font-family: var(--font-display);
-    font-size: 22px;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
-    animation: marquee 34s linear infinite;
-  }
-
-  & span {
-    padding-right: 40px;
-  }
-}
-
-.t1 {
-  top: 30px;
-  background: var(--red);
-  color: #000;
-  transform: rotate(-2.4deg);
-}
-
-.t2 {
-  top: 44px;
-  z-index: -1;
-  background: var(--ink);
-  color: #000;
-  transform: rotate(1.6deg);
-
-  & p {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.18em;
-    animation-direction: reverse;
-    animation-duration: 44s;
-  }
-}
-
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 /* ---------- 4. SHOP BY (카테고리 타일) ---------- */
@@ -312,7 +208,7 @@
   display: grid;
   grid-template-columns: 1.3fr 1fr 1fr;
   gap: 2px;
-  background: #000;
+  background: var(--bg);
 }
 
 .tile {
@@ -410,7 +306,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, #000 0%, rgb(0 0 0 / 0.6) 30%, transparent 70%);
+    background: linear-gradient(90deg, var(--bg) 0%, rgb(18 19 22 / 0.6) 30%, transparent 70%);
   }
 }
 
@@ -637,7 +533,7 @@
   }
 
   .trendBg::after {
-    background: linear-gradient(0deg, #000 10%, rgb(0 0 0 / 0.4) 60%, rgb(0 0 0 / 0.2));
+    background: linear-gradient(0deg, var(--bg) 10%, rgb(18 19 22 / 0.4) 60%, rgb(18 19 22 / 0.2));
   }
 
   .scrawl {
@@ -661,9 +557,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .tapeLine p,
-  .ring,
-  .face {
+  .ring {
     animation: none;
   }
 }

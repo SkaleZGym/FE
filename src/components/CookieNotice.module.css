@@ -12,7 +12,7 @@
   font-size: 12.5px;
   line-height: 1.5;
   color: var(--ink);
-  background: #141618;
+  background: var(--iron);
   border: 1px solid var(--line);
   border-radius: 10px;
   box-shadow: 0 10px 30px rgb(0 0 0 / 0.5);

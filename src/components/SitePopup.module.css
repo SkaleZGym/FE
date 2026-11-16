@@ -13,7 +13,7 @@
 .popup {
   width: min(420px, 100%);
   overflow: hidden;
-  background: #111;
+  background: var(--iron);
   border: 1px solid var(--line);
   border-radius: 10px;
 }
