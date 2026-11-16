@@ -12,21 +12,13 @@ import SiteHeader from "@/components/SiteHeader";
 import { headerLabels, siteNav } from "@/components/siteNav";
 import { bestsellerIds, heroShowcase, images, productById, shopByTiles, trendImageId } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { getBanners } from "@/lib/api";
+import HeroSticker from "@/components/home/HeroSticker";
+import HeroTape from "@/components/home/HeroTape";
+import { getBanners, getSiteTexts } from "@/lib/api";
+import { defaultHomeDeco, HOME_DECO_KEY, parseHomeDeco } from "@/lib/homeDeco";
 import { localHref } from "@/lib/links";
 import { bySku, getShopProducts, priceText, productsOfPage, type ShopProduct } from "@/lib/shop";
 import styles from "./page.module.css";
-
-/** 테이프 티커: 같은 문장을 두 벌 이어 붙여 절반 지점에서 되감겨도 끊김이 없다 */
-function Tape({ text, repeat }: { text: string; repeat: number }) {
-  return (
-    <p>
-      {Array.from({ length: repeat * 2 }, (_, index) => (
-        <span key={index}>{text}</span>
-      ))}
-    </p>
-  );
-}
 
 /** 신뢰 바 아이콘 (방패 · 트럭 · 상자 · 헤드셋). 사전의 trust.items 순서와 같다 */
 const trustIcons = [
@@ -41,6 +33,8 @@ export default async function HomePage() {
   const dict = await getDictionary();
 
   const products = await getShopProducts(locale);
+  // 히어로 스티커와 아래 띠: 관리자 '메인 꾸미기'에서 켜고 끄고 문구·색을 바꾼다. 저장한 값이 없으면 기본 문구
+  const deco = parseHomeDeco((await getSiteTexts(locale))?.[HOME_DECO_KEY], defaultHomeDeco());
 
   // 히어로 상품 슬라이드: 관리자 '메인 히어로' 배너가 켜져 있으면 그 순서대로, 없으면 기본 상품
   const heroBanners = (await getBanners(locale, "MAIN_HERO")) ?? [];
@@ -163,32 +157,13 @@ export default async function HomePage() {
               <div className={styles.shadow} aria-hidden="true" />
               {/* 상품을 못 받은 경우(BE가 꺼졌거나 배포 빌드 중)엔 슬라이드 없이 그린다 */}
               {showcase.length > 0 && <HeroShowcase items={showcase} labels={{ prev: dict.hero.prev, next: dict.hero.next }} />}
-              <div className={styles.sticker} aria-hidden="true">
-                <div className={styles.face}>
-                  KAIDO
-                  <br />
-                  ×
-                  <br />
-                  SKZ
-                </div>
-                <div className={styles.tag}>
-                  <b>LIMITED</b>
-                  <b>FORGE IT.</b>
-                </div>
-              </div>
+              {deco.sticker.on && <HeroSticker deco={deco.sticker} className={styles.sticker} />}
             </div>
           </section>
         </SerpentIntro>
 
         {/* 2. 테이프 티커 */}
-        <div className={styles.tape} aria-hidden="true">
-          <div className={`${styles.tapeLine} ${styles.t1}`}>
-            <Tape text={dict.tape.line1} repeat={3} />
-          </div>
-          <div className={`${styles.tapeLine} ${styles.t2}`}>
-            <Tape text={dict.tape.line2} repeat={5} />
-          </div>
-        </div>
+        <HeroTape front={deco.front} back={deco.back} className={styles.tape} />
 
         {/* 3. BESTSELLER (13번 시안의 세로 제목 섹션) */}
         <ProductShelf id="best" title={dict.shelves.best.title} ranked items={bestItems} moreHref={`/${locale}/shop/best`} labels={shelfLabels} />

@@ -1,0 +1,131 @@
+/* 히어로 스티커와 히어로 아래 띠. 쇼핑몰 메인과 관리자 '메인 꾸미기' 미리보기가 같이 쓴다.
+   관리자 화면은 색 변수가 달라서, 여기서는 색을 변수에 기대지 않고 직접 적는다 */
+
+.sticker {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.face {
+  width: 76px;
+  height: 76px;
+  flex: none;
+  display: grid;
+  place-content: center;
+  font-family: var(--font-anton), "Impact", var(--font-body, sans-serif);
+  font-size: 15px;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--sticker-ink, #000);
+  background: var(--sticker-bg, #e0261b);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+  animation: wob 4s ease-in-out infinite;
+
+  & span {
+    display: block;
+  }
+}
+
+@keyframes wob {
+  50% {
+    transform: rotate(8deg) scale(1.05);
+  }
+}
+
+.tag {
+  display: grid;
+  justify-items: start;
+  transform: rotate(-4deg);
+
+  & b {
+    padding: 4px 12px;
+    font-family: var(--font-anton), "Impact", var(--font-body, sans-serif);
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 1.1;
+    white-space: nowrap;
+    color: #ededed;
+    background: #000;
+    border: 2px solid #ededed;
+  }
+
+  & b[data-solid] {
+    color: #000;
+    background: #ededed;
+  }
+
+  & b[data-shift] {
+    margin-left: 18px;
+  }
+}
+
+.tape {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.tapeLine {
+  position: absolute;
+  left: -5%;
+  right: -5%;
+  padding: 12px 0;
+  overflow: hidden;
+  color: var(--tape-ink, #000);
+  background: var(--tape-bg, #e0261b);
+  /* 밝은 진열대 위로 걸치는 부분에서도 띠 가장자리가 보이게 옅은 그림자 */
+  box-shadow: 0 8px 22px rgb(0 0 0 / 0.22);
+
+  & p {
+    display: flex;
+    width: max-content;
+    margin: 0;
+    white-space: nowrap;
+    animation: marquee var(--tape-seconds, 34s) linear infinite;
+  }
+
+  & span {
+    padding-right: 40px;
+  }
+}
+
+.front {
+  top: 30px;
+  transform: rotate(-2.4deg);
+
+  & p {
+    font-family: var(--font-anton), "Impact", var(--font-body, sans-serif);
+    font-size: 22px;
+    letter-spacing: 0.04em;
+  }
+}
+
+.back {
+  top: 44px;
+  z-index: -1;
+  transform: rotate(1.6deg);
+
+  & p {
+    font-family: var(--font-jetbrains), var(--font-body, monospace);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    animation-direction: reverse;
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tapeLine p,
+  .face {
+    animation: none;
+  }
+}
