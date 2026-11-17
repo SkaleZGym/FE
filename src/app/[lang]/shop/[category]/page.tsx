@@ -34,6 +34,9 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
   const dict = await getDictionary();
   const page = dict.category.pages[category];
   const products = productsOfPage(await getShopProducts(locale), category);
+  const filled = await getFilledPages(locale);
+  // 상품 없는 카테고리 칩은 숨긴다. 전체와 지금 보는 칸은 늘 보이고, BE 무응답(null)이면 다 보인다
+  const chips = categoryPages.filter((key) => key === "all" || key === category || !filled || filled.has(key));
 
   const items: BrowserItem[] = products.map((product) => ({
     id: product.id,
@@ -67,7 +70,7 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
       <SiteHeader
         locale={locale}
         logo={images.wordmark}
-        nav={siteNav(locale, dict.nav, await getFilledPages(locale))}
+        nav={siteNav(locale, dict.nav, filled)}
         labels={headerLabels(dict.nav)}
       />
 
@@ -76,7 +79,7 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
           <h1>{page.title}</h1>
           <p>{page.sub}</p>
           <nav className={styles.categories} aria-label={dict.nav.shop}>
-            {categoryPages.map((key) => (
+            {chips.map((key) => (
               <a key={key} href={`/${locale}/shop/${key}`} aria-current={key === category ? "page" : undefined}>
                 {dict.category.pages[key].title}
               </a>
