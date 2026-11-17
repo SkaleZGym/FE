@@ -8,7 +8,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { headerLabels, siteNav } from "@/components/siteNav";
 import { categoryPages, images, isCategoryPage, sizeOrder } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
-import { getShopProducts, priceText, productsOfPage } from "@/lib/shop";
+import { getFilledPages, getShopProducts, priceText, productsOfPage } from "@/lib/shop";
 import styles from "./page.module.css";
 
 // 상품 목록은 BE에서 받아 몇 분 캐시한다 (관리자 수정이 곧 반영되게). 요청 때 그린다
@@ -67,7 +67,7 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
       <SiteHeader
         locale={locale}
         logo={images.wordmark}
-        nav={siteNav(locale, dict.nav)}
+        nav={siteNav(locale, dict.nav, await getFilledPages(locale))}
         labels={headerLabels(dict.nav)}
       />
 

@@ -5,6 +5,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { headerLabels, siteNav } from "@/components/siteNav";
 import { images } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
+import { getFilledPages } from "@/lib/shop";
 import styles from "./account.module.css";
 
 /** 회원·장바구니·마이페이지 화면 공통 틀: 헤더 + 가운데 제목 + 본문 + 푸터 */
@@ -26,6 +27,7 @@ export default async function PageShell({
 }) {
   const locale = await getLocale();
   const dict = await getDictionary();
+  const filled = await getFilledPages(locale);
 
   const main = (
     <main className={styles.main} data-narrow={narrow || undefined} data-zone={light ? "light" : undefined}>
@@ -41,7 +43,7 @@ export default async function PageShell({
 
   return (
     <>
-      <SiteHeader locale={locale} logo={images.wordmark} nav={siteNav(locale, dict.nav)} labels={headerLabels(dict.nav)} />
+      <SiteHeader locale={locale} logo={images.wordmark} nav={siteNav(locale, dict.nav, filled)} labels={headerLabels(dict.nav)} />
       {light ? <div className={styles.lightPage}>{main}</div> : main}
       <SiteFooter locale={locale} labels={dict.footer} />
       <QuickMenu locale={locale} labels={dict.quick} />

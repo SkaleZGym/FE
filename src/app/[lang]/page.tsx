@@ -17,7 +17,7 @@ import HeroTape from "@/components/home/HeroTape";
 import { getBanners, getSiteTexts } from "@/lib/api";
 import { defaultHomeDeco, HOME_DECO_KEY, parseHomeDeco } from "@/lib/homeDeco";
 import { localHref } from "@/lib/links";
-import { bySku, getShopProducts, priceText, productsOfPage, type ShopProduct } from "@/lib/shop";
+import { bySku, getFilledPages, getShopProducts, priceText, productsOfPage, type ShopProduct } from "@/lib/shop";
 import styles from "./page.module.css";
 
 /** 신뢰 바 아이콘 (방패 · 트럭 · 상자 · 헤드셋). 사전의 trust.items 순서와 같다 */
@@ -98,7 +98,7 @@ export default async function HomePage() {
     fabric: dict.fabric[product.fabric],
   }));
 
-  const nav = siteNav(locale, dict.nav);
+  const nav = siteNav(locale, dict.nav, await getFilledPages(locale));
 
   return (
     <>

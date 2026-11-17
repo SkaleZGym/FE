@@ -1,6 +1,6 @@
 // 쇼핑몰 화면(서버 컴포넌트)이 쓰는 상품 데이터. BE 상품 API를 화면 모양으로 바꾼다.
 // 관리자에서 고친 가격·재고·품절·새 상품이 몇 분 안에 쇼핑몰에 반영된다 (lib/api.ts 캐시)
-import { currencyFor, formatMoney, type Badge, type CategoryPage, type Currency, type Fabric, type Fit } from "@/data/catalog";
+import { categoryPages, currencyFor, formatMoney, type Badge, type CategoryPage, type Currency, type Fabric, type Fit } from "@/data/catalog";
 import type { Locale } from "@/i18n/config";
 import { getProducts, type ApiProduct } from "./api";
 
@@ -78,6 +78,14 @@ export function productsOfPage(products: ShopProduct[], page: CategoryPage): Sho
     default:
       return products.filter((product) => PAGE_CATEGORIES[page]?.includes(product.categoryCode));
   }
+}
+
+/** 상품이 하나라도 있는 카테고리 페이지 (헤더 메뉴 숨김용). BE가 응답하지 않으면 null → 메뉴를 다 보여 준다 */
+export async function getFilledPages(locale: Locale): Promise<Set<CategoryPage> | null> {
+  const raw = await getProducts(locale);
+  if (!raw) return null;
+  const products = raw.map(toShop);
+  return new Set(categoryPages.filter((page) => productsOfPage(products, page).length > 0));
 }
 
 /** 상품이 속한 카테고리 페이지 (상세 화면의 '목록으로') */
