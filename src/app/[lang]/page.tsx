@@ -98,7 +98,11 @@ export default async function HomePage() {
     fabric: dict.fabric[product.fabric],
   }));
 
-  const nav = siteNav(locale, dict.nav, await getFilledPages(locale));
+  const filled = await getFilledPages(locale);
+  const nav = siteNav(locale, dict.nav, filled);
+  // NEW 상품이 없으면 "Shop the drop" 은 전체 상품으로, 타이즈가 없으면 타이즈 버튼은 숨긴다 (BE 무응답이면 원래대로)
+  const dropHref = !filled || filled.has("new") ? `/${locale}/shop/new` : `/${locale}/shop/all`;
+  const showTights = !filled || filled.has("tights");
 
   return (
     <>
@@ -127,12 +131,14 @@ export default async function HomePage() {
               <p className={styles.heroLead}>{dict.hero.lead}</p>
               {/* data-hero-ctas: 모바일에서 버튼이 화면 아래에 오므로 퀵메뉴가 이걸 보고 위로 비켜선다 */}
               <div className={styles.ctas} data-hero-ctas>
-                <a className={`${styles.btn} ${styles.btnWhite}`} href={`/${locale}/shop/new`}>
+                <a className={`${styles.btn} ${styles.btnWhite}`} href={dropHref}>
                   {dict.hero.shop} <span>→</span>
                 </a>
-                <a className={`${styles.btn} ${styles.btnGhost}`} href={`/${locale}/shop/tights`}>
-                  {dict.hero.tights} <span>→</span>
-                </a>
+                {showTights && (
+                  <a className={`${styles.btn} ${styles.btnGhost}`} href={`/${locale}/shop/tights`}>
+                    {dict.hero.tights} <span>→</span>
+                  </a>
+                )}
               </div>
               <div className={styles.globe} role="img" aria-label={dict.hero.globe}>
                 <svg className={styles.ring} viewBox="0 0 92 92" aria-hidden="true">
