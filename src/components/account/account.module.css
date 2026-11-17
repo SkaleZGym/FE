@@ -9,6 +9,16 @@
   &[data-narrow] {
     width: min(100%, 460px);
   }
+
+  /* 밝은 화면: 바탕은 바깥 .lightPage 가 화면 끝까지 칠한다 (본문 상자는 가운데 1280px 라서) */
+  &[data-zone] {
+    background: none;
+  }
+}
+
+/* 맨 위 68px(고정 헤더 자리)은 어두운 바탕 그대로 → 스크롤 전 투명한 헤더의 흰 글자가 보인다 */
+.lightPage {
+  background: linear-gradient(var(--bg) 68px, var(--bone) 68px);
 }
 
 /* 오른쪽 아래 퀵메뉴(52px)가 본문 오른쪽 끝(가격·버튼)을 가리지 않게, 화면이 좁은 PC에서는 양옆을 넉넉히 */

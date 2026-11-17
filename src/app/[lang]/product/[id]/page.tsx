@@ -110,7 +110,7 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/product
   const model = texts["product.model"]?.trim() || null;
 
   return (
-    <PageShell>
+    <PageShell light>
       <ProductDetail
         locale={locale}
         product={detail}

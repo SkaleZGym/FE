@@ -34,7 +34,7 @@ export default async function SearchPage() {
   }));
 
   return (
-    <PageShell title={dict.search.title}>
+    <PageShell title={dict.search.title} light>
       <SearchView locale={locale} items={items} labels={{ ...dict.search, soldOut: dict.shelves.soldOut, sale: dict.shelves.sale }} />
     </PageShell>
   );

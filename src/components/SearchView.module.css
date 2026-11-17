@@ -25,10 +25,6 @@
     }
   }
 
-  & input::-webkit-search-cancel-button {
-    filter: invert(1);
-  }
-
   & button {
     padding: 0 8px;
     font-family: var(--font-label);
@@ -169,11 +165,11 @@
   font-family: var(--font-mono);
   font-size: 9px;
   letter-spacing: 0.1em;
-  color: #000;
+  color: var(--on-ink);
   background: var(--ink);
 
   &[data-tone="red"] {
-    color: var(--ink);
+    color: #fff;
     background: var(--red);
   }
 }

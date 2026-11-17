@@ -19,6 +19,9 @@
   --edge: rgb(255 255 255 / 0.4); /* 또렷한 테두리 */
   --tint: rgb(255 255 255 / 0.08); /* 눌린·올린 자리 표시 */
   --tile: #23262a; /* 상품 사진 뒤 (사진이 뜨기 전, 배경 없는 사진) */
+  --error: #ffb4ad; /* 오류 문구 */
+  --star: #e7c66b; /* 리뷰 별점 (채운 별) */
+  --star-off: rgb(255 255 255 / 0.35); /* 리뷰 별점 (빈 별) */
   --accent: var(--ink);
 
   --font-display: var(--font-anton), "Impact", var(--font-body);
@@ -75,6 +78,7 @@ body {
    같은 변수 이름에 밝은 바탕용 값을 넣어서, 안쪽 부품은 그대로 두고 색만 뒤집힌다.
    빨강은 밝은 바탕에서 작은 글자도 읽히게 조금 진하게 */
 [data-zone="light"] {
+  --bg: var(--bone); /* 구역 안에서 바탕을 꽉 채우는 자리 (붙는 탭, 휴대폰 아래 구매 막대) */
   --ink: #1c1e21;
   --ink-muted: #5d6166;
   --ink-faint: #686c72;
@@ -84,6 +88,9 @@ body {
   --edge: rgb(28 30 33 / 0.45);
   --tint: rgb(28 30 33 / 0.07);
   --tile: #dddcd6;
+  --error: #b3261e;
+  --star: #b07d0c;
+  --star-off: rgb(28 30 33 / 0.22);
   color: var(--ink);
   background: var(--bone);
 }

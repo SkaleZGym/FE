@@ -15,7 +15,7 @@
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: var(--iron);
+  background: var(--tile);
   border-radius: 6px;
 
   & img {
@@ -35,7 +35,7 @@
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.08em;
-    color: #000;
+    color: var(--on-ink);
     background: var(--ink);
   }
 
@@ -173,7 +173,7 @@
     cursor: pointer;
 
     &[aria-pressed="true"] {
-      color: #000;
+      color: var(--on-ink);
       background: var(--ink);
       border-color: var(--ink);
     }
@@ -369,7 +369,7 @@
   }
 
   &[data-tone="error"] {
-    color: #ffb4ad;
+    color: var(--error);
   }
 }
 
@@ -424,7 +424,7 @@
     margin: 0;
     font-size: 15px;
     line-height: 1.8;
-    color: rgb(255 255 255 / 0.85);
+    color: color-mix(in srgb, var(--ink) 88%, transparent);
   }
 }
 
@@ -515,12 +515,12 @@
 .stars {
   font-size: 13px;
   letter-spacing: 1px;
-  color: #e7c66b;
+  color: var(--star);
   white-space: nowrap;
 
   & i {
     font-style: normal;
-    color: rgb(255 255 255 / 0.35);
+    color: var(--star-off);
   }
 
   &[data-size="large"] {
@@ -532,7 +532,7 @@
   display: grid;
   gap: 12px;
   padding: 20px;
-  background: var(--iron);
+  background: var(--tint);
   border: 1px solid var(--line);
   border-radius: 8px;
 
@@ -557,13 +557,13 @@
   & button {
     padding: 0 2px;
     font-size: 28px;
-    color: rgb(255 255 255 / 0.35);
+    color: var(--star-off);
     background: none;
     border: 0;
     cursor: pointer;
 
     &[data-on] {
-      color: #e7c66b;
+      color: var(--star);
     }
   }
 }
@@ -599,7 +599,7 @@
   font-size: 13px;
   line-height: 1.7;
   white-space: pre-wrap;
-  background: rgb(255 255 255 / 0.05);
+  background: var(--tint);
   border-left: 2px solid var(--red);
 
   & b {
@@ -660,7 +660,7 @@
     grid-template-columns: 52px 1fr 1.3fr;
     gap: 8px;
     padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
-    /* 반투명이면 테두리만 있는 '장바구니 담기' 버튼 안으로 뒤의 글자가 비친다 → 꽉 채운 검정 */
+    /* 반투명이면 테두리만 있는 '장바구니 담기' 버튼 안으로 뒤의 글자가 비친다 → 꽉 채운 바탕색 */
     background: var(--bg);
     border-top: 1px solid var(--line);
 
