@@ -22,7 +22,8 @@ function subscribe(onChange: () => void) {
   return () => observer.disconnect();
 }
 
-function switchTheme() {
+/** 나이트 ↔ 라이트 바꾸기 (비늘 쓸기 효과와 함께). 헤더 토글과 휴대폰 퀵메뉴 버튼이 같이 쓴다 */
+export function switchTheme() {
   const root = document.documentElement;
   const next: Theme = readTheme() === "light" ? "night" : "light";
   try {
@@ -89,9 +90,12 @@ function scaleWipe(width: number, height: number) {
   return { frames, duration: Math.min(1300, Math.max(900, steps * 26)) };
 }
 
+/** 지금 테마 (서버에서 그릴 때는 나이트로 친다). 바뀌면 다시 그린다 */
+export const useTheme = () => useSyncExternalStore(subscribe, readTheme, (): Theme => "night");
+
 /** 나이트 ↔ 라이트 토글. 손잡이 위치와 아이콘은 CSS 가 <html data-theme> 를 보고 정한다 (서버가 그린 화면과 어긋나지 않게) */
 export default function ThemeToggle({ label }: { label: string }) {
-  const theme = useSyncExternalStore(subscribe, readTheme, (): Theme => "night");
+  const theme = useTheme();
 
   // 아직 고른 적이 없는 손님은 기기 설정(다크 모드)을 바꾸면 따라간다
   useEffect(() => {

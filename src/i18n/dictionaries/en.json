@@ -495,7 +495,8 @@
     "cart": "Cart",
     "wish": "Wishlist",
     "chat": "KakaoTalk chat",
-    "top": "Back to top"
+    "top": "Back to top",
+    "theme": "Light mode"
   },
   "intro": {
     "skip": "Skip intro",

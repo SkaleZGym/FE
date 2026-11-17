@@ -72,6 +72,31 @@
   }
 }
 
+/* 나이트·라이트 버튼: 휴대폰에서만 (PC는 헤더에 토글이 있다). 아이콘은 <html data-theme> 로 고른다 */
+.theme {
+  display: none;
+
+  & svg {
+    grid-area: 1 / 1;
+    transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+.moon {
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+:root[data-theme="light"] .sun {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.6);
+}
+
+:root[data-theme="light"] .moon {
+  opacity: 1;
+  transform: none;
+}
+
 @media (max-width: 720px) {
   .item {
     width: 44px;
@@ -80,6 +105,10 @@
 
   .item span {
     display: none;
+  }
+
+  .theme {
+    display: grid;
   }
 }
 

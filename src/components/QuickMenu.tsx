@@ -4,17 +4,19 @@ import { useEffect, useState } from "react";
 import { kakaoChannelUrl } from "@/data/catalog";
 import type { Locale } from "@/i18n/config";
 import styles from "./QuickMenu.module.css";
+import { switchTheme, useTheme } from "./ThemeToggle";
 
 type Props = {
   locale: Locale;
-  labels: { title: string; cart: string; wish: string; chat: string; top: string };
+  labels: { title: string; cart: string; wish: string; chat: string; top: string; theme: string };
   /** 인트로가 끝날 때까지 숨겼다가, 인트로 스크립트가 이 요소에 올리는 --qv/--nav 값에 맞춰 나타난다 */
   introDim?: boolean;
 };
 
-/** 화면 오른쪽 아래에 떠 있는 퀵메뉴. 맨 위로 버튼은 조금 내려왔을 때만 보인다 */
+/** 화면 오른쪽 아래에 떠 있는 퀵메뉴. 맨 위로 버튼은 조금 내려왔을 때만 보인다. 휴대폰에서는 맨 위에 나이트·라이트 버튼 */
 export default function QuickMenu({ locale, labels, introDim = false }: Props) {
   const [showTop, setShowTop] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > window.innerHeight * 0.8);
@@ -25,6 +27,16 @@ export default function QuickMenu({ locale, labels, introDim = false }: Props) {
 
   return (
     <nav className={styles.quick} aria-label={labels.title} data-intro-quick={introDim || undefined}>
+      {/* 휴대폰 전용(헤더에 토글 자리가 없어서). 지금이 나이트면 해, 라이트면 달 — 누르면 그쪽으로 바뀐다는 뜻 */}
+      <button type="button" className={`${styles.item} ${styles.theme}`} role="switch" aria-checked={theme === "light"} aria-label={labels.theme} onClick={switchTheme}>
+        <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.sun}>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" />
+        </svg>
+        <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.moon}>
+          <path d="M20 14.2A8.2 8.2 0 0 1 9.8 4 8.2 8.2 0 1 0 20 14.2Z" />
+        </svg>
+      </button>
       <a href={`/${locale}/cart`} className={styles.item}>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M5 8h14l-1.2 11.2a1 1 0 0 1-1 .8H7.2a1 1 0 0 1-1-.8L5 8Z" />

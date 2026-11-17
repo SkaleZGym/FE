@@ -495,7 +495,8 @@
     "cart": "购物车",
     "wish": "收藏",
     "chat": "KakaoTalk 咨询",
-    "top": "回到顶部"
+    "top": "回到顶部",
+    "theme": "浅色模式"
   },
   "intro": {
     "skip": "跳过片头",
