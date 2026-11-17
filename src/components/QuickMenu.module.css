@@ -49,28 +49,138 @@
 }
 
 .fab {
+  --s: 24px; /* 로고 S 글자 높이 */
   pointer-events: auto;
+  overflow: hidden; /* 이빨이 동그라미 밖으로 안 나가게 */
+  isolation: isolate;
   transition: background 0.25s ease, border-color 0.25s ease;
-
-  & svg {
-    width: 22px;
-    height: 22px;
-    stroke-width: 1.6;
-    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
-  }
 
   &:hover {
     border-color: rgb(236 235 230 / 0.4);
   }
+
+  & .close {
+    grid-area: 1 / 1;
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.8;
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+    transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
 }
 
-/* 펼치면 + 가 돌아 × 가 되고 빨갛게 */
+/* 로고 그림(가로로 긴 SKALEZ)에서 S 만 보이게: 그림 안 S 의 자리(가로 6~16%, 세로 10~86%)를 재서 맞췄다.
+   그림 폭 = S 높이 × 256/38, S 가운데 = 그림 왼쪽에서 S 높이 × 29/38, 위에서 × 24/38 */
+.mark {
+  position: absolute;
+  inset: 0;
+  /* 옆 글자(K)가 S 가운데에서 S 높이의 0.79배 오른쪽에서 시작해서, 그보다 안쪽만 보이게 동그랗게 자른다 */
+  clip-path: circle(calc(var(--s) * 0.66) at 50% 50%);
+  transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  & img {
+    position: absolute;
+    left: calc(50% - var(--s) * 29 / 38);
+    top: calc(50% - var(--s) * 24 / 38);
+    width: calc(var(--s) * 256 / 38);
+    max-width: none;
+    height: auto;
+    filter: invert(1); /* 로고는 검정 → 어두운 동그라미 위에서는 흰색 */
+  }
+}
+
+/* 펼치면 S 대신 × 가 나오고 빨갛게 */
 .quick[data-open] .fab {
   background: var(--red);
   border-color: var(--red);
 
-  & svg {
-    transform: rotate(135deg);
+  & .mark {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+  }
+
+  & .close {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 바이트: 위·아래 이빨이 콱 물었다(번쩍) 벌어진다 (인트로의 BITE 를 작게). 이빨 색은 뼈빛 */
+.jaw {
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  z-index: 2;
+  height: 56%;
+  background: var(--bone);
+  pointer-events: none;
+  /* 아래로 향한 송곳니 4개 */
+  clip-path: polygon(0 0, 100% 0, 100% 52%, 87.5% 100%, 75% 52%, 62.5% 100%, 50% 52%, 37.5% 100%, 25% 52%, 12.5% 100%, 0 52%);
+  transform: translateY(-105%);
+
+  &[data-top] {
+    top: 0;
+  }
+
+  &:not([data-top]) {
+    bottom: 0;
+    /* 위 이빨 사이사이에 맞물리게 반 칸 어긋나게, 위로 향한 송곳니 */
+    clip-path: polygon(0 100%, 100% 100%, 100% 48%, 93.75% 0, 81.25% 48%, 68.75% 0, 56.25% 48%, 43.75% 0, 31.25% 48%, 18.75% 0, 6.25% 48%, 0 0);
+    transform: translateY(105%);
+  }
+}
+
+.fab[data-bite] {
+  animation: bite-flash 0.5s ease-out;
+
+  & .jaw[data-top] {
+    animation: bite-top 0.5s cubic-bezier(0.5, 0, 0.3, 1);
+  }
+
+  & .jaw:not([data-top]) {
+    animation: bite-bottom 0.5s cubic-bezier(0.5, 0, 0.3, 1);
+  }
+}
+
+@keyframes bite-top {
+  0% {
+    transform: translateY(-105%);
+  }
+  38%,
+  52% {
+    transform: translateY(-8%); /* 꽉 맞물린 자리 */
+  }
+  100% {
+    transform: translateY(-105%);
+  }
+}
+
+@keyframes bite-bottom {
+  0% {
+    transform: translateY(105%);
+  }
+  38%,
+  52% {
+    transform: translateY(8%);
+  }
+  100% {
+    transform: translateY(105%);
+  }
+}
+
+/* 무는 순간 동그라미가 살짝 움찔하며 빨갛게 번쩍 */
+@keyframes bite-flash {
+  38% {
+    transform: scale(0.88);
+    box-shadow: 0 0 0 0 rgb(224 38 27 / 0.55);
+  }
+  60% {
+    transform: scale(1.04);
+  }
+  100% {
+    transform: none;
+    box-shadow: 0 0 0 14px rgb(224 38 27 / 0);
   }
 }
 
@@ -152,6 +262,10 @@
     --qm-gap: 8px;
   }
 
+  .fab {
+    --s: 21px;
+  }
+
   .item span {
     display: none;
   }
@@ -176,8 +290,14 @@
 
   .item,
   .quick[data-open] .item,
-  .fab svg {
+  .fab .close,
+  .mark {
     transition: none;
+  }
+
+  .fab[data-bite],
+  .fab[data-bite] .jaw {
+    animation: none;
   }
 }
 

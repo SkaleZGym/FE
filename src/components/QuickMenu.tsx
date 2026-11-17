@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { kakaoChannelUrl } from "@/data/catalog";
+import Image from "next/image";
+import { images, kakaoChannelUrl } from "@/data/catalog";
 import type { Locale } from "@/i18n/config";
+import { signOut, useAccount } from "./account/accountStore";
 import styles from "./QuickMenu.module.css";
 import { switchTheme, useTheme } from "./ThemeToggle";
 
 type Props = {
   locale: Locale;
-  labels: { title: string; cart: string; wish: string; chat: string; top: string; theme: string };
+  labels: { title: string; cart: string; wish: string; chat: string; top: string; theme: string; login: string; logout: string };
   /** 인트로가 끝날 때까지 숨겼다가, 인트로 스크립트가 이 요소에 올리는 --qv/--nav 값에 맞춰 나타난다 */
   introDim?: boolean;
 };
@@ -16,7 +18,7 @@ type Props = {
 type Item = { key: string; label: string; icon: ReactNode; className?: string; href?: string; external?: boolean; onClick?: () => void; switchOn?: boolean };
 
 /**
- * 화면 오른쪽 아래에 떠 있는 퀵메뉴. 평소에는 동그란 버튼 하나이고, 누르면 그 위로 동그란 버튼들이
+ * 화면 오른쪽 아래에 떠 있는 퀵메뉴. 평소에는 로고(S)가 든 동그란 버튼 하나이고, 누르면 이빨이 한 번 콱 물었다 벌어지며(바이트), 누르면 그 위로 동그란 버튼들이
  * 가까운 것부터 차례로 촤라락 올라온다 (다시 누르거나, 바깥을 누르거나, Esc 로 접힌다).
  * 맨 위로 버튼은 조금 내려왔을 때만, 나이트·라이트 버튼은 휴대폰에서만 (PC는 헤더에 토글이 있다)
  */
@@ -24,7 +26,9 @@ export default function QuickMenu({ locale, labels, introDim = false }: Props) {
   const [open, setOpen] = useState(false);
   const [showTop, setShowTop] = useState(false);
   const theme = useTheme();
+  const account = useAccount(locale);
   const navRef = useRef<HTMLElement>(null);
+  const fabRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > window.innerHeight * 0.8);
@@ -50,6 +54,17 @@ export default function QuickMenu({ locale, labels, introDim = false }: Props) {
     };
   }, [open]);
 
+  // 바이트: 누를 때마다 처음부터 다시 (속성을 뗐다가 한 프레임 뒤 다시 붙인다)
+  const toggle = () => {
+    const fab = fabRef.current;
+    if (fab) {
+      fab.removeAttribute("data-bite");
+      void fab.offsetWidth;
+      fab.setAttribute("data-bite", "");
+    }
+    setOpen((value) => !value);
+  };
+
   // 위에서 아래 순서. 펼칠 때는 아래(동그란 버튼에 가까운 것)부터 올라온다
   const items: Item[] = [
     {
@@ -71,6 +86,36 @@ export default function QuickMenu({ locale, labels, introDim = false }: Props) {
         </>
       ),
     },
+    // 로그인했으면 로그아웃, 아니면 로그인 (로그인 여부를 알기 전에는 안 보인다)
+    ...(account.status === "member"
+      ? [
+          {
+            key: "logout",
+            label: labels.logout,
+            onClick: () => void signOut(locale),
+            icon: (
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M14 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4" />
+                <path d="M10 8l-4 4 4 4M6 12h9" />
+              </svg>
+            ),
+          },
+        ]
+      : account.status === "guest"
+        ? [
+            {
+              key: "login",
+              label: labels.login,
+              href: `/${locale}/login`,
+              icon: (
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8.5" r="3.5" />
+                  <path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" />
+                </svg>
+              ),
+            },
+          ]
+        : []),
     {
       key: "cart",
       label: labels.cart,
@@ -166,10 +211,27 @@ export default function QuickMenu({ locale, labels, introDim = false }: Props) {
         })}
       </div>
 
-      <button type="button" className={styles.fab} aria-expanded={open} aria-controls="quick-menu-list" aria-label={labels.title} onClick={() => setOpen((value) => !value)}>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 5v14M5 12h14" />
+      <button
+        ref={fabRef}
+        type="button"
+        className={styles.fab}
+        aria-expanded={open}
+        aria-controls="quick-menu-list"
+        aria-label={labels.title}
+        onClick={toggle}
+        onAnimationEnd={(event) => {
+          if (event.animationName.includes("bite-flash")) event.currentTarget.removeAttribute("data-bite");
+        }}
+      >
+        {/* 로고 그림에서 첫 글자 S 만 보이게 잘라 쓴다 (따로 만든 심볼 파일이 없어서) */}
+        <span className={styles.mark} aria-hidden="true">
+          <Image src={images.wordmark} alt="" width={160} height={31} />
+        </span>
+        <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.close}>
+          <path d="M6 6l12 12M18 6L6 18" />
         </svg>
+        <i className={styles.jaw} data-top="" aria-hidden="true" />
+        <i className={styles.jaw} aria-hidden="true" />
       </button>
     </nav>
   );

@@ -16,7 +16,8 @@
     "login": "登录",
     "my": "MY",
     "search": "搜索",
-    "theme": "浅色模式"
+    "theme": "浅色模式",
+    "logout": "退出登录"
   },
   "hero": {
     "kicker": "[ NEW DROP · 01/26 ]",
@@ -496,7 +497,9 @@
     "wish": "收藏",
     "chat": "KakaoTalk 咨询",
     "top": "回到顶部",
-    "theme": "浅色模式"
+    "theme": "浅色模式",
+    "login": "登录",
+    "logout": "退出登录"
   },
   "intro": {
     "skip": "跳过片头",

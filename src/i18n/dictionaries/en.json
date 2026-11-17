@@ -16,7 +16,8 @@
     "login": "Log in",
     "my": "MY",
     "search": "Search",
-    "theme": "Light mode"
+    "theme": "Light mode",
+    "logout": "Log out"
   },
   "hero": {
     "kicker": "[ NEW DROP · 01/26 ]",
@@ -496,7 +497,9 @@
     "wish": "Wishlist",
     "chat": "KakaoTalk chat",
     "top": "Back to top",
-    "theme": "Light mode"
+    "theme": "Light mode",
+    "login": "Log in",
+    "logout": "Log out"
   },
   "intro": {
     "skip": "Skip intro",

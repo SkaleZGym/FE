@@ -5,7 +5,7 @@ import { localeLabels, locales, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { api, money, type Claim, type Inquiry, type Me, type MyPoints, type Order } from "@/lib/client";
 import styles from "./account.module.css";
-import { logout, setMe } from "./accountStore";
+import { setMe, signOut as signOutTo } from "./accountStore";
 import { canClaim, ClaimForm, ClaimList } from "./Claims";
 import { fill } from "./CartView";
 import { errorText, useMember, useSearch } from "./useMember";
@@ -480,12 +480,7 @@ function Profile({ locale, labels, me }: { locale: Locale; labels: Labels; me: M
     }
   };
 
-  const signOut = async () => {
-    await logout();
-    // 로그인 상태 저장소까지 처음부터 다시 불러오도록 전체 새로고침으로 이동
-    // eslint-disable-next-line @next/next/no-location-assign-relative-destination
-    window.location.assign(`/${locale}`);
-  };
+  const signOut = () => signOutTo(locale);
 
   // 회원 탈퇴(개인정보 삭제 요청): BE 가 개인정보를 바로 지우고 주문 기록만 비식별 상태로 남긴다
   const [withdrawMessage, setWithdrawMessage] = useState<string | null>(null);

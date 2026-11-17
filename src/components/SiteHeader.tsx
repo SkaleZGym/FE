@@ -3,12 +3,12 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
-import { useAccount } from "./account/accountStore";
+import { signOut, useAccount } from "./account/accountStore";
 import LanguageSwitcher from "./LanguageSwitcher";
 import ThemeToggle from "./ThemeToggle";
 import styles from "./SiteHeader.module.css";
 
-export type HeaderLabels = { cart: string; search: string; language: string; menu: string; close: string; login: string; my: string; theme: string };
+export type HeaderLabels = { cart: string; search: string; language: string; menu: string; close: string; login: string; my: string; logout: string; theme: string };
 
 type Props = {
   locale: Locale;
@@ -105,6 +105,11 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
         <a href={accountLink.href} className={styles.drawerAccount} onClick={() => setMenuOpen(false)}>
           {accountLink.label}
         </a>
+        {member && (
+          <button type="button" className={styles.drawerAccount} onClick={() => void signOut(locale)}>
+            {labels.logout}
+          </button>
+        )}
         <p className={styles.drawerTheme}>
           {labels.theme}
           <ThemeToggle label={labels.theme} />

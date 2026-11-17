@@ -29,5 +29,6 @@ export const headerLabels = (nav: Dictionary["nav"]) => ({
   close: nav.close,
   login: nav.login,
   my: nav.my,
+  logout: nav.logout,
   theme: nav.theme,
 });

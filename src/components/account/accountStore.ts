@@ -63,6 +63,13 @@ export async function logout() {
   set({ status: "guest", me: null, cartCount: 0, wishes: new Map() });
 }
 
+/** 로그아웃하고 메인으로 (로그인 상태 저장소까지 처음부터 다시 불러오도록 전체 새로고침). 마이페이지·퀵메뉴·휴대폰 메뉴가 같이 쓴다 */
+export async function signOut(locale: Locale) {
+  await logout();
+  // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+  window.location.assign(`/${locale}`);
+}
+
 const subscribe = (listener: () => void) => {
   listeners.add(listener);
   return () => listeners.delete(listener);

@@ -16,7 +16,8 @@
     "login": "로그인",
     "my": "MY",
     "search": "검색",
-    "theme": "밝은 화면"
+    "theme": "밝은 화면",
+    "logout": "로그아웃"
   },
   "hero": {
     "kicker": "[ NEW DROP · 01/26 ]",
@@ -496,7 +497,9 @@
     "wish": "찜한 상품",
     "chat": "카카오톡 문의",
     "top": "맨 위로",
-    "theme": "밝은 화면"
+    "theme": "밝은 화면",
+    "login": "로그인",
+    "logout": "로그아웃"
   },
   "intro": {
     "skip": "인트로 건너뛰기",
