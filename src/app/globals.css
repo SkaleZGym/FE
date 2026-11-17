@@ -136,9 +136,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------- 테마 바꾸기 효과: 새 색이 위에서 아래로 쓸고 내려온다 (경계는 부드러운 그라데이션) ----------
-   ThemeToggle 이 화면 전환(View Transition) 동안만 <html data-theme-wipe> 를 붙인다.
-   새 화면(new)을 이전 화면(old) 위에 올리고, 세로로 긴 마스크(위 불투명 → 그라데이션 띠 → 아래 투명)를 아래로 밀어 드러낸다.
+/* ---------- 테마 바꾸기 효과: 비늘이 위에서 아래로 한 줄씩 돋아나며 새 색을 드러낸다 (SKALEZ = scales) ----------
+   ThemeToggle 이 화면 전환(View Transition) 동안만 <html data-theme-wipe> 를 붙이고,
+   새 화면(new)을 이전 화면(old) 위에 올린 뒤 비늘 모양 clip-path 를 키프레임으로 넣는다 (components/ThemeToggle 의 scaleWipe).
+   여기서는 기본 전환(서서히 섞임)을 끄고, 비늘이 시작되기 전에는 새 화면을 가려 둔다.
    화면 전환을 모르는 브라우저와 '움직임 줄이기' 설정에서는 효과 없이 바로 바뀐다 */
 :root[data-theme-wipe]::view-transition-old(root),
 :root[data-theme-wipe]::view-transition-new(root) {
@@ -147,22 +148,7 @@ body {
 }
 
 :root[data-theme-wipe]::view-transition-new(root) {
-  /* 마스크 높이 = 화면의 2.7배: 위 1칸은 불투명, 가운데 0.7칸이 그라데이션 띠, 아래 1칸은 투명 */
-  -webkit-mask: linear-gradient(to bottom, #000 0, #000 37.04%, transparent 62.96%) 0 100% / 100% 270% no-repeat;
-  mask: linear-gradient(to bottom, #000 0, #000 37.04%, transparent 62.96%) 0 100% / 100% 270% no-repeat;
-  animation: theme-wipe 0.9s cubic-bezier(0.65, 0, 0.35, 1) both;
-}
-
-@keyframes theme-wipe {
-  from {
-    -webkit-mask-position: 0 100%;
-    mask-position: 0 100%;
-  }
-
-  to {
-    -webkit-mask-position: 0 0;
-    mask-position: 0 0;
-  }
+  clip-path: inset(0 0 100% 0);
 }
 
 a {
