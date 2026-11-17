@@ -175,7 +175,7 @@ export default async function HomePage() {
         <ProductShelf id="best" title={dict.shelves.best.title} ranked items={bestItems} moreHref={`/${locale}/shop/best`} labels={shelfLabels} />
 
         {/* 4. 카테고리 타일 */}
-        <section className={styles.shopBy} id="shopby">
+        <section className={styles.shopBy} id="shopby" data-zone="night">
           {tiles.map((tile, index) => (
             <Reveal key={tile.key} delay={index * 100}>
               <a className={styles.tile} href={`/${locale}/shop/${tile.key}`}>
@@ -194,7 +194,7 @@ export default async function HomePage() {
         </section>
 
         {/* 5. 트렌드 배너 (쇼핑하기) */}
-        <section className={styles.trend} id="trend">
+        <section className={styles.trend} id="trend" data-zone="night">
           <div className={styles.trendBg} aria-hidden="true">
             {/* 관리자 '메인 중간 배너'가 켜져 있으면 그 사진·문구, 없으면 기본 문구 */}
             {subBanner ? (

@@ -45,11 +45,11 @@
 
     &:hover {
       color: var(--ink);
-      border-color: rgb(255 255 255 / 0.4);
+      border-color: color-mix(in srgb, var(--ink) 40%, transparent);
     }
 
     &[aria-current="page"] {
-      color: #000;
+      color: var(--on-ink);
       background: var(--ink);
       border-color: var(--ink);
     }

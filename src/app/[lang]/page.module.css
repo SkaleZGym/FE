@@ -1,4 +1,4 @@
-/* 12번 시안: 검은 바탕 + 빨간 포인트. 히어로는 서펜트 인트로(SerpentIntro) 안에 들어가 비늘이 걷히면 나타난다 */
+/* 12번 시안: 어두운 바탕 + 빨간 포인트 (라이트 테마에서는 밝은 바탕). 색은 globals.css 테마 변수. 히어로는 서펜트 인트로(SerpentIntro) 안에 들어가 비늘이 걷히면 나타난다 */
 
 .kicker {
   font-family: var(--font-mono);
@@ -40,7 +40,7 @@
   position: absolute;
   inset: 0;
   z-index: -2;
-  background: radial-gradient(60% 70% at 72% 50%, #34373b 0%, #191b1e 55%, var(--bg) 80%);
+  background: radial-gradient(60% 70% at 72% 50%, var(--hero-glow-a) 0%, var(--hero-glow-b) 55%, var(--bg) 80%);
 }
 
 .hero::after {
@@ -52,8 +52,8 @@
   height: 26%;
   z-index: -1;
   background:
-    repeating-linear-gradient(90deg, transparent 0 79px, rgb(255 255 255 / 0.04) 79px 80px),
-    linear-gradient(180deg, transparent, rgb(255 255 255 / 0.03));
+    repeating-linear-gradient(90deg, transparent 0 79px, color-mix(in srgb, var(--ink) 4%, transparent) 79px 80px),
+    linear-gradient(180deg, transparent, color-mix(in srgb, var(--ink) 3%, transparent));
   transform: perspective(500px) rotateX(58deg);
   transform-origin: bottom center;
 }
@@ -80,13 +80,13 @@
     display: block;
     width: 100%;
     height: auto;
-    filter: invert(1) drop-shadow(5px 4px 0 var(--red));
+    filter: var(--logo-filter) drop-shadow(5px 4px 0 var(--red));
     transition: filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* 큰 로고가 내려앉는 순간 잠깐 빛난다 (인트로 스크립트가 data-glow를 켠다) */
   &[data-glow] img {
-    filter: invert(1) drop-shadow(5px 4px 0 var(--red)) brightness(1.4) drop-shadow(0 0 22px rgb(237 237 237 / 0.4));
+    filter: var(--logo-filter) drop-shadow(5px 4px 0 var(--red)) var(--logo-glow-lg);
   }
 }
 
@@ -108,7 +108,7 @@
   max-width: 36ch;
   font-size: 14px;
   line-height: 1.8;
-  color: #bdbdbd;
+  color: var(--ink-soft);
 }
 
 .ctas {
@@ -169,7 +169,7 @@
   line-height: 0.82;
   text-align: right;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgb(255 255 255 / 0.16);
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--ink) 16%, transparent);
   transform: rotate(-6deg);
   user-select: none;
   pointer-events: none;
@@ -183,7 +183,7 @@
   height: 26px;
   z-index: 0;
   border-radius: 50%;
-  background: radial-gradient(closest-side, rgb(0 0 0 / 0.9), transparent);
+  background: radial-gradient(closest-side, var(--hero-shadow), transparent);
   filter: blur(4px);
 }
 
@@ -259,7 +259,7 @@
     font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.14em;
-    color: #bdbdbd;
+    color: var(--ink-soft);
   }
 }
 
@@ -268,13 +268,13 @@
   height: 46px;
   display: grid;
   place-items: center;
-  border: 1px solid rgb(255 255 255 / 0.5);
+  border: 1px solid color-mix(in srgb, var(--ink) 50%, transparent);
   border-radius: 50%;
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .tile:hover .go {
-  color: #000;
+  color: var(--on-ink);
   background: var(--ink);
 }
 
@@ -289,6 +289,7 @@
   padding: 60px var(--gutter);
   overflow: hidden;
   isolation: isolate;
+  background: var(--bg); /* 늘 나이트 구역(data-zone)이라 라이트 테마에서도 어두운 바탕 */
 }
 
 .trendBg {
@@ -330,7 +331,7 @@
   font-size: 13px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgb(255 255 255 / 0.8);
+  color: color-mix(in srgb, var(--ink) 80%, transparent);
 }
 
 .trendPrice {
@@ -552,7 +553,7 @@
 
   .trustItem {
     border-right: 0;
-    border-bottom: 1px solid rgb(255 255 255 / 0.1);
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
   }
 }
 

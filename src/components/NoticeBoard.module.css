@@ -4,7 +4,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
   color: var(--ink);
-  background: var(--iron);
+  background: var(--surface);
   border-top: 1px solid var(--line);
 }
 
@@ -151,7 +151,7 @@
     padding: 0 36px 18px 30px;
     font-size: 12.5px;
     line-height: 1.8;
-    color: #bdbdbd;
+    color: var(--ink-soft);
   }
 }
 

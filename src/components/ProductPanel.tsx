@@ -169,6 +169,7 @@ export default function ProductPanel({ locale, products, labels }: Props) {
       <aside
         ref={panelRef}
         className={styles.panel}
+        data-zone="light"
         data-open={open || undefined}
         role="dialog"
         aria-modal="true"

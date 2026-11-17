@@ -13,7 +13,7 @@
 .popup {
   width: min(420px, 100%);
   overflow: hidden;
-  background: var(--iron);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 10px;
 }
@@ -49,7 +49,7 @@
   & span {
     font-size: 12px;
     letter-spacing: 0.08em;
-    color: rgb(255 255 255 / 0.8);
+    color: color-mix(in srgb, var(--ink) 80%, transparent);
   }
 
   & em {

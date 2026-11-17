@@ -118,7 +118,7 @@ export default function AuthCard({ locale, initialMode, image, labels, common }:
       </section>
 
       {/* 데스크톱 슬라이드 패널: 로그인일 땐 오른쪽(가입 쪽)을, 가입일 땐 왼쪽(로그인 쪽)을 덮는다 */}
-      <aside className={styles.overlay}>
+      <aside className={styles.overlay} data-zone="night">
         <Image src={image} alt="" fill sizes="480px" className={styles.overlayImage} />
         <div className={styles.overlayText} data-for="signup" aria-hidden={mode !== "signup"}>
           <b>{auth.welcomeTitle}</b>

@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { useAccount } from "./account/accountStore";
 import LanguageSwitcher from "./LanguageSwitcher";
+import ThemeToggle from "./ThemeToggle";
 import styles from "./SiteHeader.module.css";
 
-export type HeaderLabels = { cart: string; search: string; language: string; menu: string; close: string; login: string; my: string };
+export type HeaderLabels = { cart: string; search: string; language: string; menu: string; close: string; login: string; my: string; theme: string };
 
 type Props = {
   locale: Locale;
@@ -18,7 +19,7 @@ type Props = {
   introDim?: boolean;
 };
 
-/** 히어로 위에서는 투명, 스크롤하면 배경이 생기는 고정 헤더 */
+/** 히어로 위에서는 투명, 스크롤하면 배경이 생기는 고정 헤더. 오른쪽에 나이트·라이트 토글 */
 export default function SiteHeader({ locale, logo, nav, labels, introDim = false }: Props) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -60,6 +61,10 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
         </nav>
 
         <div className={styles.actions}>
+          {/* 휴대폰에서는 자리가 좁아 메뉴(서랍) 안으로 옮긴다 */}
+          <span className={styles.theme}>
+            <ThemeToggle label={labels.theme} />
+          </span>
           <LanguageSwitcher current={locale} label={labels.language} />
           <a href={`/${locale}/search`} className={styles.search}>
             {labels.search}
@@ -100,6 +105,10 @@ export default function SiteHeader({ locale, logo, nav, labels, introDim = false
         <a href={accountLink.href} className={styles.drawerAccount} onClick={() => setMenuOpen(false)}>
           {accountLink.label}
         </a>
+        <p className={styles.drawerTheme}>
+          {labels.theme}
+          <ThemeToggle label={labels.theme} />
+        </p>
       </nav>
     </>
   );

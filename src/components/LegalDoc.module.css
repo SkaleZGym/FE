@@ -45,7 +45,7 @@
 .doc {
   font-size: 14.5px;
   line-height: 1.85;
-  color: rgb(237 237 237 / 0.78);
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
 
   & section {
     padding: 28px 0;
@@ -93,7 +93,7 @@
   padding: 14px 16px;
   font-size: 13px;
   color: var(--ink);
-  background: var(--iron);
+  background: var(--surface);
   border-radius: 6px;
 }
 

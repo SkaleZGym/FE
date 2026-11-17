@@ -89,7 +89,7 @@ export default function SitePopup({ locale, banners, labels }: Props) {
         <img src={banner.imageUrl} alt={banner.headline ?? ""} />
       </picture>
       {(banner.headline || banner.subtext || banner.price) && (
-        <div className={styles.text}>
+        <div className={styles.text} data-zone="night">
           {banner.subtext && <span>{banner.subtext}</span>}
           {banner.headline && <b>{banner.headline}</b>}
           {banner.price && <em>{banner.price}</em>}

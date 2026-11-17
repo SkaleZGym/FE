@@ -281,6 +281,7 @@ export const cookiePolicy: LegalDocument = {
       list: [
         "skz.popup.hidden: '오늘 하루 보지 않기'를 누른 팝업",
         "skz.cookie-notice: 화면 아래 쿠키 안내 띠에서 '확인'을 누른 여부",
+        "skz.theme: 헤더의 토글로 고른 화면 색 (나이트·라이트)",
         "skz_coupon: 장바구니에서 입력한 할인코드 (창을 닫으면 지워짐)",
         "skz.intro · skz.lang-scroll: 첫 화면 인트로를 본 여부, 언어를 바꿀 때 보던 위치 (창을 닫으면 지워짐)",
       ],

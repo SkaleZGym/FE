@@ -19,7 +19,7 @@
   & img {
     width: 150px;
     height: auto;
-    filter: invert(1);
+    filter: var(--logo-filter);
   }
 }
 
@@ -36,7 +36,7 @@
   }
 
   & dt {
-    color: #9a9a9a;
+    color: var(--ink-muted);
   }
 
   & dd {
@@ -58,7 +58,7 @@
   text-transform: uppercase;
 
   & a {
-    color: #9a9a9a;
+    color: var(--ink-muted);
   }
 
   & a:hover {

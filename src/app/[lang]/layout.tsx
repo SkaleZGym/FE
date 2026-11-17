@@ -3,6 +3,7 @@ import { Anton, JetBrains_Mono, Noto_Sans_JP, Noto_Sans_KR, Noto_Sans_SC } from 
 import { locales } from "@/i18n/config";
 import CookieNotice from "@/components/CookieNotice";
 import SitePopup from "@/components/SitePopup";
+import { themeScript } from "@/components/ThemeToggle";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getBanners } from "@/lib/api";
 import { SITE_URL } from "@/lib/backend";
@@ -50,7 +51,12 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const popups = (await getBanners(locale, "POPUP")) ?? [];
 
   return (
-    <html lang={locale} className={fontVariables}>
+    // data-theme 은 아래 머리 스크립트가 화면을 그리기 전에 붙인다 → 서버가 그린 것과 달라도 경고하지 않게
+    <html lang={locale} className={fontVariables} suppressHydrationWarning>
+      <head>
+        {/* 나이트·라이트: 고른 값(없으면 기기 설정)을 첫 화면이 그려지기 전에 정한다 */}
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body>
         {children}
         <SitePopup locale={locale} banners={popups} labels={dict.popup} />

@@ -1,0 +1,76 @@
+/* 나이트 ↔ 라이트 토글: 언어 선택과 같은 알약 테두리 안에서 손잡이가 좌우로 미끄러진다.
+   왼쪽(달) = 나이트, 오른쪽(해) = 라이트. 위치와 아이콘은 <html data-theme> 로 정한다 */
+.toggle {
+  position: relative;
+  flex: none;
+  width: 46px;
+  height: 26px;
+  padding: 0;
+  color: inherit;
+  background: none;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  cursor: pointer;
+
+  /* 손가락으로 누르기 쉽게 누르는 자리만 위아래로 넓힌다 (보이는 크기는 그대로) */
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -10px -4px;
+  }
+}
+
+.knob {
+  position: absolute;
+  left: 3px;
+  top: 3px;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  color: var(--on-ink);
+  background: var(--ink);
+  border-radius: 50%;
+  transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  & svg {
+    grid-area: 1 / 1;
+    width: 12px;
+    height: 12px;
+    transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+.moon {
+  fill: currentColor;
+}
+
+.sun {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.6);
+}
+
+:root[data-theme="light"] .knob {
+  transform: translateX(20px);
+}
+
+:root[data-theme="light"] .moon {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.6);
+}
+
+:root[data-theme="light"] .sun {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knob,
+  .knob svg {
+    transition: none;
+  }
+}

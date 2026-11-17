@@ -12,10 +12,10 @@
   font-size: 12.5px;
   line-height: 1.5;
   color: var(--ink);
-  background: var(--iron);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgb(0 0 0 / 0.5);
+  box-shadow: 0 10px 30px var(--shadow);
 
   & p {
     margin: 0;
@@ -36,14 +36,14 @@
     font-size: 11px;
     letter-spacing: var(--label-tracking);
     text-transform: uppercase;
-    color: #000;
+    color: var(--on-ink);
     background: var(--ink);
     border: 0;
     border-radius: 6px;
     cursor: pointer;
 
     &:hover {
-      background: #fff;
+      background: var(--ink-strong);
     }
   }
 }

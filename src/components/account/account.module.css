@@ -9,16 +9,6 @@
   &[data-narrow] {
     width: min(100%, 460px);
   }
-
-  /* 밝은 화면: 바탕은 바깥 .lightPage 가 화면 끝까지 칠한다 (본문 상자는 가운데 1280px 라서) */
-  &[data-zone] {
-    background: none;
-  }
-}
-
-/* 맨 위 68px(고정 헤더 자리)은 어두운 바탕 그대로 → 스크롤 전 투명한 헤더의 흰 글자가 보인다 */
-.lightPage {
-  background: linear-gradient(var(--bg) 68px, var(--bone) 68px);
 }
 
 /* 오른쪽 아래 퀵메뉴(52px)가 본문 오른쪽 끝(가격·버튼)을 가리지 않게, 화면이 좁은 PC에서는 양옆을 넉넉히 */
@@ -84,18 +74,18 @@
   font: inherit;
   font-size: 14px;
   color: var(--ink);
-  background: var(--iron);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 6px;
   outline: none;
   transition: border-color 0.2s;
 
   &:focus {
-    border-color: rgb(255 255 255 / 0.55);
+    border-color: color-mix(in srgb, var(--ink) 55%, transparent);
   }
 
   &::placeholder {
-    color: rgb(255 255 255 / 0.45);
+    color: color-mix(in srgb, var(--ink) 45%, transparent);
   }
 }
 
@@ -172,7 +162,7 @@ select.input {
   padding: 11px 14px;
   font-size: 13px;
   line-height: 1.5;
-  color: #ffb4ad;
+  color: var(--error);
   background: rgb(224 38 27 / 0.12);
   border: 1px solid rgb(224 38 27 / 0.4);
   border-radius: 6px;
@@ -183,7 +173,7 @@ select.input {
   padding: 11px 14px;
   font-size: 13px;
   color: var(--ink);
-  background: rgb(255 255 255 / 0.06);
+  background: color-mix(in srgb, var(--ink) 6%, transparent);
   border: 1px solid var(--line);
   border-radius: 6px;
 }
@@ -247,7 +237,7 @@ select.input {
   position: relative;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  background: var(--iron);
+  background: var(--surface);
   border-radius: 4px;
 
   & img {
@@ -318,7 +308,7 @@ select.input {
   display: grid;
   gap: 16px;
   padding: 24px;
-  background: var(--iron);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
 
@@ -486,7 +476,7 @@ select.input {
   display: grid;
   gap: 14px;
   padding: 20px 22px;
-  background: var(--iron);
+  background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
 }
@@ -562,7 +552,7 @@ select.input {
   border-radius: 999px;
 
   &[data-tone="done"] {
-    color: #000;
+    color: var(--on-ink);
     background: var(--ink);
     border-color: var(--ink);
   }
@@ -583,7 +573,7 @@ select.input {
   font-size: 13px;
   line-height: 1.7;
   white-space: pre-wrap;
-  background: rgb(255 255 255 / 0.04);
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
   border-left: 2px solid var(--red);
 
   & b {
