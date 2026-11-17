@@ -11,7 +11,7 @@
   top: 0;
   height: 100svh;
   overflow: hidden;
-  background: #000;
+  background: #060a14; /* 아주 어두운 네이비 (셰이더 바탕 deepVoidBg 와 같은 색) */
 }
 
 /* 감싼 히어로: 비늘이 걷히는 만큼 나타난다. 안 보일 땐 visibility: hidden 이라 그 안의 애니메이션이 합성 비용을 안 쓴다 */
@@ -73,7 +73,7 @@
   /* 무대가 늘 검정이라 테마 변수 대신 나이트 색을 직접 적는다 */
   color: #a0a0a0;
   background: none;
-  border: 1px solid #333;
+  border: 1px solid #2a3348;
   border-radius: 999px;
   opacity: calc(1 - var(--c, 0) * 2);
   transition: color 0.2s ease, border-color 0.2s ease;
@@ -144,7 +144,7 @@
   top: 22px;
   z-index: 13;
   padding: 8px 14px;
-  border: 1px solid #333;
+  border: 1px solid #2a3348;
   border-radius: 999px;
   font-family: var(--font-mono);
   font-size: 10px;

@@ -140,7 +140,7 @@
   font-size: 10px;
   letter-spacing: 0.12em;
   color: var(--bone);
-  background: rgb(28 30 33 / 0.9);
+  background: rgb(18 26 45 / 0.92);
   transform: translateY(100%);
   transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
 

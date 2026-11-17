@@ -151,7 +151,7 @@ void main() {
   scaleVisibility = mix(scaleVisibility, ambientVisibility, s5Ambient);
   float dramaticCrest = (narrowBeam * 0.8 + takeoverWaveCrest * 0.6 + migrationLightWave * 0.75) * coilMask * mouth + headGlow * 0.9 + lip * 0.5 * mouth;
   vec3 crestHighlight = silverHighlight * dramaticCrest * (0.35 + 0.95 * h + anisoSpec * 0.6) * afterBite;
-  vec3 deepVoidBg = vec3(0.012, 0.013, 0.016) + noise(p * 3.5 + u_time * 0.05) * 0.018 * startDim * afterBite;
+  vec3 deepVoidBg = vec3(0.016, 0.026, 0.06) + noise(p * 3.5 + u_time * 0.05) * 0.018 * startDim * afterBite;
   vec3 finalColor = mix(deepVoidBg, scaleColor, clamp(scaleVisibility, 0.0, 1.0)); finalColor += crestHighlight * creviceAO;
   finalColor = mix(finalColor, fangColor, fang * afterBite);
   finalColor += silverHighlight * biteFlash * 1.4;

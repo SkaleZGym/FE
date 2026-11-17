@@ -1,43 +1,41 @@
+/* 퀵메뉴: 오른쪽 아래 동그란 버튼 하나. 누르면 그 위로 동그란 버튼들이 가까운 것부터 차례로 올라온다.
+   테마와 상관없이 늘 어두운 네이비 동그라미 (밝은 화면에서도 눈에 띄게) */
 .quick {
+  --qm-size: 52px;
+  --qm-gap: 10px;
+  --qm-bg: rgb(18 26 45 / 0.96);
+  --qm-line: rgb(236 235 230 / 0.16);
   position: fixed;
   right: clamp(12px, 2vw, 28px);
   bottom: clamp(12px, 3vh, 28px);
   z-index: 40;
   display: flex;
   flex-direction: column;
-  border: 1px solid rgb(236 235 230 / 0.16);
-  background: rgb(28 30 33 / 0.95);
+  align-items: center;
+  gap: var(--qm-gap);
+  pointer-events: none; /* 접혀 있을 때 버튼 위 빈자리가 아래 화면 클릭을 막지 않게 (버튼만 받는다) */
 }
 
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--qm-gap);
+}
+
+.fab,
 .item {
   position: relative;
   display: grid;
   place-items: center;
-  width: 52px;
-  height: 52px;
+  width: var(--qm-size);
+  height: var(--qm-size);
   padding: 0;
   color: var(--bone);
-  background: none;
-  border: 0;
-  border-top: 1px solid rgb(236 235 230 / 0.12);
+  background: var(--qm-bg);
+  border: 1px solid var(--qm-line);
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgb(2 4 10 / 0.35);
   cursor: pointer;
-  transition: background 0.2s ease, height 0.3s ease, opacity 0.3s ease;
-
-  &:first-child {
-    border-top: 0;
-  }
-
-  &:hover {
-    background: rgb(236 235 230 / 0.1);
-  }
-
-  &[data-hidden] {
-    height: 0;
-    opacity: 0;
-    overflow: hidden;
-    border-top-width: 0;
-    pointer-events: none;
-  }
 
   & svg {
     width: 20px;
@@ -48,11 +46,51 @@
     stroke-linecap: round;
     stroke-linejoin: round;
   }
+}
+
+.fab {
+  pointer-events: auto;
+  transition: background 0.25s ease, border-color 0.25s ease;
+
+  & svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 1.6;
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  &:hover {
+    border-color: rgb(236 235 230 / 0.4);
+  }
+}
+
+/* 펼치면 + 가 돌아 × 가 되고 빨갛게 */
+.quick[data-open] .fab {
+  background: var(--red);
+  border-color: var(--red);
+
+  & svg {
+    transform: rotate(135deg);
+  }
+}
+
+/* 접혀 있을 때: 동그란 버튼 쪽으로 내려가 작게 숨는다. 접을 때는 위의 것부터 빠르게 */
+.item {
+  opacity: 0;
+  transform: translateY(calc((var(--i) + 1) * (var(--qm-size) + var(--qm-gap)))) scale(0.3);
+  transition:
+    opacity 0.2s ease calc((4 - var(--i)) * 25ms),
+    transform 0.3s cubic-bezier(0.5, 0, 0.75, 0) calc((4 - var(--i)) * 25ms),
+    background 0.2s ease;
+
+  &:hover {
+    background: rgb(36 48 76 / 0.98);
+  }
 
   /* 마우스를 올리면 왼쪽에 이름표 */
   & span {
     position: absolute;
-    right: calc(100% + 8px);
+    right: calc(100% + 10px);
     padding: 5px 9px;
     font-family: var(--font-label);
     font-size: 11px;
@@ -70,6 +108,17 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* 펼칠 때: 바로 위의 것부터 하나씩 튀어 오르듯 (살짝 넘쳤다가 제자리) */
+.quick[data-open] .item {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  transition:
+    opacity 0.25s ease calc(var(--i) * 55ms),
+    transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--i) * 55ms),
+    background 0.2s ease;
 }
 
 /* 나이트·라이트 버튼: 휴대폰에서만 (PC는 헤더에 토글이 있다). 아이콘은 <html data-theme> 로 고른다 */
@@ -98,9 +147,9 @@
 }
 
 @media (max-width: 720px) {
-  .item {
-    width: 44px;
-    height: 44px;
+  .quick {
+    --qm-size: 46px;
+    --qm-gap: 8px;
   }
 
   .item span {
@@ -123,6 +172,12 @@
   .quick[data-intro-quick] {
     visibility: visible;
     opacity: 1;
+  }
+
+  .item,
+  .quick[data-open] .item,
+  .fab svg {
+    transition: none;
   }
 }
 

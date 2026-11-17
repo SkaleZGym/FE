@@ -307,7 +307,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, var(--bg) 0%, rgb(18 19 22 / 0.6) 30%, transparent 70%);
+    background: linear-gradient(90deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 60%, transparent) 30%, transparent 70%);
   }
 }
 
@@ -534,7 +534,7 @@
   }
 
   .trendBg::after {
-    background: linear-gradient(0deg, var(--bg) 10%, rgb(18 19 22 / 0.4) 60%, rgb(18 19 22 / 0.2));
+    background: linear-gradient(0deg, var(--bg) 10%, color-mix(in srgb, var(--bg) 40%, transparent) 60%, color-mix(in srgb, var(--bg) 20%, transparent));
   }
 
   .scrawl {
