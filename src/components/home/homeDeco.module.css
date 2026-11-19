@@ -110,7 +110,7 @@
   transform: rotate(1.6deg);
 
   & p {
-    font-family: var(--font-jetbrains), var(--font-body, monospace);
+    font-family: var(--font-barlow, var(--font-jetbrains, monospace)), var(--font-body, sans-serif);
     font-size: 12px;
     letter-spacing: 0.18em;
     animation-direction: reverse;

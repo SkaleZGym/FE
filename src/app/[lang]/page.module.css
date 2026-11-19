@@ -1,7 +1,7 @@
 /* 메인 화면. 2026-11-19 룩북형으로 정리: 빛 원·바닥 격자·흐릿한 큰 글자·도는 배지·도장 같은 장식을 걷고 사진과 글자만 둔다. 색은 globals.css 테마 변수. 히어로는 서펜트 인트로(SerpentIntro) 안에 들어가 비늘이 걷히면 나타난다 */
 
 .kicker {
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--red);
@@ -185,8 +185,8 @@
   & small {
     display: block;
     margin-bottom: 8px;
-    font-family: var(--font-mono);
-    font-size: 10px;
+    font-family: var(--font-ui);
+    font-size: 11px;
     letter-spacing: 0.04em;
     color: var(--ink-soft);
   }
@@ -256,7 +256,7 @@
 /* 관리자 배너: 작은 글자는 큰 글자 위, 가격은 아래 */
 .trendKicker {
   margin-bottom: 14px;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 13px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -265,7 +265,7 @@
 
 .trendPrice {
   margin-top: 16px;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 18px;
   color: var(--ink);
 }
@@ -292,7 +292,7 @@
 
   & b {
     display: block;
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: 11px;
     letter-spacing: 0.04em;
     font-weight: 400;

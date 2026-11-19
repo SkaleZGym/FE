@@ -66,8 +66,8 @@
   top: 22px;
   z-index: 15;
   padding: 8px 14px;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   /* 무대가 늘 검정이라 테마 변수 대신 나이트 색을 직접 적는다 */
@@ -93,8 +93,8 @@
   display: grid;
   justify-items: center;
   gap: 10px;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #a0a0a0;
@@ -146,8 +146,8 @@
   padding: 8px 14px;
   border: 1px solid #2a3348;
   border-radius: 999px;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink-faint);

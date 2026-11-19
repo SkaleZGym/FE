@@ -19,7 +19,7 @@
 .select {
   appearance: none;
   font: inherit;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 12px;
   letter-spacing: 0.04em;
   color: inherit;

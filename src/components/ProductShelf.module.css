@@ -53,8 +53,8 @@
 
   & a {
     padding-left: 4px;
-    font-family: var(--font-mono);
-    font-size: 10px;
+    font-family: var(--font-ui);
+    font-size: 11px;
     letter-spacing: 0.04em;
     border-left: 1px solid var(--edge);
   }
@@ -118,8 +118,8 @@
   right: 8px;
   top: 8px;
   padding: 3px 6px;
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-ui);
+  font-size: 11px;
   color: var(--on-ink);
   background: var(--ink);
 
@@ -136,8 +136,8 @@
   right: 0;
   bottom: 0;
   padding: 10px;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--bone);
   background: rgb(18 26 45 / 0.92);
@@ -160,8 +160,8 @@
   display: flex;
   gap: 8px;
   margin-top: 2px;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--ink-muted);
 }

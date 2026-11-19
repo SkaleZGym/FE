@@ -18,28 +18,61 @@
   }
 }
 
+/* 페이지 제목: 왼쪽 큰 제목, 오른쪽 아래 한 줄 설명, 아래 선 (카테고리 페이지 머리와 같은 결) */
 .head {
   display: grid;
-  justify-items: center;
-  gap: 10px;
-  padding: 64px 0 36px;
-  text-align: center;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 8px 32px;
+  margin-bottom: 36px;
+  padding: clamp(40px, 6vw, 80px) 0 22px;
+  border-bottom: 1px solid var(--line);
 
   & h1 {
     margin: 0;
     font-family: var(--font-display);
     font-weight: 400;
-    font-size: clamp(2.6rem, 6vw, 4.2rem);
-    line-height: 0.95;
-    letter-spacing: 0.06em;
+    font-size: clamp(3rem, 7.4vw, 6.4rem);
+    line-height: 0.88;
+    letter-spacing: 0.005em;
     text-transform: uppercase;
   }
 
   & p {
     margin: 0;
-    font-size: 13px;
+    padding-bottom: 0.4em;
+    font-size: 14px;
     line-height: 1.6;
     color: var(--ink-muted);
+  }
+}
+
+/* 폭 좁은 화면(비밀번호 찾기·간편가입 마무리)은 가운데 작은 제목 */
+.main[data-narrow] .head {
+  grid-template-columns: 1fr;
+  justify-items: center;
+  margin-bottom: 28px;
+  padding: 56px 0 0;
+  text-align: center;
+  border-bottom: 0;
+
+  & h1 {
+    font-size: clamp(2.6rem, 6vw, 4rem);
+  }
+
+  & p {
+    padding: 0;
+  }
+}
+
+@media (max-width: 860px) {
+  .head {
+    grid-template-columns: 1fr;
+    margin-bottom: 24px;
+
+    & p {
+      padding: 0;
+    }
   }
 }
 
@@ -258,7 +291,7 @@ select.input {
   }
 
   & span {
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: 11px;
     color: var(--ink-muted);
   }
@@ -269,7 +302,7 @@ select.input {
   justify-items: end;
   align-content: space-between;
   gap: 12px;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 13px;
 }
 
@@ -296,7 +329,7 @@ select.input {
 
   & output {
     min-width: 28px;
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: 13px;
     text-align: center;
   }
@@ -341,7 +374,7 @@ select.input {
 
   & dd {
     margin: 0;
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
   }
 
   & [data-total] {
@@ -366,7 +399,7 @@ select.input {
   & .input {
     flex: 1;
     padding: 10px 12px;
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     text-transform: uppercase;
   }
 }
@@ -411,7 +444,7 @@ select.input {
   }
 
   & span {
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: 12px;
   }
 }
@@ -435,7 +468,7 @@ select.input {
   font-size: 15px;
 
   & span {
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: 12px;
     color: var(--ink-muted);
   }
@@ -545,7 +578,7 @@ select.input {
 .status {
   padding: 4px 9px;
   font-family: var(--font-label);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: var(--label-tracking);
   color: var(--ink);
   border: 1px solid var(--line);
@@ -579,7 +612,7 @@ select.input {
   & b {
     display: block;
     margin-bottom: 4px;
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: 11px;
     font-weight: 400;
     color: var(--ink-muted);

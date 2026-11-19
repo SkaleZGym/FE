@@ -1,8 +1,7 @@
 /* 공지사항 · FAQ 전용 페이지 (가운데 폭, 위아래 선 목록) */
 
 .wrap {
-  width: min(100%, 860px);
-  margin: 0 auto;
+  width: min(100%, 860px); /* 왼쪽 정렬: 페이지 제목과 같은 선에서 시작한다 */
 }
 
 .list {
@@ -35,7 +34,7 @@
   }
 
   & time {
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: 11px;
     color: var(--ink-muted);
   }
@@ -105,7 +104,7 @@
 .meta {
   display: flex;
   gap: 14px;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
   color: var(--ink-muted);
 }
@@ -177,7 +176,7 @@
 
   & summary::after {
     content: "+";
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     color: var(--ink-muted);
   }
 
@@ -196,7 +195,7 @@
 }
 
 .q {
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   color: var(--red);
 }
 

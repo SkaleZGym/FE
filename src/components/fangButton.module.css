@@ -26,7 +26,11 @@
   clip-path: polygon(0 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% 100%, 0 100%);
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
 
   /* 테두리: clip-path가 border를 잘라 먹어서 안쪽에 같은 모양으로 선을 긋는다 */
   &::after {
@@ -121,7 +125,7 @@
   --fang-pattern: color-mix(in srgb, var(--ink) 28%, transparent);
   color: var(--ink);
   background: linear-gradient(var(--red), var(--red)) left bottom / 0 2px no-repeat;
-  transition: background-size 0.4s cubic-bezier(0.7, 0, 0.2, 1), color 0.2s ease;
+  transition: background-size 0.4s cubic-bezier(0.7, 0, 0.2, 1), color 0.2s ease, transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1);
 
   &:hover:not(:disabled) {
     color: var(--ink-strong);

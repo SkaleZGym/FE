@@ -6,8 +6,9 @@
   display: grid;
   grid-template-rows: minmax(0, 1fr) auto;
   overflow: hidden;
-  background: #e3e2dc;
+  background: #e3e2dc; /* 사진 바탕색을 읽으면 그 색으로 바뀐다 (HeroShowcase 의 readTone) */
   border: 1px solid var(--line);
+  transition: background-color 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .prod {
@@ -74,7 +75,7 @@
 }
 
 .price {
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 13px;
 
   & s {
@@ -88,7 +89,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
   color: var(--ink-muted);
 

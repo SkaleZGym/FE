@@ -532,7 +532,7 @@ function Profile({ locale, labels, me }: { locale: Locale; labels: Labels; me: M
       </form>
 
       <form className={styles.form} onSubmit={changePassword}>
-        <h2 className={styles.muted} style={{ fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+        <h2 className={styles.muted} style={{ fontFamily: "var(--font-ui)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
           {text.passwordTitle}
         </h2>
         <label className={styles.field}>
@@ -555,7 +555,7 @@ function Profile({ locale, labels, me }: { locale: Locale; labels: Labels; me: M
       </form>
 
       <form className={styles.form} onSubmit={withdraw}>
-        <h2 className={styles.muted} style={{ fontFamily: "var(--font-mono)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
+        <h2 className={styles.muted} style={{ fontFamily: "var(--font-ui)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
           {text.withdrawTitle}
         </h2>
         <p className={styles.muted}>{text.withdrawText}</p>

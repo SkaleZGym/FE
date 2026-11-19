@@ -21,7 +21,7 @@
 }
 
 .kicker {
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--red);
@@ -43,13 +43,13 @@
 
   & dt {
     font-family: var(--font-label);
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: var(--label-tracking);
     color: var(--ink-muted);
   }
 
   & dd {
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: clamp(18px, 2vw, 24px);
   }
 

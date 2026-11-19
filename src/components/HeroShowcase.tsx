@@ -17,6 +17,47 @@ const INTERVAL = 5000;
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /**
+ * 사진의 바탕색을 읽는다 (네 귀퉁이 색이 서로 같고 밝을 때만). 상품 사진은 대개 밝은 단색 배경이라,
+ * 판을 그 색으로 칠하면 사진과 판의 경계가 사라져 한 장의 스튜디오 사진처럼 보인다.
+ * 배경을 지운(투명) 사진이나 배경이 어둡거나 얼룩덜룩한 사진은 null → 판의 기본 색을 쓴다.
+ * 다른 주소의 사진은 캔버스로 못 읽어서, 같은 주소로 나가는 작은 사본(/_next/image)을 읽는다
+ */
+function readTone(src: string): Promise<string | null> {
+  return new Promise((resolve) => {
+    if (!/^https?:/.test(src)) return resolve(null);
+    const probe = new window.Image();
+    probe.onerror = () => resolve(null);
+    probe.onload = () => {
+      try {
+        const w = probe.naturalWidth;
+        const h = probe.naturalHeight;
+        const canvas = document.createElement("canvas");
+        canvas.width = w;
+        canvas.height = h;
+        const context = canvas.getContext("2d");
+        if (!context || w < 4 || h < 4) return resolve(null);
+        context.drawImage(probe, 0, 0);
+        const corners = [
+          [1, 1],
+          [w - 2, 1],
+          [1, h - 2],
+          [w - 2, h - 2],
+        ].map(([x, y]) => context.getImageData(x, y, 1, 1).data);
+        if (corners.some((pixel) => pixel[3] < 250)) return resolve(null); // 투명 배경
+        const channel = (i: number) => corners.map((pixel) => pixel[i]);
+        const spread = Math.max(...[0, 1, 2].map((i) => Math.max(...channel(i)) - Math.min(...channel(i))));
+        const [r, g, b] = [0, 1, 2].map((i) => Math.round(channel(i).reduce((sum, v) => sum + v, 0) / 4));
+        const light = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        resolve(spread <= 16 && light >= 0.72 ? `rgb(${r} ${g} ${b})` : null);
+      } catch {
+        resolve(null);
+      }
+    };
+    probe.src = `/_next/image?url=${encodeURIComponent(src)}&w=64&q=75`;
+  });
+}
+
+/**
  * 히어로 오른쪽: 룩북 한 장처럼 평평한 판 위에 대표 상품 사진을 올리고, 아래 줄에 이름·가격과 넘기기를 둔다.
  * 사진은 5초마다 바뀐다. 판은 테마와 상관없이 밝은 색이라(어두운 옷이 잘 보이게) 안쪽은 밝은 구역(data-zone="light")
  */
@@ -24,7 +65,21 @@ export default function HeroShowcase({ items, labels }: Props) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState<number | null>(null);
   const [round, setRound] = useState(0); // 진행 막대 애니메이션을 처음부터 다시 돌리기 위한 키
+  const [tones, setTones] = useState<Record<string, string | null>>({}); // 사진마다 읽은 바탕색
   const many = items.length > 1;
+
+  // 사진 바탕색을 한 번씩 읽어 둔다 (읽기 전·못 읽으면 판의 기본 색)
+  useEffect(() => {
+    let alive = true;
+    for (const item of items) {
+      void readTone(item.image).then((tone) => {
+        if (alive) setTones((known) => (item.image in known ? known : { ...known, [item.image]: tone }));
+      });
+    }
+    return () => {
+      alive = false;
+    };
+  }, [items]);
 
   const go = (next: number) => {
     setLeaving(index);
@@ -51,7 +106,7 @@ export default function HeroShowcase({ items, labels }: Props) {
   const current = items[index];
 
   return (
-    <div className={styles.plate} data-zone="light">
+    <div className={styles.plate} data-zone="light" style={tones[current.image] ? { backgroundColor: tones[current.image] ?? undefined } : undefined}>
       <div className={styles.prod}>
         {items.map((item, i) => (
           <Image

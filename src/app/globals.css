@@ -87,12 +87,12 @@
 :root {
 
   --font-display: var(--font-anton), "Impact", var(--font-body);
-  /* 모노 폰트에도 한·중·일 글자가 없어서 본문 폰트로 대체 */
-  --font-mono: var(--font-jetbrains), var(--font-body);
+  /* 영문 메뉴·꼬리표·가격: 좁은 고딕 (예전에는 고정폭). 한·중·일 글자가 없어서 본문 폰트로 대체된다 */
+  --font-ui: var(--font-barlow), var(--font-body);
   --font-body: var(--font-noto-kr), system-ui, sans-serif;
   /* 라벨(버튼·탭·상태 등) 글꼴: 영어 화면은 고정폭, 한·중·일 화면은 본문 글꼴 (아래 :lang 규칙) */
-  --font-label: var(--font-mono);
-  --label-tracking: 0.06em;
+  --font-label: var(--font-ui);
+  --label-tracking: 0.04em;
 
   --gutter: clamp(16px, 4vw, 48px);
   --max-width: 1280px;
@@ -104,6 +104,12 @@
 :root:lang(zh-CN) {
   --font-label: var(--font-body);
   --label-tracking: 0.01em;
+}
+
+/* 한국어: 단어 중간에서 줄이 바뀌지 않게 ("견/디는" 처럼 끊기지 않고 띄어쓰기에서만 넘어간다) */
+:root:lang(ko) body {
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 :root:lang(ja) {
@@ -132,6 +138,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
+  font-variant-numeric: tabular-nums; /* 가격·수량 숫자의 폭을 맞춘다 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -189,6 +196,18 @@ button {
   font: inherit;
   color: inherit;
   cursor: pointer;
+}
+
+/* 글자를 끌어 고를 때의 색 */
+::selection {
+  color: #fff;
+  background: var(--red);
+}
+
+/* 큰 제목은 줄 길이를 고르게 */
+h1,
+h2 {
+  text-wrap: balance;
 }
 
 html {

@@ -41,7 +41,7 @@
 }
 
 .kicker {
-  font-family: var(--font-mono);
+  font-family: var(--font-ui);
   font-size: 11px;
   letter-spacing: 0.04em;
   color: var(--red);
@@ -73,7 +73,7 @@
 
 .tag {
   font-family: var(--font-label);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: var(--label-tracking);
   color: var(--ink-muted);
 
@@ -89,8 +89,8 @@
 }
 
 .notice time {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
   color: var(--ink-muted);
 }
 
@@ -156,8 +156,8 @@
 }
 
 .q {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-ui);
+  font-size: 11px;
   color: var(--red);
 }
 

@@ -54,7 +54,7 @@
 
   & em {
     font-style: normal;
-    font-family: var(--font-mono);
+    font-family: var(--font-ui);
     font-size: 14px;
   }
 }
