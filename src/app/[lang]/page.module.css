@@ -23,11 +23,18 @@
 
 /* ---------- 1. 히어로 ---------- */
 
+/*
+ * 구성 (PC): 오른쪽에 세로로 긴 상품 판, 그 위로 초대형 제목이 왼쪽에서 걸쳐 들어온다. 아래 왼쪽에 소개·버튼.
+ * 제목의 흰 낱말은 뒤 배경과 반대색으로 뒤집힌다(mix-blend-mode: difference) → 바탕 위에서는 밝게, 밝은 판 위에서는 어둡게.
+ * 뒤집기가 먹으려면 제목과 낱말 사이에 z-index·transform·opacity 를 두면 안 된다 (새 쌓임 맥락이 생기면 판과 섞이지 않는다).
+ * 그래서 제목을 판보다 뒤에 적어(문서 순서) 위에 그리고, 모바일도 순서 바꾸기(order) 대신 격자 자리로 놓는다
+ */
 .hero {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  align-items: center;
+  grid-template-columns: minmax(0, 1fr) min(48vw, 720px);
+  grid-template-rows: minmax(0, 1fr) auto;
+  column-gap: clamp(24px, 3vw, 56px);
   height: 100svh;
   padding: 88px var(--gutter) 40px;
   overflow: hidden;
@@ -35,54 +42,70 @@
   background: var(--bg); /* 인트로의 검은 무대 위로 떠오를 때 테마 바탕을 스스로 칠한다 */
 }
 
-.heroLeft {
+.heroRight {
   position: relative;
-  z-index: 2;
-  display: grid;
-  gap: 22px;
-  justify-items: start;
-}
-
-/*
- * 히어로 큰 로고: 스크린 프린트처럼 빨간 판이 살짝 어긋나 찍힌 느낌 + 살짝 기울임.
- * 인트로가 --lg(0→1)를 올리는 순간 나타난다 (날아온 로고와 자리를 바꾼다)
- */
-.heroLogo {
-  width: clamp(220px, 28vw, 420px);
-  opacity: var(--lg, 1);
-  transform: rotate(-2deg);
-  transform-origin: left center;
-
-  & img {
-    display: block;
-    width: 100%;
-    height: auto;
-    filter: var(--logo-filter) drop-shadow(5px 4px 0 var(--red));
-    transition: filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* 큰 로고가 내려앉는 순간 잠깐 빛난다 (인트로 스크립트가 data-glow를 켠다) */
-  &[data-glow] img {
-    filter: var(--logo-filter) drop-shadow(5px 4px 0 var(--red)) var(--logo-glow-lg);
-  }
+  grid-column: 2;
+  grid-row: 1 / -1;
+  min-height: 0;
 }
 
 .heroTitle {
+  position: relative;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  align-self: end;
+  margin-bottom: clamp(18px, 3vh, 36px);
   font-family: var(--font-display);
   font-weight: 400;
-  font-size: clamp(3.6rem, 7.4vw, 8rem);
-  line-height: 0.88;
-  letter-spacing: -0.01em;
+  /* 폭과 높이 둘 다에 맞춘다 (낮은 노트북 화면에서 헤더 밑으로 넘치지 않게) */
+  font-size: clamp(4.6rem, min(14vw, 27svh), 16rem);
+  line-height: 0.84;
+  letter-spacing: -0.012em;
   text-transform: uppercase;
+  text-wrap: nowrap;
+  pointer-events: none; /* 글자 밑의 상품 판을 누를 수 있게 */
+}
 
-  & em {
-    font-style: normal;
-    color: var(--red);
+.wordRow {
+  display: block;
+}
+
+/*
+ * 낱말: 인트로가 히어로를 띄우는 동안(--c 0→1) 아래에서 밀려 올라온다 (둘째 줄은 조금 늦게).
+ * 내려가 있는 만큼 아래를 잘라서, 보이지 않는 선 밑에서 솟는 것처럼 보인다. 인트로가 없으면(--c 없음) 제자리
+ */
+.word,
+.wordRed {
+  --q: calc(1 - clamp(0, (var(--c, 1) - 0.2) / 0.6, 1));
+  display: inline-block;
+  transform: translateY(calc(var(--q) * 100%));
+  clip-path: inset(-0.2em -0.1em calc(var(--q) * 100% - 0.2em) -0.1em);
+
+  &[data-late] {
+    --q: calc(1 - clamp(0, (var(--c, 1) - 0.4) / 0.6, 1));
   }
 }
 
+.word {
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+.wordRed {
+  font-style: normal;
+  color: var(--red);
+}
+
+.heroFoot {
+  grid-column: 1;
+  grid-row: 2;
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+}
+
 .heroLead {
-  max-width: 36ch;
+  max-width: 38ch;
   font-size: 14px;
   line-height: 1.8;
   color: var(--ink-soft);
@@ -108,12 +131,6 @@
     height: 1px;
     background: currentColor;
   }
-}
-
-
-.heroRight {
-  position: relative;
-  height: min(70svh, 640px);
 }
 
 /* 스티커 자리. 생김새(배지·문구 상자)는 components/home/homeDeco.module.css, 문구·색·켜기는 관리자 '메인 꾸미기' */
@@ -328,72 +345,63 @@
 }
 
 @media (max-width: 860px) {
-  /* 모바일: 위에서부터 제목 → 상품 사진 → 상품 정보·넘기기 → 버튼 두 개.
-     heroLeft 를 풀어(display: contents) 제목과 버튼을 히어로 칸에 바로 놓고 순서를 바꾼다.
-     좌우 여백은 20px 로 모두 같은 선에 맞춘다 */
+  /* 모바일: 제목 → 화면 가득 상품 판(제목 아랫부분이 판 위로 걸친다) → 버튼.
+     순서는 격자 줄로 정한다 (order 로 바꾸면 그리는 순서까지 바뀌어 제목이 판 밑으로 깔린다) */
   .hero {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; /* PC의 가운데 정렬을 풀어 제목·버튼을 왼쪽 선에 맞춘다 */
-    gap: 14px;
-    justify-content: center; /* 제목·사진·정보·버튼을 빈틈 없이 붙여 화면 가운데에 모은다 */
-    padding: 80px 20px 24px;
-    text-align: left;
-  }
-
-  .heroLeft {
-    display: contents;
-  }
-
-  .heroLogo {
-    order: 0;
-    position: relative;
-    z-index: 2;
-    width: min(62vw, 300px);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    align-content: start;
+    padding: 84px 20px 24px;
   }
 
   .heroTitle {
-    order: 1;
-    position: relative;
-    z-index: 2;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: auto;
+    margin-bottom: -0.36em; /* 판이 이만큼 올라와 둘째 줄 밑동과 겹친다 */
+    font-size: 20.5vw;
   }
 
   .heroRight {
-    order: 2;
+    grid-column: 1;
+    grid-row: 2;
+    margin-inline: -20px; /* 화면 끝에서 끝까지 */
+  }
+
+  .heroFoot {
+    grid-row: 3;
+    gap: 0;
+    margin-top: 14px;
+    justify-items: stretch;
   }
 
   .ctas {
-    order: 3;
-    position: relative;
-    z-index: 2;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+
+    /* 버튼이 하나뿐이면(타이즈 상품 없음) 한 줄을 다 쓴다 */
+    & .btn:only-child {
+      grid-column: 1 / -1;
+    }
 
     & .btn {
       justify-content: space-between;
       gap: 8px;
       padding: 0 14px;
-      font-size: 11px;
+      font-size: 12px;
       letter-spacing: 0.04em;
       white-space: nowrap;
     }
   }
 
-  /* 모바일: 제목·버튼·상품 사진만 남긴다 */
+  /* 모바일: 제목·상품 판·버튼만 남긴다 */
   .hero .kicker,
   .heroLead,
   .heroNote,
   .sticker {
     display: none;
   }
-
-  /* 상품 판이 제 높이를 갖는다 (HeroShowcase 의 모바일 규칙) */
-  .heroRight {
-    flex: none;
-    height: auto;
-  }
-
 
   .shopBy {
     grid-template-columns: 1fr;
@@ -416,6 +424,14 @@
     background: linear-gradient(0deg, var(--bg) 10%, color-mix(in srgb, var(--bg) 40%, transparent) 60%, color-mix(in srgb, var(--bg) 20%, transparent));
   }
 
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word,
+  .wordRed {
+    transform: none;
+    clip-path: none;
+  }
 }
 
 @media (max-width: 560px) {

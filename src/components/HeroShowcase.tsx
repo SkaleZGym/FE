@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { openProduct } from "./productEvents";
+import { scaleWipe } from "./scaleTransition";
 import styles from "./HeroShowcase.module.css";
 
 /**
@@ -59,7 +60,8 @@ function readTone(src: string): Promise<string | null> {
 
 /**
  * 히어로 오른쪽: 룩북 한 장처럼 평평한 판 위에 대표 상품 사진을 올리고, 아래 줄에 이름·가격과 넘기기를 둔다.
- * 사진은 5초마다 바뀐다. 판은 테마와 상관없이 밝은 색이라(어두운 옷이 잘 보이게) 안쪽은 밝은 구역(data-zone="light")
+ * 사진은 5초마다 바뀌고, 바뀔 때 새 사진이 비늘이 돋듯 위에서부터 덮인다 (나이트·라이트 전환과 같은 비늘 쓸기).
+ * 판은 테마와 상관없이 밝은 색이라(어두운 옷이 잘 보이게) 안쪽은 밝은 구역(data-zone="light")
  */
 export default function HeroShowcase({ items, labels }: Props) {
   const [index, setIndex] = useState(0);
@@ -67,6 +69,8 @@ export default function HeroShowcase({ items, labels }: Props) {
   const [round, setRound] = useState(0); // 진행 막대 애니메이션을 처음부터 다시 돌리기 위한 키
   const [tones, setTones] = useState<Record<string, string | null>>({}); // 사진마다 읽은 바탕색
   const many = items.length > 1;
+  const prodRef = useRef<HTMLDivElement>(null);
+  const shown = useRef(0); // 지금 화면에 다 그려진 사진 (처음 사진에는 비늘 효과를 주지 않는다)
 
   // 사진 바탕색을 한 번씩 읽어 둔다 (읽기 전·못 읽으면 판의 기본 색)
   useEffect(() => {
@@ -99,15 +103,27 @@ export default function HeroShowcase({ items, labels }: Props) {
 
   useEffect(() => {
     if (leaving === null) return;
-    const id = setTimeout(() => setLeaving(null), 900);
+    const id = setTimeout(() => setLeaving(null), 1500);
     return () => clearTimeout(id);
   }, [leaving]);
+
+  // 사진이 바뀌면 새 사진을 비늘 쓸기로 드러낸다 (움직임 줄이기 설정에서는 바로 바뀐다)
+  useEffect(() => {
+    if (shown.current === index) return;
+    shown.current = index;
+    const image = prodRef.current?.querySelector<HTMLImageElement>("img[data-state=\"on\"]");
+    if (!image || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const box = image.getBoundingClientRect();
+    const { frames, duration } = scaleWipe(box.width, box.height);
+    const animation = image.animate({ clipPath: frames }, { duration, easing: "linear" });
+    return () => animation.cancel();
+  }, [index]);
 
   const current = items[index];
 
   return (
     <div className={styles.plate} data-zone="light" style={tones[current.image] ? { backgroundColor: tones[current.image] ?? undefined } : undefined}>
-      <div className={styles.prod}>
+      <div ref={prodRef} className={styles.prod}>
         {items.map((item, i) => (
           <Image
             key={item.id}
@@ -118,6 +134,8 @@ export default function HeroShowcase({ items, labels }: Props) {
             priority={i === 0}
             unoptimized={item.remote}
             data-state={i === index ? "on" : i === leaving ? "off" : undefined}
+            // 사진 둘레 여백까지 그 사진의 바탕색으로 칠해서, 비늘이 덮을 때 새 면이 통째로 드러난다
+            style={{ backgroundColor: tones[item.image] ?? undefined }}
           />
         ))}
       </div>

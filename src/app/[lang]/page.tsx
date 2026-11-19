@@ -119,16 +119,27 @@ export default async function HomePage() {
         {/* 0. 서펜트 비늘 인트로가 1번 히어로를 감싼다. 비늘이 걷히고 로고가 헤더로 날아가면 히어로가 나타난다 */}
         <SerpentIntro logo={images.wordmark} labels={dict.intro}>
           <section className={styles.hero} id="hero">
-            <div className={styles.heroLeft}>
-              {/* 인트로의 큰 로고가 S자로 날아와 내려앉는 자리 (data-intro-target) */}
-              <div className={styles.heroLogo} data-intro-target="">
-                <Image src={images.wordmark} alt="SKALEZ" width={420} height={83} priority />
-              </div>
-              <h1 className={styles.heroTitle}>
-                Forged,
-                <br />
-                not <em>born.</em>
-              </h1>
+            {/* 상품 판 (먼저 그려서 제목이 그 위로 겹친다). 상품을 못 받은 경우(BE가 꺼졌거나 배포 빌드 중)엔 판 없이 그린다 */}
+            <div className={styles.heroRight}>
+              {showcase.length > 0 && <HeroShowcase items={showcase} labels={{ prev: dict.hero.prev, next: dict.hero.next }} />}
+              {deco.sticker.on && <HeroSticker deco={deco.sticker} className={styles.sticker} />}
+            </div>
+
+            {/* 초대형 제목: 상품 판 위로 걸친다. 흰 글자는 뒤 배경과 반대색으로 뒤집혀서(바탕 위에서는 밝게, 밝은 판 위에서는 어둡게)
+                한 글자가 두 색으로 갈린다. 빨간 낱말만 그대로 빨강. 낱말마다 따로 뒤집어야 해서 낱말 단위로 나눈다 */}
+            <h1 className={styles.heroTitle}>
+              <span className={styles.word}>Forged,</span>
+              <span className={styles.wordRow}>
+                <span className={styles.word} data-late="">
+                  not
+                </span>{" "}
+                <em className={styles.wordRed} data-late="">
+                  born.
+                </em>
+              </span>
+            </h1>
+
+            <div className={styles.heroFoot}>
               <p className={styles.heroLead}>{dict.hero.lead}</p>
               {/* data-hero-ctas: 모바일에서 버튼이 화면 아래에 오므로 퀵메뉴가 이걸 보고 위로 비켜선다 */}
               <div className={styles.ctas} data-hero-ctas>
@@ -142,11 +153,6 @@ export default async function HomePage() {
                 )}
               </div>
               <p className={styles.heroNote}>{dict.hero.globe}</p>
-            </div>
-            <div className={styles.heroRight}>
-              {/* 상품을 못 받은 경우(BE가 꺼졌거나 배포 빌드 중)엔 슬라이드 없이 그린다 */}
-              {showcase.length > 0 && <HeroShowcase items={showcase} labels={{ prev: dict.hero.prev, next: dict.hero.next }} />}
-              {deco.sticker.on && <HeroSticker deco={deco.sticker} className={styles.sticker} />}
             </div>
           </section>
         </SerpentIntro>

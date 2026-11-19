@@ -39,10 +39,11 @@ const round = (value: number) => Math.round(value * 10) / 10;
  * 비늘 쓸기의 clip-path 키프레임. 영역을 기왓장처럼 겹친 비늘 격자로 덮고(짝수·홀수 줄이 반 칸씩 어긋난다),
  * 윗줄부터 차례로 비늘이 윗줄 밑에서 돋아나 다 자라면 영역이 새 화면으로 덮인다. 물결처럼 줄마다 살짝 굽이친다.
  * 키프레임마다 비늘 수·순서가 같아야 브라우저가 사이를 부드럽게 이어 준다 (path 보간).
+ * 화면 전환 없이도 쓸 수 있다 (히어로 상품 넘김: 새 사진에 바로 clip-path 애니메이션).
  * 비늘 크기는 영역 폭에 맞춰서(가로 약 12개) 큰 화면에서도 개수가 늘지 않는다.
  * clip-path 는 화면 카드(GPU)가 아니라 매 프레임 다시 그려서, 비늘 수가 곧 무게다 → 한 화면 300개 안팎으로 (예전 16개 폭은 약 450개)
  */
-function scaleWipe(width: number, height: number) {
+export function scaleWipe(width: number, height: number) {
   const w = Math.max(56, width / 12); // 비늘 너비
   const rowH = w * 0.42; // 줄 간격
   const radius = w * 0.53; // 옆 비늘과 살짝 겹쳐 빈틈이 없게
