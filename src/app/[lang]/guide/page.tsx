@@ -5,10 +5,11 @@ import { formatMoney } from "@/data/catalog";
 import { shoppingGuide } from "@/data/legal";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getShippingPolicy } from "@/lib/api";
+import { pageAlternates } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
-  return { title: `${dict.footer.guide} | ${dict.meta.title}` };
+  return { title: `${dict.footer.guide} | ${dict.meta.title}`, alternates: pageAlternates(await getLocale(), "/guide") };
 }
 
 /** 이용안내 (배송·교환·반품). 본문은 한국어 기준이라 국내 배송비(원)를 관리자 '배송 설정'에서 읽어 넣는다 */

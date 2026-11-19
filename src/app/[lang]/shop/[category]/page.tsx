@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CategoryBrowser, { type BrowserItem } from "@/components/CategoryBrowser";
+import JsonLd from "@/components/JsonLd";
 import ProductPanel, { type PanelProduct } from "@/components/ProductPanel";
 import QuickMenu from "@/components/QuickMenu";
 import SiteFooter from "@/components/SiteFooter";
@@ -8,6 +9,7 @@ import SiteHeader from "@/components/SiteHeader";
 import { headerLabels, siteNav } from "@/components/siteNav";
 import { categoryPages, images, isCategoryPage, sizeOrder } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
+import { breadcrumbLd, itemListLd, pageAlternates } from "@/lib/seo";
 import { getFilledPages, getShopProducts, priceText, productsOfPage } from "@/lib/shop";
 import styles from "./page.module.css";
 
@@ -22,7 +24,12 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/shop/[cate
   const { category } = await params;
   const dict = await getDictionary();
   if (!isCategoryPage(category)) return {};
-  return { title: `${dict.category.pages[category].title} | ${dict.meta.title}` };
+  const page = dict.category.pages[category];
+  return {
+    title: `${page.title} | ${dict.meta.title}`,
+    description: `${page.sub} — ${dict.meta.description}`,
+    alternates: pageAlternates(await getLocale(), `/shop/${category}`),
+  };
 }
 
 /** 카테고리 페이지: 가운데 제목 → 카테고리 이동 → 툴바(보기·정렬) → 왼쪽 필터 + 상품 그리드 */
@@ -67,6 +74,15 @@ export default async function CategoryPage({ params }: PageProps<"/[lang]/shop/[
 
   return (
     <>
+      <JsonLd
+        data={[
+          breadcrumbLd(locale, [
+            { name: dict.meta.title, path: "" },
+            { name: page.title, path: `/shop/${category}` },
+          ]),
+          itemListLd(locale, page.title, products),
+        ]}
+      />
       <SiteHeader
         locale={locale}
         logo={images.wordmark}

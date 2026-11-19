@@ -1,4 +1,4 @@
-/* 배송 안내: 왼쪽 큰 제목 + 오른쪽 숫자 카드. 바로 아래 신뢰 바(당일 출고·무료 교환 등)와 이어진다 */
+/* 배송 안내: 왼쪽 큰 제목 + 오른쪽 숫자 세 칸 (상자 없이 위 선만). 바로 아래 신뢰 바(당일 출고·무료 교환 등)와 이어진다 */
 
 .shipping {
   display: grid;
@@ -23,14 +23,14 @@
 .kicker {
   font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.04em;
   color: var(--red);
 }
 
 .stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: clamp(16px, 2.4vw, 32px);
 }
 
 .stat {
@@ -38,9 +38,8 @@
   gap: 10px;
   align-content: start;
   height: 100%;
-  padding: 20px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--edge);
 
   & dt {
     font-family: var(--font-label);

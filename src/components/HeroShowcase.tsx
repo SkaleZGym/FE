@@ -16,11 +16,15 @@ type Props = { items: ShowcaseItem[]; labels: { prev: string; next: string } };
 const INTERVAL = 5000;
 const pad = (n: number) => String(n).padStart(2, "0");
 
-/** 히어로 오른쪽: 대표 상품 사진이 5초마다 바뀐다 (빛나는 원 위에 떠 있고, 바뀔 때 옆으로 밀려 나간다) */
+/**
+ * 히어로 오른쪽: 룩북 한 장처럼 평평한 판 위에 대표 상품 사진을 올리고, 아래 줄에 이름·가격과 넘기기를 둔다.
+ * 사진은 5초마다 바뀐다. 판은 테마와 상관없이 밝은 색이라(어두운 옷이 잘 보이게) 안쪽은 밝은 구역(data-zone="light")
+ */
 export default function HeroShowcase({ items, labels }: Props) {
   const [index, setIndex] = useState(0);
   const [leaving, setLeaving] = useState<number | null>(null);
   const [round, setRound] = useState(0); // 진행 막대 애니메이션을 처음부터 다시 돌리기 위한 키
+  const many = items.length > 1;
 
   const go = (next: number) => {
     setLeaving(index);
@@ -29,6 +33,7 @@ export default function HeroShowcase({ items, labels }: Props) {
   };
 
   useEffect(() => {
+    if (items.length < 2) return;
     const id = setInterval(() => {
       setLeaving(index);
       setIndex((index + 1) % items.length);
@@ -46,7 +51,7 @@ export default function HeroShowcase({ items, labels }: Props) {
   const current = items[index];
 
   return (
-    <>
+    <div className={styles.plate} data-zone="light">
       <div className={styles.prod}>
         {items.map((item, i) => (
           <Image
@@ -61,29 +66,37 @@ export default function HeroShowcase({ items, labels }: Props) {
           />
         ))}
       </div>
-      <div className={styles.nav}>
-        <button type="button" aria-label={labels.prev} onClick={() => go(index - 1)}>
-          ‹
-        </button>
-        <span>
-          {pad(index + 1)} / {pad(items.length)}
-        </span>
-        <div className={styles.bar}>
+      <div className={styles.caption}>
+        <InfoTag item={current}>
+          {current.line && <small>{current.line}</small>}
+          <b>{current.name}</b>
+          {current.price && (
+            <span className={styles.price}>
+              {current.price}
+              {current.listPrice && <s>{current.listPrice}</s>}
+            </span>
+          )}
+        </InfoTag>
+        {many && (
+          <div className={styles.nav}>
+            <button type="button" aria-label={labels.prev} onClick={() => go(index - 1)}>
+              ‹
+            </button>
+            <span>
+              {pad(index + 1)} / {pad(items.length)}
+            </span>
+            <button type="button" aria-label={labels.next} onClick={() => go(index + 1)}>
+              ›
+            </button>
+          </div>
+        )}
+      </div>
+      {many && (
+        <div className={styles.bar} aria-hidden="true">
           <i key={round} />
         </div>
-        <button type="button" aria-label={labels.next} onClick={() => go(index + 1)}>
-          ›
-        </button>
-      </div>
-      <InfoTag item={current}>
-        <small>{current.line}</small>
-        <b>{current.name}</b>
-        <span className={styles.price}>
-          {current.price}
-          {current.listPrice && <s>{current.listPrice}</s>}
-        </span>
-      </InfoTag>
-    </>
+      )}
+    </div>
   );
 }
 

@@ -3,10 +3,11 @@ import PageShell from "@/components/account/PageShell";
 import styles from "@/components/board/Board.module.css";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getLatestNotices } from "@/lib/api";
+import { pageAlternates } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
-  return { title: `${dict.footer.notice} | ${dict.meta.title}` };
+  return { title: `${dict.footer.notice} | ${dict.meta.title}`, alternates: pageAlternates(await getLocale(), "/notice") };
 }
 
 /** 공지사항 목록 (고정 글이 먼저, 최신순). 공지는 많지 않아 최근 100개를 한 화면에 */

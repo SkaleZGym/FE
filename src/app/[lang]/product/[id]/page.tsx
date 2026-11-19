@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageShell from "@/components/account/PageShell";
+import JsonLd from "@/components/JsonLd";
 import ProductDetail, { type DetailProduct } from "@/components/product/ProductDetail";
 import { business, currencyFor, formatMoney } from "@/data/catalog";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getShippingPolicy, getSiteTexts } from "@/lib/api";
+import { breadcrumbLd, pageAlternates, productLd } from "@/lib/seo";
 import { getShopProducts, pageOfProduct } from "@/lib/shop";
 
 // 상품은 관리자가 언제든 추가해서 번호를 미리 알 수 없다 → 요청 때 그린다 (BE 응답은 몇 분 캐시)
@@ -21,13 +23,16 @@ export async function generateMetadata({ params }: PageProps<"/[lang]/product/[i
   const product = await find(id);
   if (!product) return {};
   const dict = await getDictionary();
+  const locale = await getLocale();
   return {
     title: `${product.name} | ${dict.meta.title}`,
     description: product.description ?? dict.meta.description,
+    alternates: pageAlternates(locale, `/product/${product.id}`),
     // openGraph 는 레이아웃 값을 통째로 덮어쓰므로 사이트 이름까지 다시 적는다
     openGraph: {
       type: "website",
       siteName: "SKALEZ",
+      url: `/${locale}/product/${product.id}`,
       title: product.name,
       description: product.description ?? dict.meta.description,
       images: [product.image],
@@ -109,8 +114,19 @@ export default async function ProductPage({ params }: PageProps<"/[lang]/product
   // 모델 착용 정보: 상품마다 다를 수 있어 관리자가 문구를 넣었을 때만 보인다
   const model = texts["product.model"]?.trim() || null;
 
+  const categoryPage = pageOfProduct(product);
   return (
     <PageShell>
+      <JsonLd
+        data={[
+          productLd(locale, { ...product, currency }),
+          breadcrumbLd(locale, [
+            { name: dict.meta.title, path: "" },
+            { name: dict.category.pages[categoryPage].title, path: `/shop/${categoryPage}` },
+            { name: product.name, path: `/product/${product.id}` },
+          ]),
+        ]}
+      />
       <ProductDetail
         locale={locale}
         product={detail}

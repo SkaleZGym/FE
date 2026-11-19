@@ -447,7 +447,7 @@
     "polySilicone": "폴리에스터 / 실리콘 논슬립"
   },
   "panel": {
-    "title": "[ PRODUCT ]",
+    "title": "PRODUCT",
     "close": "닫기",
     "dialog": "상품 정보",
     "size": "사이즈",
@@ -456,7 +456,7 @@
     "increase": "수량 늘리기",
     "add": "장바구니 담기",
     "restock": "재입고 알림 받기",
-    "soldOutNote": "[ SOLD OUT ] 재입고 알림을 받을 수 있어요",
+    "soldOutNote": "재입고 알림을 받을 수 있어요",
     "fit": "FIT",
     "fabric": "FABRIC",
     "model": "MODEL",

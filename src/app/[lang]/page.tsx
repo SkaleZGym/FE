@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import HeroShowcase, { type ShowcaseItem } from "@/components/HeroShowcase";
+import JsonLd from "@/components/JsonLd";
 import NoticeBoard from "@/components/NoticeBoard";
 import ProductPanel, { type PanelProduct } from "@/components/ProductPanel";
 import ProductShelf, { type ShelfItem } from "@/components/ProductShelf";
@@ -17,16 +19,13 @@ import HeroTape from "@/components/home/HeroTape";
 import { getBanners, getSiteTexts } from "@/lib/api";
 import { defaultHomeDeco, HOME_DECO_KEY, parseHomeDeco } from "@/lib/homeDeco";
 import { localHref } from "@/lib/links";
+import { organizationLd, pageAlternates, websiteLd } from "@/lib/seo";
 import { bySku, getFilledPages, getShopProducts, priceText, productsOfPage, type ShopProduct } from "@/lib/shop";
 import styles from "./page.module.css";
 
-/** 신뢰 바 아이콘 (방패 · 트럭 · 상자 · 헤드셋). 사전의 trust.items 순서와 같다 */
-const trustIcons = [
-  <g key="official"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z" /><path d="M9 12l2 2 4-4" /></g>,
-  <g key="ship"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7" /><circle cx="7" cy="17.5" r="1.6" /><circle cx="17" cy="17.5" r="1.6" /></g>,
-  <g key="exchange"><path d="M4 8l8-4 8 4v8l-8 4-8-4V8Z" /><path d="M4 8l8 4 8-4M12 12v8" /></g>,
-  <g key="here"><path d="M4 14v-2a8 8 0 0 1 16 0v2" /><rect x="3" y="13" width="4" height="6" rx="1.5" /><rect x="17" y="13" width="4" height="6" rx="1.5" /></g>,
-];
+export async function generateMetadata(): Promise<Metadata> {
+  return { alternates: pageAlternates(await getLocale()) };
+}
 
 export default async function HomePage() {
   const locale = await getLocale();
@@ -106,6 +105,8 @@ export default async function HomePage() {
 
   return (
     <>
+      {/* 검색엔진·AI 검색용 회사·사이트 정보 (화면에는 안 보인다) */}
+      <JsonLd data={[organizationLd(locale, dict.meta.description, images.wordmark), websiteLd(locale, dict.meta.title)]} />
       <SiteHeader
         locale={locale}
         introDim
@@ -140,27 +141,9 @@ export default async function HomePage() {
                   </a>
                 )}
               </div>
-              <div className={styles.globe} role="img" aria-label={dict.hero.globe}>
-                <svg className={styles.ring} viewBox="0 0 92 92" aria-hidden="true">
-                  <defs>
-                    <path id="globe-circle" d="M46,46 m-36,0 a36,36 0 1,1 72,0 a36,36 0 1,1 -72,0" />
-                  </defs>
-                  <text>
-                    <textPath href="#globe-circle">WORLDWIDE SHIPPING · 2027 · </textPath>
-                  </text>
-                </svg>
-                <span className={styles.globeIcon}>🌐</span>
-              </div>
+              <p className={styles.heroNote}>{dict.hero.globe}</p>
             </div>
             <div className={styles.heroRight}>
-              <div className={styles.graffiti} aria-hidden="true">
-                FORGE
-                <br />
-                YOUR
-                <br />
-                SCALES
-              </div>
-              <div className={styles.shadow} aria-hidden="true" />
               {/* 상품을 못 받은 경우(BE가 꺼졌거나 배포 빌드 중)엔 슬라이드 없이 그린다 */}
               {showcase.length > 0 && <HeroShowcase items={showcase} labels={{ prev: dict.hero.prev, next: dict.hero.next }} />}
               {deco.sticker.on && <HeroSticker deco={deco.sticker} className={styles.sticker} />}
@@ -221,22 +204,14 @@ export default async function HomePage() {
               {dict.trend.cta} <span>→</span>
             </a>
           </Reveal>
-          <div className={styles.scrawl} aria-hidden="true">
-            LEG
-            <br />
-            DAY.
-          </div>
         </section>
 
         {/* 6. 배송 안내 (BE 배송 설정) + 신뢰 바 */}
         <ShippingInfo locale={locale} labels={dict.shipping} />
         {/* 6-1. 신뢰 바 */}
         <section className={styles.trust} id="trust">
-          {dict.trust.items.map((item, index) => (
+          {dict.trust.items.map((item) => (
             <div className={styles.trustItem} key={item.accent}>
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                {trustIcons[index]}
-              </svg>
               <p>
                 <b>
                   {item.title} <em>{item.accent}</em>

@@ -447,7 +447,7 @@
     "polySilicone": "聚酯纤维 / 硅胶防滑"
   },
   "panel": {
-    "title": "[ PRODUCT ]",
+    "title": "PRODUCT",
     "close": "关闭",
     "dialog": "商品信息",
     "size": "尺码",
@@ -456,7 +456,7 @@
     "increase": "增加数量",
     "add": "加入购物车",
     "restock": "到货提醒",
-    "soldOutNote": "[ SOLD OUT ] 可订阅到货提醒",
+    "soldOutNote": "可订阅到货提醒",
     "fit": "FIT",
     "fabric": "FABRIC",
     "model": "MODEL",

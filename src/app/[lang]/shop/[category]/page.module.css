@@ -37,7 +37,7 @@
     padding: 7px 14px;
     font-family: var(--font-mono);
     font-size: 10px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.04em;
     color: var(--ink-muted);
     border: 1px solid var(--line);
     border-radius: 999px;

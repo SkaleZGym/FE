@@ -447,7 +447,7 @@
     "polySilicone": "Polyester / silicone non-slip"
   },
   "panel": {
-    "title": "[ PRODUCT ]",
+    "title": "PRODUCT",
     "close": "Close",
     "dialog": "Product details",
     "size": "Size",
@@ -456,7 +456,7 @@
     "increase": "Increase quantity",
     "add": "Add to cart",
     "restock": "Notify me when restocked",
-    "soldOutNote": "[ SOLD OUT ] Get notified when it's back",
+    "soldOutNote": "Get notified when it's back",
     "fit": "FIT",
     "fabric": "FABRIC",
     "model": "MODEL",

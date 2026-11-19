@@ -76,7 +76,7 @@
   color: var(--ink);
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 4px;
   outline: none;
   transition: border-color 0.2s;
 
@@ -165,7 +165,7 @@ select.input {
   color: var(--error);
   background: rgb(224 38 27 / 0.12);
   border: 1px solid rgb(224 38 27 / 0.4);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .success {
@@ -175,7 +175,7 @@ select.input {
   color: var(--ink);
   background: color-mix(in srgb, var(--ink) 6%, transparent);
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 4px;
 }
 
 .muted {
@@ -277,7 +277,7 @@ select.input {
   display: inline-flex;
   align-items: center;
   border: 1px solid var(--line);
-  border-radius: 6px;
+  border-radius: 4px;
 
   & button {
     width: 32px;
@@ -310,7 +310,7 @@ select.input {
   padding: 24px;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 4px;
 
   & h2 {
     margin: 0;
@@ -402,7 +402,7 @@ select.input {
   font-size: 13px;
 
   & .thumb {
-    border-radius: 6px;
+    border-radius: 4px;
   }
 
   & b {
@@ -478,7 +478,7 @@ select.input {
   padding: 20px 22px;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 4px;
 }
 
 .boxHead {

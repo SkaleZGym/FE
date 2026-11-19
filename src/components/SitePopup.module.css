@@ -15,7 +15,7 @@
   overflow: hidden;
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
 .media {
@@ -48,7 +48,7 @@
 
   & span {
     font-size: 12px;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
     color: color-mix(in srgb, var(--ink) 80%, transparent);
   }
 

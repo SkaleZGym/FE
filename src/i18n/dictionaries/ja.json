@@ -447,7 +447,7 @@
     "polySilicone": "ポリエステル / シリコンノンスリップ"
   },
   "panel": {
-    "title": "[ PRODUCT ]",
+    "title": "PRODUCT",
     "close": "閉じる",
     "dialog": "商品情報",
     "size": "サイズ",
@@ -456,7 +456,7 @@
     "increase": "数量を増やす",
     "add": "カートに入れる",
     "restock": "再入荷のお知らせを受け取る",
-    "soldOutNote": "[ SOLD OUT ] 再入荷のお知らせを受け取れます",
+    "soldOutNote": "再入荷のお知らせを受け取れます",
     "fit": "FIT",
     "fabric": "FABRIC",
     "model": "MODEL",

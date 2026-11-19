@@ -3,10 +3,11 @@ import PageShell from "@/components/account/PageShell";
 import LegalDoc from "@/components/LegalDoc";
 import { privacy } from "@/data/legal";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
+import { pageAlternates } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
-  return { title: `${dict.footer.privacy} | ${dict.meta.title}` };
+  return { title: `${dict.footer.privacy} | ${dict.meta.title}`, alternates: pageAlternates(await getLocale(), "/privacy") };
 }
 
 export default async function PrivacyPage() {

@@ -7,6 +7,7 @@ import { themeScript } from "@/components/ThemeToggle";
 import { getDictionary, getLocale } from "@/i18n/dictionaries";
 import { getBanners } from "@/lib/api";
 import { SITE_URL } from "@/lib/backend";
+import { isLiveSite } from "@/lib/seo";
 import "../globals.css";
 
 // 헤드라인용 영문 장체. 한·중·일 글자는 없어서 아래 본문 폰트로 자동 대체된다.
@@ -28,8 +29,13 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     title: dict.meta.title,
     description: dict.meta.description,
-    alternates: {
-      languages: Object.fromEntries(locales.map((code) => [code, `/${code}`])),
+    // 대표 주소·언어 연결(hreflang)은 페이지마다 다르므로 각 페이지의 generateMetadata 에서 pageAlternates 로 적는다
+    // 시험 주소(new.skalez.com)·로컬은 검색에 남지 않게 (robots.txt 도 함께 막는다)
+    robots: isLiveSite ? { index: true, follow: true } : { index: false, follow: false },
+    // 구글 서치 콘솔·네이버 서치어드바이저의 '사이트 소유 확인' 값. 서버 fe.env 에 넣으면 <meta> 로 나간다
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION || undefined,
+      other: process.env.NAVER_SITE_VERIFICATION ? { "naver-site-verification": process.env.NAVER_SITE_VERIFICATION } : undefined,
     },
     // 카카오톡·인스타 등에 링크를 붙였을 때 보이는 카드. 상품 상세는 상품 사진으로 덮어쓴다
     openGraph: {
@@ -39,6 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: dict.meta.description,
       locale: locale.replace("-", "_"),
     },
+    twitter: { card: "summary_large_image" },
   };
 }
 
