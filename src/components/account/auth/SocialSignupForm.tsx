@@ -59,18 +59,21 @@ export default function SocialSignupForm({ locale, labels, common }: { locale: L
 
   return (
     <form className={styles.form} onSubmit={onSubmit}>
-      <label className={styles.field}>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M4 6h16v12H4zM4 7l8 6 8-6" />
-        </svg>
-        <input value={pending.email} readOnly aria-label={labels.email} />
-      </label>
-      <label className={styles.field}>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0" />
-        </svg>
-        <input name="name" defaultValue={pending.name} placeholder={labels.name} maxLength={50} required aria-label={labels.name} />
-      </label>
+      {/* 이메일·이름도 가입 화면처럼 한 장의 카드에 묶는다 */}
+      <div className={styles.fields}>
+        <label className={styles.field}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h16v12H4zM4 7l8 6 8-6" />
+          </svg>
+          <input value={pending.email} readOnly aria-label={labels.email} />
+        </label>
+        <label className={styles.field}>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0" />
+          </svg>
+          <input name="name" defaultValue={pending.name} placeholder={labels.name} maxLength={50} required aria-label={labels.name} />
+        </label>
+      </div>
       <div className={styles.agree}>
         <label className={styles.check} data-all="">
           <input
