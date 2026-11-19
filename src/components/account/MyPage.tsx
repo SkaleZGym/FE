@@ -3,7 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { localeLabels, locales, type Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
-import { api, money, type Claim, type Inquiry, type Me, type MyPoints, type Order } from "@/lib/client";
+import { api, ApiError, money, type Claim, type Inquiry, type Me, type MyPoints, type Order } from "@/lib/client";
 import styles from "./account.module.css";
 import { setMe, signOut as signOutTo } from "./accountStore";
 import { canClaim, ClaimForm, ClaimList } from "./Claims";
@@ -492,7 +492,8 @@ function Profile({ locale, labels, me }: { locale: Locale; labels: Labels; me: M
       await api("/members/me/withdraw", { method: "POST", locale, body: { password: password || null } });
       await signOut();
     } catch (caught) {
-      setWithdrawMessage(errorText(caught, common));
+      // BE 는 관리자 계정의 탈퇴를 INVALID_INPUT 으로 막는다 (관리자를 지우면 관리자 페이지에 못 들어가서)
+      setWithdrawMessage(caught instanceof ApiError && caught.code === "INVALID_INPUT" ? text.withdrawAdmin : errorText(caught, common));
     }
   };
 

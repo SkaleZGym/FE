@@ -194,7 +194,25 @@ export default function CheckoutView({ locale, labels, cartLabels, common, more 
   return (
     <form className={styles.layout} onSubmit={onSubmit}>
       <div className={styles.form}>
+        {/* 주문자: 회원 정보(이름·이메일)를 그대로 쓴다. 주문 확인·배송 안내 메일이 이 이메일로 간다 (BE OrderNotifier) */}
         <section className={styles.section} style={{ borderTop: 0, paddingTop: 0 }}>
+          <h2>{labels.orderer}</h2>
+          <div className={styles.row}>
+            <label className={styles.field}>
+              <span>{labels.ordererName}</span>
+              <input className={styles.input} value={account.me?.name ?? ""} disabled readOnly />
+            </label>
+            <label className={styles.field}>
+              <span>{labels.ordererEmail}</span>
+              <input className={styles.input} value={account.me?.email ?? ""} disabled readOnly />
+            </label>
+          </div>
+          <p className={styles.muted} style={{ marginTop: 10, fontSize: 12 }}>
+            {labels.ordererNote}
+          </p>
+        </section>
+
+        <section className={styles.section}>
           <h2>{labels.address}</h2>
           <div className={styles.row}>
             <label className={styles.field}>

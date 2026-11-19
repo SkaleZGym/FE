@@ -324,6 +324,10 @@
   },
   "checkout": {
     "title": "CHECKOUT",
+    "orderer": "Customer",
+    "ordererName": "Name",
+    "ordererEmail": "Email",
+    "ordererNote": "We'll send order confirmation and shipping updates to this email. You can change your name in My page > My info.",
     "address": "Shipping address",
     "recipient": "Recipient",
     "phone": "Phone",
@@ -397,7 +401,8 @@
     "withdrawText": "Deleting removes your email, name and other account data, and any remaining points, right away. Order, payment, exchange and return records (including recipient name, phone and address) are kept separately for 5 years as Korean e-commerce law requires, then deleted, and are not used for anything else. Please wait for any open orders to finish first.",
     "withdrawPassword": "Current password (leave blank if you only use social login)",
     "withdrawButton": "Delete my account",
-    "withdrawConfirm": "Delete your account? This cannot be undone."
+    "withdrawConfirm": "Delete your account? This cannot be undone.",
+    "withdrawAdmin": "Admin accounts can't be deleted. To try account deletion, sign in with a non-admin account."
   },
   "inquiry": {
     "write": "Ask a question",
