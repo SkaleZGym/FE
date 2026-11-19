@@ -42,15 +42,15 @@
   },
   "shopBy": {
     "tights": {
-      "small": "[ CORE LINE ]",
+      "small": "CORE LINE",
       "title": "TIGHTS"
     },
     "tops": {
-      "small": "[ OVERSIZED · MUSCLE ]",
+      "small": "OVERSIZED · MUSCLE",
       "title": "TOPS"
     },
     "hoodies": {
-      "small": "[ WARM UP ]",
+      "small": "WARM UP",
       "title": "HOODIES"
     }
   },

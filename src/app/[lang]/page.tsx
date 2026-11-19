@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import HeroShowcase, { type ShowcaseItem } from "@/components/HeroShowcase";
+import CategoryPanels from "@/components/home/CategoryPanels";
 import JsonLd from "@/components/JsonLd";
 import NoticeBoard from "@/components/NoticeBoard";
 import ProductPanel, { type PanelProduct } from "@/components/ProductPanel";
@@ -72,9 +73,10 @@ export default async function HomePage() {
     soldOut: dict.shelves.soldOut,
     sale: dict.shelves.sale,
   };
-  // SHOP BY 카테고리 타일: 정해 둔 상품 사진, 없으면 그 카테고리 첫 상품, 그것도 없으면 기본 사진
+  // 카테고리 패널: 정해 둔 상품 사진, 없으면 그 카테고리 첫 상품, 그것도 없으면 기본 사진
   const tiles = (["tights", "tops", "hoodies"] as const).map((key) => ({
     key,
+    href: `/${locale}/shop/${key}`,
     image: (bySku(products, shopByTiles[key]) ?? productsOfPage(products, key)[0])?.image ?? productById(shopByTiles[key]).image,
     ...dict.shopBy[key],
   }));
@@ -163,23 +165,9 @@ export default async function HomePage() {
         {/* 3. BESTSELLER (13번 시안의 세로 제목 섹션) */}
         <ProductShelf id="best" title={dict.shelves.best.title} ranked items={bestItems} moreHref={`/${locale}/shop/best`} labels={shelfLabels} />
 
-        {/* 4. 카테고리 타일 */}
-        <section className={styles.shopBy} id="shopby" data-zone="night">
-          {tiles.map((tile, index) => (
-            <Reveal key={tile.key} delay={index * 100}>
-              <a className={styles.tile} href={`/${locale}/shop/${tile.key}`}>
-                <div className={styles.tileImage}>
-                  <Image src={tile.image} alt="" fill sizes="(max-width: 860px) 100vw, 40vw" />
-                </div>
-                <div className={styles.tileText}>
-                  <div>
-                    <b>{tile.title}</b>
-                  </div>
-                  <span className={styles.go}>→</span>
-                </div>
-              </a>
-            </Reveal>
-          ))}
+        {/* 4. 카테고리: 가로로 나란한 패널, 고른 것이 펼쳐진다 */}
+        <section id="shopby" data-zone="night">
+          <CategoryPanels panels={tiles} />
         </section>
 
         {/* 5. 트렌드 배너 (쇼핑하기) */}
