@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useRef, useState, type FormEvent, type ReactNode } from "react";
+import { flushSync } from "react-dom";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/dictionaries";
 import { ApiError } from "@/lib/client";
 import { safePath } from "@/lib/links";
 import { errorText, safeNext, useSearch } from "../useMember";
+import { scaleTransition } from "../../scaleTransition";
 import { login, signup, socialStartHref } from "./authApi";
 import styles from "./auth.module.css";
 
@@ -29,7 +31,13 @@ const icons = {
   user: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 9a7 7 0 0 1 14 0",
 };
 
-function Field({ icon, children }: { icon: keyof typeof icons; children: ReactNode }) {
+function Field({
+  icon,
+  children,
+}: {
+  icon: keyof typeof icons;
+  children: ReactNode;
+}) {
   return (
     <label className={styles.field}>
       <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -41,12 +49,39 @@ function Field({ icon, children }: { icon: keyof typeof icons; children: ReactNo
 }
 
 /** 눈 버튼으로 보였다 숨겼다 하는 비밀번호 칸 */
-function PasswordField({ name, placeholder, autoComplete, labels, minLength }: { name: string; placeholder: string; autoComplete: string; labels: Labels["auth"]; minLength?: number }) {
+function PasswordField({
+  name,
+  placeholder,
+  autoComplete,
+  labels,
+  minLength,
+}: {
+  name: string;
+  placeholder: string;
+  autoComplete: string;
+  labels: Labels["auth"];
+  minLength?: number;
+}) {
   const [shown, setShown] = useState(false);
   return (
     <Field icon="lock">
-      <input type={shown ? "text" : "password"} name={name} placeholder={placeholder} aria-label={placeholder} autoComplete={autoComplete} minLength={minLength} maxLength={64} required />
-      <button type="button" className={styles.eye} aria-label={shown ? labels.hidePassword : labels.showPassword} aria-pressed={shown} onClick={() => setShown((value) => !value)}>
+      <input
+        type={shown ? "text" : "password"}
+        name={name}
+        placeholder={placeholder}
+        aria-label={placeholder}
+        autoComplete={autoComplete}
+        minLength={minLength}
+        maxLength={64}
+        required
+      />
+      <button
+        type="button"
+        className={styles.eye}
+        aria-label={shown ? labels.hidePassword : labels.showPassword}
+        aria-pressed={shown}
+        onClick={() => setShown((value) => !value)}
+      >
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
           <circle cx="12" cy="12" r="3" />
@@ -57,7 +92,15 @@ function PasswordField({ name, placeholder, autoComplete, labels, minLength }: {
   );
 }
 
-function SocialButtons({ locale, next, labels }: { locale: Locale; next: string; labels: Labels["auth"] }) {
+function SocialButtons({
+  locale,
+  next,
+  labels,
+}: {
+  locale: Locale;
+  next: string;
+  labels: Labels["auth"];
+}) {
   return (
     <div className={styles.social}>
       <a className={styles.kakao} href={socialStartHref("kakao", locale, next)}>
@@ -77,11 +120,20 @@ function SocialButtons({ locale, next, labels }: { locale: Locale; next: string;
 }
 
 /**
- * 로그인 · 회원가입 한 장 카드. 두 폼이 나란히 있고 사진 패널이 미끄러지며 한쪽을 덮는다.
+ * 로그인 · 회원가입 한 장 카드. 카드 위 토글로 바꾸고, 두 폼이 나란히 있어 사진 패널이 미끄러지며 한쪽을 덮는다
+ * (로그인: 폼 왼쪽·사진 오른쪽 ↔ 회원가입: 사진 왼쪽·폼 오른쪽).
  * 모드를 바꾸면 주소도 /login ↔ /signup 으로 바꾼다 (새로고침 없이). 모바일은 패널 없이 폼 하나만.
+ * 바꿀 때 카드가 나이트·라이트 전환과 같은 비늘 쓸기로 바뀐다 (components/scaleTransition).
  */
-export default function AuthCard({ locale, initialMode, image, labels, common }: Props) {
+export default function AuthCard({
+  locale,
+  initialMode,
+  image,
+  labels,
+  common,
+}: Props) {
   const [mode, setMode] = useState<Mode>(initialMode);
+  const cardRef = useRef<HTMLDivElement>(null);
   const search = useSearch();
   const query = new URLSearchParams(search);
   const next = safePath(query.get("next"), `/${locale}`);
@@ -89,57 +141,112 @@ export default function AuthCard({ locale, initialMode, image, labels, common }:
   const auth = labels.auth;
 
   const switchTo = (nextMode: Mode) => {
-    setMode(nextMode);
+    // 화면 전환이 새 모습을 찍기 전에 React 가 바로 그리도록 flushSync
+    scaleTransition(() => flushSync(() => setMode(nextMode)), cardRef.current);
     window.history.replaceState(null, "", `/${locale}/${nextMode}${search}`);
     // 브라우저 탭 제목도 함께 (LOGIN | … ↔ SIGN UP | …)
-    document.title = document.title.replace(/^[^|]+|/, `${nextMode === "login" ? labels.loginTitle : labels.signupTitle} |`);
+    document.title = document.title.replace(
+      /^[^|]+\|/,
+      `${nextMode === "login" ? labels.loginTitle : labels.signupTitle} |`,
+    );
   };
 
   return (
-    <div className={styles.card} data-mode={mode}>
-      <section className={styles.side} data-side="login" inert={mode !== "login" || undefined} aria-hidden={mode !== "login"}>
-        <LoginPanel locale={locale} next={next} labels={labels} common={common} socialError={socialError ? (auth.errors as Record<string, string>)[socialError] ?? auth.errors.SOCIAL_LOGIN_FAILED : ""} />
-        <p className={styles.switch}>
-          {labels.noAccount}
-          <button type="button" onClick={() => switchTo("signup")}>
-            {labels.signupLink}
-          </button>
-        </p>
-      </section>
+    <div className={styles.wrap}>
+      {/* 로그인 ↔ 회원가입 토글: 빨간 손잡이가 고른 쪽으로 미끄러진다 */}
+      <div
+        className={styles.toggle}
+        data-mode={mode}
+        role="group"
+        aria-label={`${labels.loginTitle} / ${labels.signupTitle}`}
+      >
+        <button
+          type="button"
+          aria-pressed={mode === "login"}
+          onClick={() => mode !== "login" && switchTo("login")}
+        >
+          {labels.loginTitle}
+        </button>
+        <button
+          type="button"
+          aria-pressed={mode === "signup"}
+          onClick={() => mode !== "signup" && switchTo("signup")}
+        >
+          {labels.signupTitle}
+        </button>
+      </div>
 
-      <section className={styles.side} data-side="signup" inert={mode !== "signup" || undefined} aria-hidden={mode !== "signup"}>
-        <SignupPanel locale={locale} next={next} labels={labels} common={common} />
-        <p className={styles.switch}>
-          {labels.haveAccount}
-          <button type="button" onClick={() => switchTo("login")}>
-            {labels.loginLink}
-          </button>
-        </p>
-      </section>
+      <div ref={cardRef} className={styles.card} data-mode={mode}>
+        <section
+          className={styles.side}
+          data-side="login"
+          inert={mode !== "login" || undefined}
+          aria-hidden={mode !== "login"}
+        >
+          <LoginPanel
+            locale={locale}
+            next={next}
+            labels={labels}
+            common={common}
+            socialError={
+              socialError
+                ? ((auth.errors as Record<string, string>)[socialError] ??
+                  auth.errors.SOCIAL_LOGIN_FAILED)
+                : ""
+            }
+          />
+        </section>
 
-      {/* 데스크톱 슬라이드 패널: 로그인일 땐 오른쪽(가입 쪽)을, 가입일 땐 왼쪽(로그인 쪽)을 덮는다 */}
-      <aside className={styles.overlay} data-zone="night">
-        <Image src={image} alt="" fill sizes="480px" className={styles.overlayImage} />
-        <div className={styles.overlayText} data-for="signup" aria-hidden={mode !== "signup"}>
-          <b>{auth.welcomeTitle}</b>
-          <p>{auth.welcomeText}</p>
-          <button type="button" tabIndex={mode === "signup" ? 0 : -1} onClick={() => switchTo("login")}>
-            {auth.welcomeCta}
-          </button>
-        </div>
-        <div className={styles.overlayText} data-for="login" aria-hidden={mode !== "login"}>
-          <b>{auth.helloTitle}</b>
-          <p>{auth.helloText}</p>
-          <button type="button" tabIndex={mode === "login" ? 0 : -1} onClick={() => switchTo("signup")}>
-            {auth.helloCta}
-          </button>
-        </div>
-      </aside>
+        <section
+          className={styles.side}
+          data-side="signup"
+          inert={mode !== "signup" || undefined}
+          aria-hidden={mode !== "signup"}
+        >
+          <SignupPanel
+            locale={locale}
+            next={next}
+            labels={labels}
+            common={common}
+          />
+        </section>
+
+        {/* 데스크톱 슬라이드 패널: 로그인일 땐 오른쪽(가입 쪽)을, 가입일 땐 왼쪽(로그인 쪽)을 덮는다. 바꾸기는 위 토글로 */}
+        <aside className={styles.overlay} data-zone="night" aria-hidden="true">
+          <Image
+            src={image}
+            alt=""
+            fill
+            sizes="480px"
+            className={styles.overlayImage}
+          />
+          <div className={styles.overlayText} data-for="signup">
+            <b>{auth.welcomeTitle}</b>
+            <p>{auth.welcomeText}</p>
+          </div>
+          <div className={styles.overlayText} data-for="login">
+            <b>{auth.helloTitle}</b>
+            <p>{auth.helloText}</p>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }
 
-function LoginPanel({ locale, next, labels, common, socialError }: { locale: Locale; next: string; labels: Labels; common: Dictionary["common"]; socialError: string }) {
+function LoginPanel({
+  locale,
+  next,
+  labels,
+  common,
+  socialError,
+}: {
+  locale: Locale;
+  next: string;
+  labels: Labels;
+  common: Dictionary["common"];
+  socialError: string;
+}) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
@@ -149,7 +256,12 @@ function LoginPanel({ locale, next, labels, common, socialError }: { locale: Loc
     setBusy(true);
     setError("");
     try {
-      await login(locale, String(form.get("email")).trim(), String(form.get("password")), Boolean(form.get("remember")));
+      await login(
+        locale,
+        String(form.get("email")).trim(),
+        String(form.get("password")),
+        Boolean(form.get("remember")),
+      );
       // 전체 새로고침으로 이동해서 헤더·장바구니 개수까지 로그인 상태로 다시 불러온다
       window.location.assign(safeNext(locale));
     } catch (caught) {
@@ -163,10 +275,24 @@ function LoginPanel({ locale, next, labels, common, socialError }: { locale: Loc
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <h1>{labels.loginTitle}</h1>
-      <Field icon="mail">
-        <input type="email" name="email" placeholder={labels.email} aria-label={labels.email} autoComplete="email" required />
-      </Field>
-      <PasswordField name="password" placeholder={labels.password} autoComplete="current-password" labels={labels.auth} />
+      <div className={styles.fields}>
+        <Field icon="mail">
+          <input
+            type="email"
+            name="email"
+            placeholder={labels.email}
+            aria-label={labels.email}
+            autoComplete="email"
+            required
+          />
+        </Field>
+        <PasswordField
+          name="password"
+          placeholder={labels.password}
+          autoComplete="current-password"
+          labels={labels.auth}
+        />
+      </div>
       <div className={styles.row}>
         <label className={styles.check}>
           <input type="checkbox" name="remember" defaultChecked />
@@ -194,11 +320,26 @@ function LoginPanel({ locale, next, labels, common, socialError }: { locale: Loc
   );
 }
 
-function SignupPanel({ locale, next, labels, common }: { locale: Locale; next: string; labels: Labels; common: Dictionary["common"] }) {
+function SignupPanel({
+  locale,
+  next,
+  labels,
+  common,
+}: {
+  locale: Locale;
+  next: string;
+  labels: Labels;
+  common: Dictionary["common"];
+}) {
   const [error, setError] = useState("");
   const [taken, setTaken] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [agree, setAgree] = useState({ terms: false, privacy: false, age: false, marketing: false });
+  const [agree, setAgree] = useState({
+    terms: false,
+    privacy: false,
+    age: false,
+    marketing: false,
+  });
   const all = agree.terms && agree.privacy && agree.age && agree.marketing;
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -206,7 +347,8 @@ function SignupPanel({ locale, next, labels, common }: { locale: Locale; next: s
     const form = new FormData(event.currentTarget);
     const email = String(form.get("email")).trim();
     const password = String(form.get("password"));
-    if (!agree.terms || !agree.privacy || !agree.age) return setError(labels.agreeRequired);
+    if (!agree.terms || !agree.privacy || !agree.age)
+      return setError(labels.agreeRequired);
     setBusy(true);
     setError("");
     setTaken(false);
@@ -224,7 +366,8 @@ function SignupPanel({ locale, next, labels, common }: { locale: Locale; next: s
       window.location.assign(safeNext(locale));
     } catch (caught) {
       // 이미 있는 이메일: 아임웹에서 옮겨 온 회원일 수 있어서 비밀번호 설정으로 안내
-      const duplicated = caught instanceof ApiError && caught.code === "EMAIL_DUPLICATED";
+      const duplicated =
+        caught instanceof ApiError && caught.code === "EMAIL_DUPLICATED";
       setTaken(duplicated);
       setError(duplicated ? labels.emailTaken : errorText(caught, common));
       setBusy(false);
@@ -234,44 +377,108 @@ function SignupPanel({ locale, next, labels, common }: { locale: Locale; next: s
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <h1>{labels.signupTitle}</h1>
-      <Field icon="mail">
-        <input type="email" name="email" placeholder={labels.email} aria-label={labels.email} autoComplete="email" maxLength={100} required />
-      </Field>
-      <Field icon="user">
-        <input name="name" placeholder={labels.name} aria-label={labels.name} autoComplete="name" maxLength={50} required />
-      </Field>
-      <PasswordField name="password" placeholder={`${labels.password} (${labels.passwordRule})`} autoComplete="new-password" labels={labels.auth} minLength={8} />
+      <div className={styles.fields}>
+        <Field icon="mail">
+          <input
+            type="email"
+            name="email"
+            placeholder={labels.email}
+            aria-label={labels.email}
+            autoComplete="email"
+            maxLength={100}
+            required
+          />
+        </Field>
+        <Field icon="user">
+          <input
+            name="name"
+            placeholder={labels.name}
+            aria-label={labels.name}
+            autoComplete="name"
+            maxLength={50}
+            required
+          />
+        </Field>
+        <PasswordField
+          name="password"
+          placeholder={`${labels.password} (${labels.passwordRule})`}
+          autoComplete="new-password"
+          labels={labels.auth}
+          minLength={8}
+        />
+      </div>
       <div className={styles.agree}>
         <label className={styles.check} data-all="">
           <input
             type="checkbox"
             checked={all}
-            onChange={(event) => setAgree({ terms: event.target.checked, privacy: event.target.checked, age: event.target.checked, marketing: event.target.checked })}
+            onChange={(event) =>
+              setAgree({
+                terms: event.target.checked,
+                privacy: event.target.checked,
+                age: event.target.checked,
+                marketing: event.target.checked,
+              })
+            }
           />
           {labels.agreeAll}
         </label>
         <label className={styles.check}>
-          <input type="checkbox" checked={agree.terms} onChange={(event) => setAgree({ ...agree, terms: event.target.checked })} />
+          <input
+            type="checkbox"
+            checked={agree.terms}
+            onChange={(event) =>
+              setAgree({ ...agree, terms: event.target.checked })
+            }
+          />
           {labels.agreeTerms}
-          <a className={styles.view} href={`/${locale}/terms`} target="_blank" rel="noreferrer">
+          <a
+            className={styles.view}
+            href={`/${locale}/terms`}
+            target="_blank"
+            rel="noreferrer"
+          >
             {labels.viewTerms}
           </a>
         </label>
         <label className={styles.check}>
-          <input type="checkbox" checked={agree.privacy} onChange={(event) => setAgree({ ...agree, privacy: event.target.checked })} />
+          <input
+            type="checkbox"
+            checked={agree.privacy}
+            onChange={(event) =>
+              setAgree({ ...agree, privacy: event.target.checked })
+            }
+          />
           {labels.agreePrivacy}
-          <a className={styles.view} href={`/${locale}/privacy`} target="_blank" rel="noreferrer">
+          <a
+            className={styles.view}
+            href={`/${locale}/privacy`}
+            target="_blank"
+            rel="noreferrer"
+          >
             {labels.viewTerms}
           </a>
         </label>
         {/* 개인정보 동의는 수집 항목·목적·보유 기간·거부권을 동의 칸 옆에서 바로 알려야 한다 (개인정보 보호법 제15조) */}
         <p className={styles.summary}>{labels.privacySummary}</p>
         <label className={styles.check}>
-          <input type="checkbox" checked={agree.age} onChange={(event) => setAgree({ ...agree, age: event.target.checked })} />
+          <input
+            type="checkbox"
+            checked={agree.age}
+            onChange={(event) =>
+              setAgree({ ...agree, age: event.target.checked })
+            }
+          />
           {labels.agreeAge}
         </label>
         <label className={styles.check}>
-          <input type="checkbox" checked={agree.marketing} onChange={(event) => setAgree({ ...agree, marketing: event.target.checked })} />
+          <input
+            type="checkbox"
+            checked={agree.marketing}
+            onChange={(event) =>
+              setAgree({ ...agree, marketing: event.target.checked })
+            }
+          />
           {labels.agreeMarketing}
         </label>
       </div>

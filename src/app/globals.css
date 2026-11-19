@@ -136,18 +136,25 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------- 테마 바꾸기 효과: 비늘이 위에서 아래로 한 줄씩 돋아나며 새 색을 드러낸다 (SKALEZ = scales) ----------
-   ThemeToggle 이 화면 전환(View Transition) 동안만 <html data-theme-wipe> 를 붙이고,
-   새 화면(new)을 이전 화면(old) 위에 올린 뒤 비늘 모양 clip-path 를 키프레임으로 넣는다 (components/ThemeToggle 의 scaleWipe).
-   여기서는 기본 전환(서서히 섞임)을 끄고, 비늘이 시작되기 전에는 새 화면을 가려 둔다.
+/* ---------- 비늘 쓸기 전환: 바뀐 화면이 위에서 아래로 비늘이 한 줄씩 돋아나며 드러난다 (SKALEZ = scales) ----------
+   components/scaleTransition 이 화면 전환(View Transition) 동안만 <html data-scale-wipe="root|part"> 를 붙이고,
+   새 화면 위에 비늘 모양 clip-path 키프레임을 넣는다. root = 화면 전체(나이트·라이트), part = 한 요소만(로그인 ↔ 회원가입 카드, 전환 이름 scale-wipe).
+   여기서는 기본 전환(서서히 섞임·크기 맞춤)을 끄고, 비늘이 시작되기 전에는 새 화면을 가려 둔다.
    화면 전환을 모르는 브라우저와 '움직임 줄이기' 설정에서는 효과 없이 바로 바뀐다 */
-:root[data-theme-wipe]::view-transition-old(root),
-:root[data-theme-wipe]::view-transition-new(root) {
+:root[data-scale-wipe]::view-transition-old(root),
+:root[data-scale-wipe]::view-transition-new(root),
+:root[data-scale-wipe]::view-transition-old(scale-wipe),
+:root[data-scale-wipe]::view-transition-new(scale-wipe) {
   animation: none;
   mix-blend-mode: normal;
 }
 
-:root[data-theme-wipe]::view-transition-new(root) {
+:root[data-scale-wipe]::view-transition-group(scale-wipe) {
+  animation: none;
+}
+
+:root[data-scale-wipe="root"]::view-transition-new(root),
+:root[data-scale-wipe="part"]::view-transition-new(scale-wipe) {
   clip-path: inset(0 0 100% 0);
 }
 
