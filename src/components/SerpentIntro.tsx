@@ -15,7 +15,7 @@ import styles from "./SerpentIntro.module.css";
  *   s .58~.67  로고 둘레로 비늘이 위아래 턱처럼 벌어졌다가 .67에 팍 닫힌다 (BITE, 번쩍). 그 직후 비늘은 사라져 검은 화면
  *   s .67~.90  무는 순간 튀어나간 로고가 S자 경로(아래로 크게 휘었다가 오른쪽으로 쓸고 올라와)로 헤더 로고 자리에 내려앉는다
  *   s .86~.98  히어로·헤더·퀵메뉴가 나타난다
- *   그 뒤 한 화면(홀드)만큼은 진행도 1로 고정: 히어로가 붙어 있다가 계속 굴려야 본문으로 넘어간다. 위로 굴리면 거꾸로 재생된다.
+ *   히어로가 다 나오면 바로 본문으로 이어서 굴러간다 (2026-11-23 사용자 요청: 예전에는 한 화면만큼 히어로가 붙어 멈춰 있었다). 위로 굴리면 거꾸로 재생된다.
  * 가볍게 가는 법: 캔버스 해상도 상한(프레임이 느리면 스스로 더 낮춤), CSS 변수는 값이 바뀔 때만 쓰고 :root에는 쓰지 않는다,
  * 안 보이는 히어로·헤더·퀵메뉴는 visibility: hidden, 인트로가 화면 밖이거나 비늘이 사라진 뒤에는 그리지 않는다.
  * 헤더는 [data-intro-dim], 헤더 로고는 [data-intro-logo], 퀵메뉴는 [data-intro-quick]으로 찾아 변수를 올린다.
@@ -250,7 +250,7 @@ export default function SerpentIntro({ logo, labels, children }: Props) {
       W = pin!.clientWidth;
       H = pin!.clientHeight;
       const introVh = mobile() ? 1.2 : 1.4; // 인트로가 차지하는 스크롤 (화면 높이 배수). 처음 2.4 / 2.8에서 절반으로
-      const holdVh = mobile() ? 0.9 : 1.0;
+      const holdVh = 0; // 히어로가 다 나온 뒤 붙어 있는 구간 없음 (예전 PC 1.0 · 모바일 0.9 화면)
       trackPx = Math.max(1, Math.round(H * introVh)); // 숨겨진 탭에서 높이가 0으로 재지면 0으로 나눠 진행도가 NaN으로 굳는다
       holdPx = Math.round(H * holdVh);
       intro!.style.height = `${H + trackPx + holdPx}px`;
