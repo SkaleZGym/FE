@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { HOME_DECO_KEY } from "@/lib/homeDeco";
+import { SHIPPING_WAIVE_KEY } from "../shipping/ShippingManager";
 import { Drawer, Top } from "../../_components/ui";
 import { adminApi, dateTime, errorMessage, LANGS, toast, type Lang, type SiteText } from "../../_lib/admin";
 
@@ -85,8 +86,8 @@ export default function SiteTextManager() {
   const saved = new Map((list ?? []).map((text) => [text.key, text]));
   const rows = [
     ...KNOWN_TEXTS.map((known) => ({ key: known.key, label: known.label, hint: known.hint, text: saved.get(known.key) })),
-    // home.deco 는 메인 꾸미기 화면이 JSON 으로 쓰는 칸이라 여기서는 숨긴다
-    ...(list ?? []).filter((text) => text.key !== HOME_DECO_KEY && !KNOWN_TEXTS.some((known) => known.key === text.key)).map((text) => ({ key: text.key, label: text.description ?? text.key, hint: "", text })),
+    // home.deco(메인 꾸미기)·shipping.waive(배송비 면제)는 다른 화면이 JSON 으로 쓰는 칸이라 여기서는 숨긴다
+    ...(list ?? []).filter((text) => text.key !== HOME_DECO_KEY && text.key !== SHIPPING_WAIVE_KEY && !KNOWN_TEXTS.some((known) => known.key === text.key)).map((text) => ({ key: text.key, label: text.description ?? text.key, hint: "", text })),
   ];
 
   return (

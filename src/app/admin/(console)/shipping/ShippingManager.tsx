@@ -2,7 +2,22 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Top } from "../../_components/ui";
-import { adminApi, errorMessage, fromMinor, toast, toMinor, type RemoteArea, type ShippingSetting } from "../../_lib/admin";
+import { adminApi, errorMessage, fromMinor, toast, toMinor, type RemoteArea, type ShippingSetting, type SiteText } from "../../_lib/admin";
+
+/**
+ * 배송비 면제(시험 결제용): 켜면 지금 배송비를 이 사이트 문구 칸에 적어 두고 모든 통화의 배송비·제주·도서산간 추가를 0으로 바꾼다.
+ * 끄면 적어 둔 값으로 되돌리고 칸을 지운다. 칸이 있으면 = 면제 중. ('사이트 문구' 목록에서는 숨긴다)
+ */
+export const SHIPPING_WAIVE_KEY = "shipping.waive";
+
+type SettingBody = { baseFee: number; freeThreshold: number | null; jejuExtraFee: number; islandExtraFee: number; autoDeliverDays: number };
+const bodyOf = (setting: SettingBody): SettingBody => ({
+  baseFee: setting.baseFee,
+  freeThreshold: setting.freeThreshold,
+  jejuExtraFee: setting.jejuExtraFee,
+  islandExtraFee: setting.islandExtraFee,
+  autoDeliverDays: setting.autoDeliverDays,
+});
 
 type Form = { baseFee: string; freeThreshold: string; jejuExtraFee: string; islandExtraFee: string; autoDeliverDays: string };
 
@@ -21,10 +36,19 @@ export default function ShippingManager() {
   const [areas, setAreas] = useState<RemoteArea[] | null>(null);
   const [error, setError] = useState("");
   const [area, setArea] = useState({ type: "ISLAND" as RemoteArea["type"], zipFrom: "", zipTo: "", memo: "" });
+  // 면제 전 원래 배송비 (통화별). null = 면제 아님
+  const [waived, setWaived] = useState<Record<string, SettingBody> | null>(null);
+  const [waiving, setWaiving] = useState(false);
 
   const load = useCallback(() => {
-    Promise.all([adminApi<ShippingSetting[]>("/shipping/settings"), adminApi<RemoteArea[]>("/shipping/remote-areas")])
-      .then(([settingList, areaList]) => {
+    Promise.all([adminApi<ShippingSetting[]>("/shipping/settings"), adminApi<RemoteArea[]>("/shipping/remote-areas"), adminApi<SiteText[]>("/site-texts")])
+      .then(([settingList, areaList, texts]) => {
+        const backup = texts.find((text) => text.key === SHIPPING_WAIVE_KEY)?.values.ko;
+        try {
+          setWaived(backup ? (JSON.parse(backup) as Record<string, SettingBody>) : null);
+        } catch {
+          setWaived(null);
+        }
         setSettings(settingList);
         setForms(Object.fromEntries(settingList.map((setting) => [setting.currency, toForm(setting)])));
         setAreas(areaList);
@@ -51,6 +75,39 @@ export default function ShippingManager() {
       load();
     } catch (caught) {
       toast(errorMessage(caught), true);
+    }
+  };
+
+  // 배송비 면제 켜기·끄기
+  const toggleWaive = async (on: boolean) => {
+    if (!settings) return;
+    if (on && !window.confirm("배송비를 0원으로 바꿀까요? (제주·도서산간 추가도 0원)\n시험이 끝나면 꼭 다시 꺼 주세요. 끄면 지금 값으로 돌아가요.")) return;
+    setWaiving(true);
+    try {
+      if (on) {
+        const backup = Object.fromEntries(settings.map((setting) => [setting.currency, bodyOf(setting)]));
+        // 원래 값을 먼저 적어 둔다 (중간에 끊겨도 되돌릴 수 있게)
+        await adminApi(`/site-texts/${SHIPPING_WAIVE_KEY}`, {
+          method: "PUT",
+          body: { description: "배송비 면제 중 — 원래 배송비 (배송 설정 화면에서 끄면 되돌아가요)", values: { ko: JSON.stringify(backup) } },
+        });
+        for (const setting of settings) {
+          await adminApi(`/shipping/settings/${setting.currency}`, { method: "PUT", body: { ...bodyOf(setting), baseFee: 0, jejuExtraFee: 0, islandExtraFee: 0 } });
+        }
+        toast("배송비 면제를 켰어요. 다음 주문부터 배송비 0원이에요.");
+      } else if (waived) {
+        for (const [currency, body] of Object.entries(waived)) {
+          await adminApi(`/shipping/settings/${currency}`, { method: "PUT", body });
+        }
+        await adminApi(`/site-texts/${SHIPPING_WAIVE_KEY}`, { method: "DELETE" });
+        toast("배송비 면제를 껐어요. 원래 배송비로 돌아갔어요.");
+      }
+      load();
+    } catch (caught) {
+      toast(errorMessage(caught), true);
+      load();
+    } finally {
+      setWaiving(false);
     }
   };
 
@@ -84,6 +141,25 @@ export default function ShippingManager() {
     <>
       <Top crumb="STORE / SHIPPING" title="배송 설정" />
       {error && <p className="alert">{error}</p>}
+      {settings && (
+        <div className="card" style={{ marginBottom: 24 }}>
+          <div className="card-b">
+            <label className="toggle-row">
+              <span className="switch">
+                <input type="checkbox" checked={Boolean(waived)} disabled={waiving} onChange={(event) => void toggleWaive(event.target.checked)} aria-label="배송비 면제" />
+                <i />
+              </span>
+              <span>
+                <b>배송비 면제 (시험 결제용)</b>
+                <br />
+                <small className="muted">
+                  {waived ? "켜짐 — 모든 주문 배송비 0원 (제주·도서산간 포함). 시험이 끝나면 꺼 주세요." : "꺼짐 — 아래 설정대로 배송비가 붙어요. 켜면 지금 값을 기억했다가 끌 때 되돌려요."}
+                </small>
+              </span>
+            </label>
+          </div>
+        </div>
+      )}
       {!settings ? (
         <div className="loading">불러오는 중…</div>
       ) : (
@@ -97,6 +173,7 @@ export default function ShippingManager() {
                 <input
                   className="input mono"
                   inputMode="decimal"
+                  disabled={Boolean(waived) && key !== "autoDeliverDays"}
                   value={form[key]}
                   onChange={(event) => setForms({ ...forms, [setting.currency]: { ...form, [key]: event.target.value } })}
                 />
